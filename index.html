@@ -142,6 +142,10 @@
       gap: 8px;
     }
 
+    .field-group.is-hidden {
+      display: none;
+    }
+
     label {
       text-align: center;
       font-weight: 800;
@@ -315,7 +319,8 @@
         <label class="sr-only" for="rampType">نوع رمپ</label>
         <select id="rampType" aria-label="نوع رمپ">
           <option value="car" selected>رمپ خودرو</option>
-          <option value="people" disabled>رمپ عابر پیاده (غیرفعال)</option>
+          <option value="disabled">رمپ معلول</option>
+          <option value="human">رمپ آدم</option>
         </select>
       </div>
 
@@ -329,12 +334,11 @@
         <input id="slope" type="number" inputmode="decimal" min="1" step="0.1" value="17" />
       </div>
 
-      <div class="field-group">
+      <div class="field-group" id="edgeSlopeGroup">
         <label for="edgeSlope">شیب ابتدا و انتهای رمپ خودرو (%)</label>
         <select id="edgeSlope">
-          <option value="8">۸</option>
           <option value="10" selected>۱۰</option>
-          <option value="12">۱۲</option>
+          <option value="5">۵</option>
         </select>
       </div>
 
@@ -345,9 +349,9 @@
 
     <section class="preview" aria-live="polite" aria-label="پیش‌نمایش نتیجه">
       <h2>پیش‌نمایش</h2>
-      <p class="result-line" id="mainResult">طول رمپ : ۲۱.۴۱ متر</p>
-      <p class="result-line" id="edgeResult">استاندارد قبل از شروع رمپ : ۳ متر</p>
-      <p class="ramp-note" id="rampNote">محاسبه فقط برای رمپ خودرو فعال است.</p>
+      <p class="result-line" id="mainResult">طول رمپ : ۲۱.۴۱۲ متر</p>
+      <p class="result-line" id="edgeResult">+۳ توقف رمپ</p>
+      <p class="ramp-note" id="rampNote">فرمول محاسبه با توجه به نوع رمپ انتخاب‌شده اعمال می‌شود.</p>
     </section>
 
     <footer class="footer">ساخته شده توسط علی خدابنده</footer>
@@ -357,8 +361,10 @@
     const body = document.body;
     const themeToggle = document.getElementById('themeToggle');
     const form = document.getElementById('rampForm');
+    const rampTypeInput = document.getElementById('rampType');
     const heightInput = document.getElementById('height');
     const slopeInput = document.getElementById('slope');
+    const edgeSlopeGroup = document.getElementById('edgeSlopeGroup');
     const edgeSlopeInput = document.getElementById('edgeSlope');
     const mainResult = document.getElementById('mainResult');
     const edgeResult = document.getElementById('edgeResult');
@@ -370,24 +376,81 @@
       return String(value).replace(/\d/g, digit => persianDigits[digit]);
     }
 
-    function formatMeters(value) {
-      const rounded = Math.round(value * 100) / 100;
-      return toPersianNumber(rounded.toLocaleString('en-US', {
-        minimumFractionDigits: rounded % 1 === 0 ? 0 : 2,
-        maximumFractionDigits: 2
+    function formatNumber(value, digits = 3) {
+      return toPersianNumber(Number(value).toLocaleString('en-US', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: digits
       }));
+    }
+
+    function carRampLength(height, slope1, slope2) {
+      if (slope1 > 18) {
+        return { error: 'شیب غیرمجاز است!' };
+      }
+
+      if (slope2 === 10) {
+        return { length: Math.round((((height - 20) / slope1) + 2) * 1000) / 1000, stop: '+۳ توقف رمپ' };
+      }
+
+      if (slope2 === 5) {
+        return { length: Math.round((((height - 25) / slope1) + 4) * 1000) / 1000 };
+      }
+
+      return { error: 'شیب ابتدا و انتهای رمپ خودرو نامعتبر است!' };
+    }
+
+    function disabledRampLength(height, slope) {
+      if (slope <= 8) {
+        const baseLength = height / slope;
+        return { length: Math.round((baseLength + Math.floor(baseLength / 8) * 1.5) * 100) / 100 };
+      }
+
+      return { error: 'شیب غیرمجاز است!' };
+    }
+
+    function humanRampLength(height, slope) {
+      if (slope <= 12.5) {
+        const baseLength = height / slope;
+        return { length: Math.round((baseLength + Math.floor(baseLength / 8) * 1.5) * 100) / 100 };
+      }
+
+      return { error: 'شیب غیرمجاز است!' };
+    }
+
+    function updateRampType() {
+      const isCarRamp = rampTypeInput.value === 'car';
+      edgeSlopeGroup.classList.toggle('is-hidden', !isCarRamp);
+      rampNote.textContent = isCarRamp
+        ? 'فرمول رمپ خودرو با شیب ابتدا و انتهای رمپ محاسبه می‌شود.'
+        : rampTypeInput.value === 'disabled'
+          ? 'برای رمپ معلول، شیب بیشتر از ۸٪ مجاز نیست.'
+          : 'برای رمپ آدم، شیب بیشتر از ۱۲.۵٪ مجاز نیست.';
+    }
+
+    function renderRampResult(result) {
+      if (result.error) {
+        mainResult.textContent = result.error;
+        edgeResult.textContent = 'لطفاً شیب مجاز وارد کنید.';
+        return;
+      }
+
+      mainResult.textContent = `طول رمپ : ${formatNumber(result.length)} متر`;
+      edgeResult.textContent = result.stop || '';
     }
 
     function calculateRamp() {
       const heightCentimeters = Math.max(Number(heightInput.value) || 0, 0);
       const slopePercent = Math.max(Number(slopeInput.value) || 1, 1);
-      const edgeSlopePercent = Math.max(Number(edgeSlopeInput.value) || 1, 1);
-      const vehicleTransitionAllowanceMeters = 0.82;
-      const rampLengthMeters = (heightCentimeters / 100) / (slopePercent / 100) + vehicleTransitionAllowanceMeters;
-      const edgeLengthMeters = Math.max(3, Math.round(edgeSlopePercent * 0.3));
+      const edgeSlopePercent = Number(edgeSlopeInput.value);
+      const rampType = rampTypeInput.value;
+      const result = rampType === 'car'
+        ? carRampLength(heightCentimeters, slopePercent, edgeSlopePercent)
+        : rampType === 'disabled'
+          ? disabledRampLength(heightCentimeters, slopePercent)
+          : humanRampLength(heightCentimeters, slopePercent);
 
-      mainResult.textContent = `طول رمپ : ${formatMeters(rampLengthMeters)} متر`;
-      edgeResult.textContent = `استاندارد قبل از شروع رمپ : ${formatMeters(edgeLengthMeters)} متر`;
+      updateRampType();
+      renderRampResult(result);
       rampNote.style.display = 'block';
     }
 
@@ -397,11 +460,15 @@
       themeToggle.setAttribute('aria-pressed', String(isDark));
     });
 
+    rampTypeInput.addEventListener('change', calculateRamp);
+    edgeSlopeInput.addEventListener('change', calculateRamp);
+
     form.addEventListener('submit', event => {
       event.preventDefault();
       calculateRamp();
     });
 
+    updateRampType();
     calculateRamp();
     rampNote.style.display = 'none';
   </script>
