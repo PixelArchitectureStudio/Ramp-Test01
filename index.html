@@ -1,522 +1,409 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Car Ramp Configurator</title>
+  <title>محاسبه‌گر رمپ خودرو</title>
   <style>
     :root {
       color-scheme: light;
-      --bg: #f6f8fb;
-      --surface: rgba(255, 255, 255, 0.82);
-      --surface-solid: #ffffff;
-      --text: #162033;
+      --page: #f4f7fb;
+      --text: #172033;
       --muted: #667085;
-      --line: rgba(28, 42, 66, 0.12);
-      --primary: #2563eb;
-      --primary-strong: #1d4ed8;
-      --accent: #10b981;
-      --warning: #f59e0b;
-      --danger: #ef4444;
-      --shadow: 0 24px 70px rgba(15, 23, 42, 0.12);
-      --preview-start: #e0f2fe;
-      --preview-end: #eef2ff;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --panel: #ffffff;
+      --field: #f8fafc;
+      --field-border: #c7ced8;
+      --primary: #2373b6;
+      --primary-dark: #105284;
+      --button: #2f6df3;
+      --button-hover: #2359d6;
+      --result-bg: #ffffff;
+      --result-border: #dfe5ed;
+      --result-text: #178a48;
+      --shadow: 0 24px 70px rgba(16, 24, 40, 0.12);
+      --footer: #98a2b3;
     }
 
     body.dark {
       color-scheme: dark;
-      --bg: #08111f;
-      --surface: rgba(15, 23, 42, 0.82);
-      --surface-solid: #101827;
-      --text: #f8fafc;
-      --muted: #a5b4c7;
-      --line: rgba(226, 232, 240, 0.14);
-      --primary: #60a5fa;
-      --primary-strong: #93c5fd;
-      --accent: #34d399;
-      --warning: #fbbf24;
-      --danger: #f87171;
-      --shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
-      --preview-start: #0f2a44;
-      --preview-end: #111827;
+      --page: #242424;
+      --text: #f4f7fb;
+      --muted: #c5cbd6;
+      --panel: #242424;
+      --field: #303437;
+      --field-border: #666c73;
+      --primary: #2473b3;
+      --primary-dark: #0f4c7e;
+      --button: #326bf0;
+      --button-hover: #447bff;
+      --result-bg: #171918;
+      --result-border: #303235;
+      --result-text: #90f3a8;
+      --shadow: none;
+      --footer: #8e949c;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
       min-height: 100vh;
-      background:
-        radial-gradient(circle at 15% 10%, rgba(37, 99, 235, 0.18), transparent 30%),
-        radial-gradient(circle at 90% 15%, rgba(16, 185, 129, 0.18), transparent 26%),
-        var(--bg);
+      background: var(--page);
       color: var(--text);
-      transition: background 260ms ease, color 260ms ease;
+      font-family: Tahoma, Vazirmatn, IRANSans, Arial, sans-serif;
+      transition: background 180ms ease, color 180ms ease;
     }
 
     .app {
-      width: min(1180px, calc(100% - 32px));
+      width: min(100%, 640px);
+      min-height: 100vh;
       margin: 0 auto;
-      padding: 32px 0 48px;
+      padding: 16px 16px 26px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
-    header {
+    .theme-row {
+      direction: ltr;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-      margin-bottom: 28px;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .logo {
-      display: grid;
-      place-items: center;
-      width: 52px;
-      height: 52px;
-      border-radius: 18px;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      color: white;
-      box-shadow: 0 14px 35px rgba(37, 99, 235, 0.28);
-      font-size: 1.6rem;
-    }
-
-    h1, h2, h3, p { margin: 0; }
-
-    h1 { font-size: clamp(1.8rem, 4vw, 3.2rem); letter-spacing: -0.05em; }
-
-    .subtitle { margin-top: 8px; color: var(--muted); max-width: 680px; line-height: 1.6; }
-
-    .theme-toggle {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      padding: 10px 14px;
-      background: var(--surface);
+      justify-content: center;
+      gap: 7px;
+      width: 100%;
+      margin-bottom: 18px;
       color: var(--text);
-      cursor: pointer;
-      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
-      backdrop-filter: blur(16px);
-      transition: transform 180ms ease, border-color 180ms ease;
+      font-size: 14px;
     }
 
-    .theme-toggle:hover { transform: translateY(-2px); border-color: var(--primary); }
-
-    .grid {
-      display: grid;
-      grid-template-columns: minmax(0, 0.88fr) minmax(360px, 1.12fr);
-      gap: 24px;
-      align-items: stretch;
-    }
-
-    .panel {
-      border: 1px solid var(--line);
-      border-radius: 30px;
-      background: var(--surface);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(18px);
-      overflow: hidden;
-    }
-
-    .panel-header {
-      padding: 26px 26px 18px;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .panel-header h2 { font-size: 1.25rem; letter-spacing: -0.03em; }
-    .panel-header p { color: var(--muted); margin-top: 6px; line-height: 1.5; }
-
-    .controls { padding: 24px; display: grid; gap: 18px; }
-
-    .ramp-card {
+    .toggle {
       position: relative;
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      align-items: center;
-      gap: 16px;
-      padding: 18px;
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      background: var(--surface-solid);
-    }
-
-    .ramp-card.disabled { opacity: 0.58; }
-
-    .icon {
-      display: grid;
-      place-items: center;
-      width: 48px;
-      height: 48px;
-      border-radius: 16px;
-      background: color-mix(in srgb, var(--primary) 14%, transparent);
-      font-size: 1.45rem;
-    }
-
-    .ramp-card.disabled .icon { background: color-mix(in srgb, var(--danger) 14%, transparent); }
-    .ramp-card h3 { font-size: 1rem; }
-    .ramp-card p { color: var(--muted); margin-top: 4px; line-height: 1.45; font-size: 0.92rem; }
-
-    .switch {
-      width: 56px;
-      height: 32px;
-      border-radius: 999px;
-      padding: 4px;
-      background: #d0d5dd;
+      inline-size: 34px;
+      block-size: 18px;
       border: 0;
-      position: relative;
+      border-radius: 999px;
+      background: #1f6fae;
+      cursor: pointer;
+      padding: 0;
+      transition: background 160ms ease;
     }
 
-    .switch::after {
+    .toggle::after {
       content: "";
       position: absolute;
-      top: 4px;
-      left: 4px;
-      width: 24px;
-      height: 24px;
+      inset-block-start: 1px;
+      inset-inline-start: 17px;
+      inline-size: 16px;
+      block-size: 16px;
       border-radius: 50%;
-      background: white;
-      box-shadow: 0 3px 8px rgba(15, 23, 42, 0.25);
-      transition: transform 180ms ease;
+      background: #d8dee7;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+      transition: transform 160ms ease;
     }
 
-    .switch.on { background: linear-gradient(135deg, var(--primary), var(--accent)); }
-    .switch.on::after { transform: translateX(24px); }
-    .switch:disabled { cursor: not-allowed; }
+    body:not(.dark) .toggle {
+      background: #cdd7e4;
+    }
 
-    .settings {
+    body:not(.dark) .toggle::after {
+      transform: translateX(-16px);
+      background: #ffffff;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(26px, 5vw, 31px);
+      line-height: 1.35;
+      font-weight: 800;
+      text-align: center;
+      text-shadow: 0 2px 0 rgba(35, 115, 182, 0.55);
+      letter-spacing: -0.02em;
+    }
+
+    .divider {
+      inline-size: min(250px, 70vw);
+      border: 0;
+      border-top: 2px solid currentColor;
+      margin: 18px 0 26px;
+      opacity: 0.94;
+    }
+
+    .calculator {
+      inline-size: min(100%, 250px);
       display: grid;
-      gap: 16px;
-      padding-top: 4px;
+      gap: 14px;
+      justify-items: stretch;
     }
 
-    label { display: grid; gap: 8px; color: var(--muted); font-weight: 650; font-size: 0.9rem; }
-
-    input[type="range"] { accent-color: var(--primary); width: 100%; }
-
-    .metric-row {
+    .field-group {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
+      gap: 8px;
     }
 
-    .metric {
-      padding: 14px;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: color-mix(in srgb, var(--surface-solid) 76%, transparent);
+    label {
+      text-align: center;
+      font-weight: 800;
+      font-size: 15px;
+      line-height: 1.7;
     }
 
-    .metric span { color: var(--muted); font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
-    .metric strong { display: block; margin-top: 6px; font-size: 1.25rem; }
+    select,
+    input {
+      inline-size: 100%;
+      block-size: 40px;
+      border: 2px solid var(--field-border);
+      border-radius: 5px;
+      background: var(--field);
+      color: var(--text);
+      font: 700 15px/1 Tahoma, Vazirmatn, IRANSans, Arial, sans-serif;
+      outline: none;
+      transition: border-color 150ms ease, box-shadow 150ms ease, background 150ms ease;
+    }
+
+    input {
+      direction: ltr;
+      text-align: left;
+      padding: 0 10px;
+    }
+
+    select {
+      appearance: none;
+      padding: 0 11px 0 40px;
+      background-image:
+        linear-gradient(45deg, transparent 50%, white 50%),
+        linear-gradient(135deg, white 50%, transparent 50%),
+        linear-gradient(to left, var(--primary-dark), var(--primary-dark));
+      background-position:
+        left 18px center,
+        left 12px center,
+        left 0 top 0;
+      background-size:
+        7px 7px,
+        7px 7px,
+        40px 100%;
+      background-repeat: no-repeat;
+      background-color: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+      cursor: pointer;
+    }
+
+    select:focus,
+    input:focus {
+      border-color: #5ea3e4;
+      box-shadow: 0 0 0 3px rgba(35, 115, 182, 0.18);
+    }
+
+    option:disabled {
+      color: #aab2bd;
+    }
+
+    .sr-only {
+      position: absolute;
+      inline-size: 1px;
+      block-size: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
+    .button-wrap {
+      display: flex;
+      justify-content: center;
+      margin-top: 18px;
+    }
+
+    button.calculate {
+      inline-size: 160px;
+      block-size: 44px;
+      border: 0;
+      border-radius: 8px;
+      background: var(--button);
+      color: #ffffff;
+      font: 800 15px/1 Tahoma, Vazirmatn, IRANSans, Arial, sans-serif;
+      cursor: pointer;
+      box-shadow: 0 11px 24px rgba(47, 109, 243, 0.26);
+      transition: transform 150ms ease, background 150ms ease, box-shadow 150ms ease;
+    }
+
+    button.calculate:hover {
+      transform: translateY(-1px);
+      background: var(--button-hover);
+      box-shadow: 0 14px 28px rgba(47, 109, 243, 0.34);
+    }
+
+    button.calculate:active {
+      transform: translateY(0);
+    }
 
     .preview {
-      min-height: 620px;
-      display: grid;
-      grid-template-rows: auto 1fr auto;
+      inline-size: 100%;
+      margin-top: 36px;
+      border: 2px solid var(--result-border);
+      border-radius: 17px;
+      background: var(--result-bg);
+      box-shadow: var(--shadow);
+      padding: 20px 14px;
+      text-align: center;
+      transition: background 180ms ease, border-color 180ms ease;
     }
 
-    .preview-stage {
-      position: relative;
-      min-height: 410px;
-      margin: 24px;
-      border: 1px solid var(--line);
-      border-radius: 28px;
+    .preview h2 {
+      position: absolute;
+      inline-size: 1px;
+      block-size: 1px;
       overflow: hidden;
-      background:
-        linear-gradient(180deg, var(--preview-start), var(--preview-end)),
-        repeating-linear-gradient(90deg, transparent 0 38px, rgba(255,255,255,0.06) 38px 40px);
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
     }
 
-    .sun {
-      position: absolute;
-      top: 34px;
-      right: 42px;
-      width: 74px;
-      height: 74px;
-      border-radius: 50%;
-      background: radial-gradient(circle, #fde68a, #f59e0b 62%, transparent 64%);
-      filter: drop-shadow(0 0 32px rgba(245, 158, 11, 0.45));
+    .result-line {
+      margin: 0;
+      color: var(--result-text);
+      font-weight: 900;
+      font-size: clamp(17px, 4vw, 20px);
+      line-height: 1.8;
+      letter-spacing: 0.02em;
     }
 
-    body.dark .sun { background: radial-gradient(circle, #e0f2fe, #93c5fd 58%, transparent 60%); }
-
-    .ground {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 108px;
-      background: linear-gradient(180deg, #334155, #111827);
-    }
-
-    .lane {
-      position: absolute;
-      left: 8%;
-      right: 8%;
-      bottom: 48px;
-      height: 4px;
-      border-radius: 999px;
-      background: repeating-linear-gradient(90deg, #f8fafc 0 42px, transparent 42px 72px);
-      opacity: 0.72;
-    }
-
-    .ramp-shape {
-      position: absolute;
-      left: 12%;
-      bottom: 92px;
-      width: 52%;
-      height: 168px;
-      transform-origin: bottom left;
-      transform: skewX(-28deg) rotate(var(--ramp-angle));
-      border-radius: 14px 22px 12px 12px;
-      background: linear-gradient(135deg, #64748b, #1e293b);
-      box-shadow: 0 26px 60px rgba(15, 23, 42, 0.35);
-    }
-
-    .ramp-shape::before {
-      content: "";
-      position: absolute;
-      inset: 14px;
-      border-radius: 10px;
-      background: repeating-linear-gradient(90deg, rgba(255,255,255,0.18) 0 12px, transparent 12px 28px);
-    }
-
-    .car {
-      position: absolute;
-      left: 35%;
-      bottom: 205px;
-      width: 172px;
-      height: 72px;
-      transform: rotate(var(--car-angle));
-      transition: transform 200ms ease, left 200ms ease, bottom 200ms ease;
-    }
-
-    .car-body {
-      position: absolute;
-      inset: 20px 0 8px;
-      border-radius: 22px 34px 14px 14px;
-      background: linear-gradient(135deg, var(--primary), var(--primary-strong));
-      box-shadow: 0 18px 30px rgba(37, 99, 235, 0.28);
-    }
-
-    .car-body::before {
-      content: "";
-      position: absolute;
-      top: -22px;
-      left: 38px;
-      width: 78px;
-      height: 34px;
-      border-radius: 30px 30px 4px 4px;
-      background: linear-gradient(135deg, #bfdbfe, #eff6ff);
-      clip-path: polygon(10% 100%, 28% 0, 78% 0, 100% 100%);
-    }
-
-    .wheel {
-      position: absolute;
-      bottom: 0;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: #020617;
-      border: 6px solid #94a3b8;
-    }
-
-    .wheel.front { right: 22px; }
-    .wheel.back { left: 24px; }
-
-    .disabled-badge {
-      position: absolute;
-      left: 24px;
-      top: 24px;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: color-mix(in srgb, var(--danger) 16%, var(--surface-solid));
-      color: var(--danger);
-      border: 1px solid color-mix(in srgb, var(--danger) 36%, transparent);
-      font-weight: 800;
-      font-size: 0.86rem;
-    }
-
-    .preview-footer {
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 0 24px 24px;
-      flex-wrap: wrap;
-    }
-
-    .status-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 13px;
-      border-radius: 999px;
-      background: var(--surface-solid);
-      border: 1px solid var(--line);
+    .ramp-note {
+      display: none;
+      margin: 8px 0 0;
       color: var(--muted);
-      font-weight: 750;
-      font-size: 0.9rem;
+      font-size: 13px;
+      line-height: 1.7;
     }
 
-    .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); }
-    .dot.off { background: var(--danger); }
+    .footer {
+      margin-top: auto;
+      padding-top: 28px;
+      color: var(--footer);
+      font-size: 12px;
+      font-weight: 700;
+      text-align: center;
+    }
 
-    @media (max-width: 860px) {
-      header { align-items: flex-start; flex-direction: column; }
-      .grid { grid-template-columns: 1fr; }
-      .preview { min-height: auto; }
-      .metric-row { grid-template-columns: 1fr; }
-      .car { left: 30%; width: 142px; }
+    @media (max-width: 430px) {
+      .app {
+        padding-inline: 12px;
+      }
+
+      .calculator {
+        inline-size: min(100%, 270px);
+      }
+
+      .preview {
+        margin-top: 30px;
+      }
     }
   </style>
 </head>
-<body>
+<body class="dark">
   <main class="app">
-    <header>
-      <div class="brand">
-        <div class="logo" aria-hidden="true">▰</div>
-        <div>
-          <h1>Car Ramp Studio</h1>
-          <p class="subtitle">A modern ramp planner focused on vehicle access. The people ramp is intentionally disabled while the car ramp preview stays active.</p>
-        </div>
+    <div class="theme-row">
+      <button class="toggle" id="themeToggle" type="button" aria-label="تغییر حالت روشن و تاریک" aria-pressed="true"></button>
+      <span>Dark</span>
+    </div>
+
+    <h1>محاسبه‌گر رمپ</h1>
+    <hr class="divider" />
+
+    <form class="calculator" id="rampForm">
+      <div class="field-group">
+        <label class="sr-only" for="rampType">نوع رمپ</label>
+        <select id="rampType" aria-label="نوع رمپ">
+          <option value="car" selected>رمپ خودرو</option>
+          <option value="people" disabled>رمپ عابر پیاده (غیرفعال)</option>
+        </select>
       </div>
-      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark mode">
-        <span id="themeIcon">🌙</span>
-        <strong id="themeText">Dark mode</strong>
-      </button>
-    </header>
 
-    <section class="grid" aria-label="Ramp configuration app">
-      <aside class="panel">
-        <div class="panel-header">
-          <h2>Ramp Controls</h2>
-          <p>Configure the car ramp dimensions and confirm that pedestrian ramp access remains disabled.</p>
-        </div>
+      <div class="field-group">
+        <label for="height">ارتفاع (سانتی‌متر)</label>
+        <input id="height" type="number" inputmode="decimal" min="1" step="1" value="350" />
+      </div>
 
-        <div class="controls">
-          <article class="ramp-card" aria-label="Car ramp enabled">
-            <div class="icon" aria-hidden="true">🚗</div>
-            <div>
-              <h3>Car ramp</h3>
-              <p>Enabled for vehicle loading, inspection, and garage transitions.</p>
-            </div>
-            <button class="switch on" type="button" aria-label="Car ramp enabled" aria-pressed="true"></button>
-          </article>
+      <div class="field-group">
+        <label for="slope">شیب (%)</label>
+        <input id="slope" type="number" inputmode="decimal" min="1" step="0.1" value="17" />
+      </div>
 
-          <article class="ramp-card disabled" aria-label="People ramp disabled">
-            <div class="icon" aria-hidden="true">🚶</div>
-            <div>
-              <h3>People ramp</h3>
-              <p>Disabled to keep this app dedicated to vehicle ramp planning only.</p>
-            </div>
-            <button class="switch" type="button" aria-label="People ramp disabled" aria-pressed="false" disabled></button>
-          </article>
+      <div class="field-group">
+        <label for="edgeSlope">شیب ابتدا و انتهای رمپ خودرو (%)</label>
+        <select id="edgeSlope">
+          <option value="8">۸</option>
+          <option value="10" selected>۱۰</option>
+          <option value="12">۱۲</option>
+        </select>
+      </div>
 
-          <div class="settings">
-            <label>
-              Ramp angle <span id="angleValue">14°</span>
-              <input id="angle" type="range" min="6" max="22" value="14" />
-            </label>
-            <label>
-              Platform height <span id="heightValue">28 in</span>
-              <input id="height" type="range" min="12" max="44" value="28" />
-            </label>
-          </div>
+      <div class="button-wrap">
+        <button class="calculate" type="submit">محاسبه</button>
+      </div>
+    </form>
 
-          <div class="metric-row" aria-label="Ramp metrics">
-            <div class="metric">
-              <span>Use case</span>
-              <strong>Cars</strong>
-            </div>
-            <div class="metric">
-              <span>People ramp</span>
-              <strong>Off</strong>
-            </div>
-            <div class="metric">
-              <span>Preview</span>
-              <strong>Live</strong>
-            </div>
-          </div>
-        </div>
-      </aside>
-
-      <section class="panel preview" aria-label="Preview section">
-        <div class="panel-header">
-          <h2>Preview</h2>
-          <p>Adjust the sliders to update the visual ramp angle and vehicle position in real time.</p>
-        </div>
-
-        <div class="preview-stage" id="previewStage">
-          <div class="disabled-badge">🚫 People ramp disabled</div>
-          <div class="sun" aria-hidden="true"></div>
-          <div class="ramp-shape" id="rampShape" aria-hidden="true"></div>
-          <div class="car" id="car" aria-hidden="true">
-            <div class="car-body"></div>
-            <div class="wheel back"></div>
-            <div class="wheel front"></div>
-          </div>
-          <div class="ground" aria-hidden="true"></div>
-          <div class="lane" aria-hidden="true"></div>
-        </div>
-
-        <div class="preview-footer">
-          <div class="status-pill"><span class="dot"></span>Car ramp active</div>
-          <div class="status-pill"><span class="dot off"></span>People ramp disabled</div>
-          <div class="status-pill">Theme: <span id="themeStatus">Light</span></div>
-        </div>
-      </section>
+    <section class="preview" aria-live="polite" aria-label="پیش‌نمایش نتیجه">
+      <h2>پیش‌نمایش</h2>
+      <p class="result-line" id="mainResult">طول رمپ : ۲۱.۴۱ متر</p>
+      <p class="result-line" id="edgeResult">استاندارد قبل از شروع رمپ : ۳ متر</p>
+      <p class="ramp-note" id="rampNote">محاسبه فقط برای رمپ خودرو فعال است.</p>
     </section>
+
+    <footer class="footer">ساخته شده توسط علی خدابنده</footer>
   </main>
 
   <script>
     const body = document.body;
     const themeToggle = document.getElementById('themeToggle');
-    const themeIcon = document.getElementById('themeIcon');
-    const themeText = document.getElementById('themeText');
-    const themeStatus = document.getElementById('themeStatus');
-    const angle = document.getElementById('angle');
-    const height = document.getElementById('height');
-    const angleValue = document.getElementById('angleValue');
-    const heightValue = document.getElementById('heightValue');
-    const rampShape = document.getElementById('rampShape');
-    const car = document.getElementById('car');
+    const form = document.getElementById('rampForm');
+    const heightInput = document.getElementById('height');
+    const slopeInput = document.getElementById('slope');
+    const edgeSlopeInput = document.getElementById('edgeSlope');
+    const mainResult = document.getElementById('mainResult');
+    const edgeResult = document.getElementById('edgeResult');
+    const rampNote = document.getElementById('rampNote');
 
-    function setTheme(isDark) {
+    const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+
+    function toPersianNumber(value) {
+      return String(value).replace(/\d/g, digit => persianDigits[digit]);
+    }
+
+    function formatMeters(value) {
+      const rounded = Math.round(value * 100) / 100;
+      return toPersianNumber(rounded.toLocaleString('en-US', {
+        minimumFractionDigits: rounded % 1 === 0 ? 0 : 2,
+        maximumFractionDigits: 2
+      }));
+    }
+
+    function calculateRamp() {
+      const heightCentimeters = Math.max(Number(heightInput.value) || 0, 0);
+      const slopePercent = Math.max(Number(slopeInput.value) || 1, 1);
+      const edgeSlopePercent = Math.max(Number(edgeSlopeInput.value) || 1, 1);
+      const vehicleTransitionAllowanceMeters = 0.82;
+      const rampLengthMeters = (heightCentimeters / 100) / (slopePercent / 100) + vehicleTransitionAllowanceMeters;
+      const edgeLengthMeters = Math.max(3, Math.round(edgeSlopePercent * 0.3));
+
+      mainResult.textContent = `طول رمپ : ${formatMeters(rampLengthMeters)} متر`;
+      edgeResult.textContent = `استاندارد قبل از شروع رمپ : ${formatMeters(edgeLengthMeters)} متر`;
+      rampNote.style.display = 'block';
+    }
+
+    themeToggle.addEventListener('click', () => {
+      const isDark = !body.classList.contains('dark');
       body.classList.toggle('dark', isDark);
-      themeIcon.textContent = isDark ? '☀️' : '🌙';
-      themeText.textContent = isDark ? 'Light mode' : 'Dark mode';
-      themeStatus.textContent = isDark ? 'Dark' : 'Light';
-      themeToggle.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
-    }
+      themeToggle.setAttribute('aria-pressed', String(isDark));
+    });
 
-    function updatePreview() {
-      const angleDegrees = Number(angle.value);
-      const heightInches = Number(height.value);
-      angleValue.textContent = `${angleDegrees}°`;
-      heightValue.textContent = `${heightInches} in`;
-      rampShape.style.setProperty('--ramp-angle', `${angleDegrees - 14}deg`);
-      car.style.setProperty('--car-angle', `${angleDegrees - 7}deg`);
-      car.style.bottom = `${180 + heightInches * 0.9}px`;
-      car.style.left = `${30 + angleDegrees * 0.35}%`;
-    }
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      calculateRamp();
+    });
 
-    themeToggle.addEventListener('click', () => setTheme(!body.classList.contains('dark')));
-    angle.addEventListener('input', updatePreview);
-    height.addEventListener('input', updatePreview);
-
-    setTheme(window.matchMedia('(prefers-color-scheme: dark)').matches);
-    updatePreview();
+    calculateRamp();
+    rampNote.style.display = 'none';
   </script>
 </body>
 </html>
