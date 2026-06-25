@@ -43,7 +43,8 @@
 
     body {
       margin: 0;
-      min-height: 100vh;
+      height: 100vh;
+      overflow: hidden;
       background:
         radial-gradient(circle at top left, rgba(47, 115, 255, 0.12), transparent 30%),
         radial-gradient(circle at bottom right, rgba(47, 115, 255, 0.1), transparent 32%),
@@ -60,12 +61,12 @@
 
     .app {
       width: min(100%, 1420px);
-      min-height: 100vh;
+      height: 100vh;
       margin: 0 auto;
-      padding: 22px 32px 24px;
+      padding: 14px 26px 14px;
       display: grid;
-      grid-template-rows: auto 1fr auto;
-      gap: 20px;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      gap: 12px;
     }
 
     .topbar, .bottom-bar, .card {
@@ -156,8 +157,8 @@
     }
 
     .brand-icon {
-      inline-size: 54px;
-      block-size: 54px;
+      inline-size: 46px;
+      block-size: 46px;
       border: 2px solid rgba(47, 115, 255, 0.22);
       border-radius: 50%;
       background: rgba(47, 115, 255, 0.08);
@@ -173,12 +174,12 @@
 
     .card {
       border-radius: 24px;
-      padding: 26px;
+      padding: 18px;
     }
 
     .preview-card {
       position: relative;
-      min-height: 570px;
+      min-height: 0;
       overflow: hidden;
     }
 
@@ -213,14 +214,15 @@
     }
 
     .diagram {
-      min-height: 500px;
+      min-height: 0;
+      height: 100%;
       display: grid;
       place-items: center;
-      padding-top: 64px;
+      padding-top: 50px;
     }
 
     .drawing {
-      width: min(100%, 760px);
+      width: min(100%, 700px);
       color: var(--text);
     }
 
@@ -231,20 +233,30 @@
     .drawing .blue { stroke: var(--primary); fill: rgba(47, 115, 255, 0.08); }
 
     .modal {
-      position: absolute;
-      inset-block-start: 145px;
-      inset-inline-end: 34px;
+      position: fixed;
+      inset-block-start: 50%;
+      inset-inline-start: 50%;
+      transform: translate(-50%, -50%);
       width: min(420px, calc(100% - 56px));
       border: 1px solid var(--line);
       border-radius: 18px;
       background: var(--panel);
       box-shadow: var(--shadow);
       padding: 18px;
-      z-index: 5;
+      z-index: 30;
       display: none;
     }
 
-    .modal.is-open { display: block; }
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 25;
+      display: none;
+      background: rgba(15, 23, 42, 0.32);
+      backdrop-filter: blur(9px);
+    }
+
+    .modal.is-open, .modal-backdrop.is-open { display: block; }
 
     .modal-head {
       display: flex;
@@ -307,7 +319,7 @@
       font-weight: 800;
     }
 
-    .form-card { display: flex; flex-direction: column; gap: 22px; }
+    .form-card { display: flex; flex-direction: column; gap: 14px; }
 
     .form-head {
       display: flex;
@@ -328,7 +340,7 @@
 
     .form-head h2 { margin: 0; font-size: 21px; font-weight: 900; }
 
-    .calculator { display: grid; gap: 21px; }
+    .calculator { display: grid; gap: 14px; }
 
     .field-row {
       display: grid;
@@ -349,7 +361,7 @@
       border-radius: 9px;
       overflow: hidden;
       background: var(--field);
-      min-height: 52px;
+      min-height: 44px;
     }
 
     .unit {
@@ -370,7 +382,7 @@
       padding: 0 13px;
       font-weight: 800;
       text-align: left;
-      min-height: 52px;
+      min-height: 44px;
     }
 
     select { appearance: none; cursor: pointer; }
@@ -437,13 +449,13 @@
       display: grid;
       grid-template-columns: auto minmax(360px, 650px) auto 1fr;
       align-items: center;
-      gap: 22px;
+      gap: 14px;
       direction: ltr;
     }
 
     .download, .rules-button, .bottom-bar {
       border-radius: 999px;
-      min-height: 70px;
+      min-height: 58px;
     }
 
     .download, .rules-button {
@@ -477,7 +489,7 @@
       align-items: center;
       justify-content: center;
       gap: 13px;
-      min-height: 56px;
+      min-height: 46px;
     }
 
     .nav-item.active {
@@ -532,7 +544,7 @@
         </button>
       </div>
       <div class="brand">
-        <h1>محاسبه رمپ</h1>
+        <h1 id="pageTitle">محاسبه رمپ</h1>
         <span class="brand-icon" aria-hidden="true"><svg class="icon"><use href="#icon-car"></use></svg></span>
       </div>
       <div></div>
@@ -541,8 +553,8 @@
     <section class="content">
       <article class="card preview-card" aria-label="پیش‌نمایش رمپ">
         <div class="view-tabs" role="tablist" aria-label="نوع نمایش">
-          <button class="view-tab active" type="button" data-view="plan">پلان <span aria-hidden="true">▧</span></button>
-          <button class="view-tab" type="button" data-view="elevation">نما <span aria-hidden="true">◿</span></button>
+          <button class="view-tab active" id="planTab" type="button" data-view="plan">پلان <span aria-hidden="true">▧</span></button>
+          <button class="view-tab" id="elevationTab" type="button" data-view="elevation">نما <span aria-hidden="true">◿</span></button>
         </div>
 
         <div class="diagram" id="planDiagram" aria-label="نمای پلان رمپ خودرو">
@@ -612,6 +624,8 @@
           </svg>
         </div>
 
+        <div class="modal-backdrop" id="modalBackdrop"></div>
+
         <aside class="modal" id="rulesModal" aria-modal="true" role="dialog" aria-labelledby="rulesTitle">
           <div class="modal-head">
             <button class="modal-close" id="closeRules" type="button" aria-label="بستن">×</button>
@@ -637,46 +651,46 @@
 
         <form class="calculator" id="rampForm">
           <div class="field-row">
-            <label for="height">ارتفاع</label>
+            <label id="heightLabel" for="height">ارتفاع</label>
             <div class="control-wrap">
               <div class="control"><span class="unit">m</span><input id="height" type="number" inputmode="decimal" min="0.01" step="0.01" value="1.00" /></div>
-              <p class="hint">اختلاف تراز بین مبدا و مقصد</p>
+              <p class="hint" id="heightHint">اختلاف تراز بین مبدا و مقصد</p>
             </div>
           </div>
 
           <div class="field-row">
-            <label for="slope">شیب اصلی</label>
+            <label id="slopeLabel" for="slope">شیب اصلی</label>
             <div class="control-wrap">
               <div class="control"><span class="unit">%</span><input id="slope" type="number" inputmode="decimal" min="1" step="0.1" value="16.0" /></div>
-              <p class="hint">حداکثر مجاز: ۲۰٪</p>
+              <p class="hint" id="slopeHint">حداکثر مجاز: ۲۰٪</p>
             </div>
           </div>
 
           <div class="field-row" id="startSlopeGroup">
-            <label for="startSlope">شیب ابتدا</label>
+            <label id="startSlopeLabel" for="startSlope">شیب ابتدا</label>
             <div class="control-wrap">
               <div class="control"><span class="unit">%</span><input id="startSlope" type="number" inputmode="decimal" min="1" step="0.1" value="12.5" /></div>
-              <p class="hint">حداکثر مجاز: ۱۵٪</p>
+              <p class="hint" id="startSlopeHint">حداکثر مجاز: ۱۵٪</p>
             </div>
           </div>
 
           <div class="field-row" id="endSlopeGroup">
-            <label for="edgeSlope">شیب انتها</label>
+            <label id="endSlopeLabel" for="edgeSlope">شیب انتها</label>
             <div class="control-wrap">
               <div class="control"><span class="unit">%</span><select id="edgeSlope"><option value="10">۱۰</option><option value="5">۵</option></select></div>
-              <p class="hint">برای فرمول فعلی ۵٪ یا ۱۰٪</p>
+              <p class="hint" id="endSlopeHint">برای فرمول فعلی ۵٪ یا ۱۰٪</p>
             </div>
           </div>
 
           <div class="field-row">
-            <label for="rampType">نوع رمپ</label>
+            <label id="rampTypeLabel" for="rampType">نوع رمپ</label>
             <div class="control-wrap select-wrap">
               <div class="control"><span class="unit">⌄</span><select id="rampType"><option value="car" selected>رمپ خودرو</option><option value="disabled">رمپ معلول</option><option value="human">رمپ عابر</option></select></div>
-              <p class="hint">انتخاب نوع رمپ برای محاسبات</p>
+              <p class="hint" id="rampTypeHint">انتخاب نوع رمپ برای محاسبات</p>
             </div>
           </div>
 
-          <button class="calculate" type="submit">محاسبه <svg class="icon" aria-hidden="true"><use href="#icon-calc"></use></svg></button>
+          <button class="calculate" id="calculateButton" type="submit">محاسبه <svg class="icon" aria-hidden="true"><use href="#icon-calc"></use></svg></button>
         </form>
 
         <section class="result-box" aria-live="polite" aria-label="نتیجه محاسبه">
@@ -687,14 +701,14 @@
     </section>
 
     <footer class="bottom-row">
-      <button class="download" type="button">دانلود نرم‌افزار <svg class="icon" aria-hidden="true"><use href="#icon-download"></use></svg></button>
+      <button class="download" id="downloadButton" type="button">دانلود نرم‌افزار <svg class="icon" aria-hidden="true"><use href="#icon-download"></use></svg></button>
       <nav class="bottom-bar" aria-label="انتخاب نوع رمپ">
         <button class="nav-item active" type="button" data-ramp="car"><span>رمپ خودرو</span><span class="nav-icon"><svg class="icon"><use href="#icon-car"></use></svg></span></button>
         <button class="nav-item" type="button" data-ramp="disabled"><span>رمپ معلول</span><span class="nav-icon"><svg class="icon"><use href="#icon-wheelchair"></use></svg></span></button>
         <button class="nav-item" type="button" data-ramp="human"><span>رمپ عابر</span><span class="nav-icon"><svg class="icon"><use href="#icon-walk"></use></svg></span></button>
       </nav>
       <button class="rules-button" id="openRules" type="button">ضوابط و مقررات <svg class="icon" aria-hidden="true"><use href="#icon-rules"></use></svg></button>
-      <span class="version">نسخه ۱.۳.۰</span>
+      <span class="version" id="versionText">نسخه ۱.۳.۰</span>
     </footer>
   </main>
 
@@ -713,6 +727,7 @@
     const formTitle = document.getElementById('formTitle');
     const formIcon = document.getElementById('formIcon');
     const rulesModal = document.getElementById('rulesModal');
+    const modalBackdrop = document.getElementById('modalBackdrop');
     const openRules = document.getElementById('openRules');
     const closeRules = document.getElementById('closeRules');
     const dismissRules = document.getElementById('dismissRules');
@@ -724,6 +739,30 @@
     const faLabel = document.getElementById('faLabel');
     const enLabel = document.getElementById('enLabel');
     let currentLanguage = 'fa';
+
+    const copy = {
+      fa: { title: 'محاسبه رمپ', plan: 'پلان ▧', elevation: 'نما ◿', formPrefix: 'مشخصات رمپ', car: 'خودرو', disabled: 'معلول', human: 'عابر', height: 'ارتفاع', heightHint: 'اختلاف تراز بین مبدا و مقصد', slope: 'شیب اصلی', slopeHint: 'حداکثر مجاز: ۲۰٪', startSlope: 'شیب ابتدا', startSlopeHint: 'حداکثر مجاز: ۱۵٪', endSlope: 'شیب انتها', endSlopeHint: 'برای فرمول فعلی ۵٪ یا ۱۰٪', rampType: 'نوع رمپ', rampTypeHint: 'انتخاب نوع رمپ برای محاسبات', calculate: 'محاسبه', download: 'دانلود نرم‌افزار', rules: 'ضوابط و مقررات', version: 'نسخه ۱.۳.۰', resultPrefix: 'طول رمپ', invalid: 'لطفاً شیب مجاز وارد کنید.' },
+      en: { title: 'Ramp Calculator', plan: 'Plan ▧', elevation: 'Elevation ◿', formPrefix: 'Ramp Specs', car: 'Car', disabled: 'Accessible', human: 'Pedestrian', height: 'Height', heightHint: 'Level difference between start and destination', slope: 'Main slope', slopeHint: 'Maximum allowed: 20%', startSlope: 'Start slope', startSlopeHint: 'Maximum allowed: 15%', endSlope: 'End slope', endSlopeHint: 'Current formula supports 5% or 10%', rampType: 'Ramp type', rampTypeHint: 'Choose ramp type for calculation', calculate: 'Calculate', download: 'Download app', rules: 'Rules & Regulations', version: 'Version 1.3.0', resultPrefix: 'Ramp length', invalid: 'Please enter an allowed slope.' }
+    };
+
+    const localizedNodes = {
+      pageTitle: document.getElementById('pageTitle'),
+      planTab: document.getElementById('planTab'),
+      elevationTab: document.getElementById('elevationTab'),
+      heightLabel: document.getElementById('heightLabel'),
+      heightHint: document.getElementById('heightHint'),
+      slopeLabel: document.getElementById('slopeLabel'),
+      slopeHint: document.getElementById('slopeHint'),
+      startSlopeLabel: document.getElementById('startSlopeLabel'),
+      startSlopeHint: document.getElementById('startSlopeHint'),
+      endSlopeLabel: document.getElementById('endSlopeLabel'),
+      endSlopeHint: document.getElementById('endSlopeHint'),
+      rampTypeLabel: document.getElementById('rampTypeLabel'),
+      rampTypeHint: document.getElementById('rampTypeHint'),
+      calculateButton: document.getElementById('calculateButton'),
+      downloadButton: document.getElementById('downloadButton'),
+      versionText: document.getElementById('versionText')
+    };
 
     const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
 
@@ -799,8 +838,9 @@
     function updateRampType() {
       const rampType = rampTypeInput.value;
       const isCarRamp = rampType === 'car';
-      const label = isCarRamp ? 'خودرو' : rampType === 'disabled' ? 'معلول' : 'عابر';
-      formTitle.textContent = `مشخصات رمپ ${label}`;
+      const activeCopy = copy[currentLanguage];
+      const label = isCarRamp ? activeCopy.car : rampType === 'disabled' ? activeCopy.disabled : activeCopy.human;
+      formTitle.textContent = `${activeCopy.formPrefix} ${label}`;
       formIcon.innerHTML = `<svg class="icon"><use href="#${isCarRamp ? 'icon-car' : rampType === 'disabled' ? 'icon-wheelchair' : 'icon-walk'}"></use></svg>`;
       startSlopeGroup.style.display = isCarRamp ? '' : 'none';
       endSlopeGroup.style.display = isCarRamp ? '' : 'none';
@@ -810,11 +850,11 @@
     function renderRampResult(result) {
       if (result.error) {
         mainResult.textContent = result.error;
-        edgeResult.textContent = 'لطفاً شیب مجاز وارد کنید.';
+        edgeResult.textContent = copy[currentLanguage].invalid;
         return;
       }
 
-      mainResult.textContent = `طول رمپ : ${formatNumber(result.length)} متر`;
+      mainResult.textContent = `${copy[currentLanguage].resultPrefix} : ${formatNumber(result.length)} ${currentLanguage === 'fa' ? 'متر' : 'm'}`;
       edgeResult.textContent = [result.stop, result.warning].filter(Boolean).join('، ');
     }
 
@@ -839,11 +879,35 @@
       calculateRamp();
     }
 
-    languageToggle.addEventListener('click', () => {
-      currentLanguage = currentLanguage === 'fa' ? 'en' : 'fa';
+    function applyLanguage() {
+      const activeCopy = copy[currentLanguage];
+      localizedNodes.pageTitle.textContent = activeCopy.title;
+      localizedNodes.planTab.textContent = activeCopy.plan;
+      localizedNodes.elevationTab.textContent = activeCopy.elevation;
+      localizedNodes.heightLabel.textContent = activeCopy.height;
+      localizedNodes.heightHint.textContent = activeCopy.heightHint;
+      localizedNodes.slopeLabel.textContent = activeCopy.slope;
+      localizedNodes.slopeHint.textContent = activeCopy.slopeHint;
+      localizedNodes.startSlopeLabel.textContent = activeCopy.startSlope;
+      localizedNodes.startSlopeHint.textContent = activeCopy.startSlopeHint;
+      localizedNodes.endSlopeLabel.textContent = activeCopy.endSlope;
+      localizedNodes.endSlopeHint.textContent = activeCopy.endSlopeHint;
+      localizedNodes.rampTypeLabel.textContent = activeCopy.rampType;
+      localizedNodes.rampTypeHint.textContent = activeCopy.rampTypeHint;
+      localizedNodes.calculateButton.childNodes[0].textContent = `${activeCopy.calculate} `;
+      localizedNodes.downloadButton.childNodes[0].textContent = `${activeCopy.download} `;
+      openRules.childNodes[0].textContent = `${activeCopy.rules} `;
+      localizedNodes.versionText.textContent = activeCopy.version;
       faLabel.style.color = currentLanguage === 'fa' ? 'var(--primary)' : 'var(--muted)';
       enLabel.style.color = currentLanguage === 'en' ? 'var(--primary)' : 'var(--muted)';
       document.documentElement.lang = currentLanguage;
+      document.documentElement.dir = currentLanguage === 'fa' ? 'rtl' : 'ltr';
+      calculateRamp();
+    }
+
+    languageToggle.addEventListener('click', () => {
+      currentLanguage = currentLanguage === 'fa' ? 'en' : 'fa';
+      applyLanguage();
     });
 
     themeToggle.addEventListener('click', () => {
@@ -852,9 +916,16 @@
       themeToggle.setAttribute('aria-pressed', String(isDark));
     });
 
-    openRules.addEventListener('click', () => rulesModal.classList.add('is-open'));
-    closeRules.addEventListener('click', () => rulesModal.classList.remove('is-open'));
-    dismissRules.addEventListener('click', () => rulesModal.classList.remove('is-open'));
+    function setRulesModal(isOpen) {
+      rulesModal.classList.toggle('is-open', isOpen);
+      modalBackdrop.classList.toggle('is-open', isOpen);
+      body.classList.toggle('modal-open', isOpen);
+    }
+
+    openRules.addEventListener('click', () => setRulesModal(true));
+    closeRules.addEventListener('click', () => setRulesModal(false));
+    dismissRules.addEventListener('click', () => setRulesModal(false));
+    modalBackdrop.addEventListener('click', () => setRulesModal(false));
 
     viewTabs.forEach(tab => {
       tab.addEventListener('click', () => {
@@ -877,7 +948,7 @@
       calculateRamp();
     });
 
-    calculateRamp();
+    applyLanguage();
   </script>
 </body>
 </html>
