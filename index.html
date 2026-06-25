@@ -252,8 +252,9 @@
       inset: 0;
       z-index: 25;
       display: none;
-      background: rgba(15, 23, 42, 0.32);
-      backdrop-filter: blur(9px);
+      background: rgba(15, 23, 42, 0.38);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
     }
 
     .modal.is-open, .modal-backdrop.is-open { display: block; }
@@ -624,23 +625,6 @@
           </svg>
         </div>
 
-        <div class="modal-backdrop" id="modalBackdrop"></div>
-
-        <aside class="modal" id="rulesModal" aria-modal="true" role="dialog" aria-labelledby="rulesTitle">
-          <div class="modal-head">
-            <button class="modal-close" id="closeRules" type="button" aria-label="بستن">×</button>
-            <h2 class="modal-title" id="rulesTitle">ضوابط رمپ <span aria-hidden="true">ⓘ</span></h2>
-          </div>
-          <ul class="rules">
-            <li>حداکثر شیب اصلی رمپ خودرو ۲۰٪ است.</li>
-            <li>حداکثر شیب در ابتدا و انتهای رمپ ۱۵٪ است.</li>
-            <li>حداقل طول پاگرد ابتدا و انتها ۱.۵۰ متر است.</li>
-            <li>حداقل عرض رمپ برای عبور یک خودرو ۳.۵۰ متر است.</li>
-            <li>در صورت تغییر جهت، حداقل طول پاگرد ۱.۵۰ متر است.</li>
-            <li>شیب جانبی رمپ حداکثر ۲٪ در نظر گرفته شود.</li>
-          </ul>
-          <button class="modal-action" id="dismissRules" type="button">بستن</button>
-        </aside>
       </article>
 
       <aside class="card form-card" aria-label="مشخصات رمپ">
@@ -710,6 +694,24 @@
       <button class="rules-button" id="openRules" type="button">ضوابط و مقررات <svg class="icon" aria-hidden="true"><use href="#icon-rules"></use></svg></button>
       <span class="version" id="versionText">نسخه ۱.۳.۰</span>
     </footer>
+
+    <div class="modal-backdrop" id="modalBackdrop"></div>
+
+    <aside class="modal" id="rulesModal" aria-modal="true" role="dialog" aria-labelledby="rulesTitle">
+      <div class="modal-head">
+        <button class="modal-close" id="closeRules" type="button" aria-label="بستن">×</button>
+        <h2 class="modal-title" id="rulesTitle">ضوابط رمپ <span aria-hidden="true">ⓘ</span></h2>
+      </div>
+      <ul class="rules">
+        <li>حداکثر شیب اصلی رمپ خودرو ۲۰٪ است.</li>
+        <li>حداکثر شیب در ابتدا و انتهای رمپ ۱۵٪ است.</li>
+        <li>حداقل طول پاگرد ابتدا و انتها ۱.۵۰ متر است.</li>
+        <li>حداقل عرض رمپ برای عبور یک خودرو ۳.۵۰ متر است.</li>
+        <li>در صورت تغییر جهت، حداقل طول پاگرد ۱.۵۰ متر است.</li>
+        <li>شیب جانبی رمپ حداکثر ۲٪ در نظر گرفته شود.</li>
+      </ul>
+      <button class="modal-action" id="dismissRules" type="button">بستن</button>
+    </aside>
   </main>
 
   <script>
