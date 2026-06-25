@@ -3,358 +3,686 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>محاسبه‌گر رمپ خودرو</title>
+  <title>محاسبه‌گر رمپ</title>
   <style>
     :root {
       color-scheme: light;
-      --page: #f4f7fb;
+      --page: #f5f8fc;
+      --panel: rgba(255, 255, 255, 0.9);
+      --panel-soft: rgba(255, 255, 255, 0.68);
       --text: #172033;
-      --muted: #667085;
-      --panel: #ffffff;
-      --field: #f8fafc;
-      --field-border: #c7ced8;
-      --primary: #2373b6;
-      --primary-dark: #105284;
-      --button: #2f6df3;
-      --button-hover: #2359d6;
-      --result-bg: #ffffff;
-      --result-border: #dfe5ed;
-      --result-text: #178a48;
-      --shadow: 0 24px 70px rgba(16, 24, 40, 0.12);
-      --footer: #98a2b3;
+      --muted: #7b8798;
+      --line: #dce3ed;
+      --field: #fbfcfe;
+      --primary: #2f73ff;
+      --primary-dark: #1f55d9;
+      --shadow: 0 22px 55px rgba(21, 36, 64, 0.12);
+      --soft-shadow: 0 12px 32px rgba(21, 36, 64, 0.08);
+      --success: #178a48;
+      --warning: #d97706;
     }
 
     body.dark {
       color-scheme: dark;
-      --page: #242424;
-      --text: #f4f7fb;
-      --muted: #c5cbd6;
-      --panel: #242424;
-      --field: #303437;
-      --field-border: #666c73;
-      --primary: #2473b3;
-      --primary-dark: #0f4c7e;
-      --button: #326bf0;
-      --button-hover: #447bff;
-      --result-bg: #171918;
-      --result-border: #303235;
-      --result-text: #90f3a8;
-      --shadow: none;
-      --footer: #8e949c;
+      --page: #111827;
+      --panel: rgba(31, 41, 55, 0.92);
+      --panel-soft: rgba(17, 24, 39, 0.78);
+      --text: #f8fafc;
+      --muted: #b7c0ce;
+      --line: #374151;
+      --field: #182231;
+      --primary: #3b82f6;
+      --primary-dark: #2563eb;
+      --shadow: 0 22px 55px rgba(0, 0, 0, 0.34);
+      --soft-shadow: 0 12px 32px rgba(0, 0, 0, 0.24);
+      --success: #86efac;
+      --warning: #fbbf24;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
       min-height: 100vh;
-      background: var(--page);
+      background:
+        radial-gradient(circle at top left, rgba(47, 115, 255, 0.12), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(47, 115, 255, 0.1), transparent 32%),
+        var(--page);
       color: var(--text);
       font-family: Tahoma, Vazirmatn, IRANSans, Arial, sans-serif;
       transition: background 180ms ease, color 180ms ease;
     }
 
+    button, input, select { font: inherit; }
+
     .app {
-      width: min(100%, 640px);
+      width: min(100%, 1420px);
       min-height: 100vh;
       margin: 0 auto;
-      padding: 16px 16px 26px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      padding: 22px 32px 24px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 20px;
     }
 
-    .theme-row {
-      direction: ltr;
+    .topbar, .bottom-bar, .card {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      box-shadow: var(--soft-shadow);
+      backdrop-filter: blur(14px);
+    }
+
+    .topbar {
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .theme-tools, .language-switch {
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 7px;
-      width: 100%;
-      margin-bottom: 18px;
-      color: var(--text);
-      font-size: 14px;
+      gap: 13px;
+      justify-self: start;
+      direction: ltr;
     }
+
+    .language-switch {
+      justify-self: start;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 11px 16px;
+      background: var(--panel-soft);
+      color: var(--muted);
+      font-weight: 700;
+      box-shadow: var(--soft-shadow);
+    }
+
+    .language-switch strong { color: var(--primary); }
+    .language-switch span:nth-child(2) { color: var(--muted); }
+
+    .theme-icon { font-size: 26px; line-height: 1; }
 
     .toggle {
       position: relative;
-      inline-size: 34px;
-      block-size: 18px;
+      inline-size: 50px;
+      block-size: 26px;
       border: 0;
       border-radius: 999px;
-      background: #1f6fae;
+      background: linear-gradient(90deg, #183b8f, var(--primary));
       cursor: pointer;
       padding: 0;
-      transition: background 160ms ease;
     }
 
     .toggle::after {
       content: "";
       position: absolute;
-      inset-block-start: 1px;
-      inset-inline-start: 17px;
-      inline-size: 16px;
-      block-size: 16px;
+      inset-block-start: 3px;
+      inset-inline-start: 4px;
+      inline-size: 20px;
+      block-size: 20px;
       border-radius: 50%;
-      background: #d8dee7;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.24);
       transition: transform 160ms ease;
     }
 
-    body:not(.dark) .toggle {
-      background: #cdd7e4;
-    }
+    body.dark .toggle::after { transform: translateX(22px); }
 
-    body:not(.dark) .toggle::after {
-      transform: translateX(-16px);
-      background: #ffffff;
+    .brand {
+      justify-self: center;
+      display: flex;
+      align-items: center;
+      gap: 16px;
     }
 
     h1 {
       margin: 0;
-      font-size: clamp(26px, 5vw, 31px);
-      line-height: 1.35;
-      font-weight: 800;
-      text-align: center;
-      text-shadow: 0 2px 0 rgba(35, 115, 182, 0.55);
-      letter-spacing: -0.02em;
+      font-size: clamp(27px, 3vw, 42px);
+      font-weight: 900;
+      letter-spacing: -0.04em;
     }
 
-    .divider {
-      inline-size: min(250px, 70vw);
+    .brand-icon, .form-icon, .nav-icon {
+      display: inline-grid;
+      place-items: center;
+      color: var(--primary);
+    }
+
+    .brand-icon {
+      inline-size: 54px;
+      block-size: 54px;
+      border: 2px solid rgba(47, 115, 255, 0.22);
+      border-radius: 50%;
+      background: rgba(47, 115, 255, 0.08);
+      font-size: 30px;
+    }
+
+    .content {
+      display: grid;
+      grid-template-columns: minmax(0, 1.9fr) minmax(340px, 1fr);
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .card {
+      border-radius: 24px;
+      padding: 26px;
+    }
+
+    .preview-card {
+      position: relative;
+      min-height: 570px;
+      overflow: hidden;
+    }
+
+    .view-tabs {
+      position: absolute;
+      inset-block-start: 28px;
+      inset-inline-start: 28px;
+      display: flex;
+      gap: 8px;
+      padding: 6px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--panel-soft);
+      box-shadow: var(--soft-shadow);
+      z-index: 3;
+    }
+
+    .view-tab {
       border: 0;
-      border-top: 2px solid currentColor;
-      margin: 18px 0 26px;
-      opacity: 0.94;
+      border-radius: 9px;
+      padding: 11px 22px;
+      color: var(--muted);
+      background: transparent;
+      cursor: pointer;
+      font-weight: 800;
     }
 
-    .calculator {
-      inline-size: min(100%, 250px);
+    .view-tab.active {
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      box-shadow: 0 8px 18px rgba(47, 115, 255, 0.28);
+    }
+
+    .diagram {
+      min-height: 500px;
+      display: grid;
+      place-items: center;
+      padding-top: 64px;
+    }
+
+    .drawing {
+      width: min(100%, 760px);
+      color: var(--text);
+    }
+
+    .drawing text { fill: currentColor; font-weight: 700; }
+    .drawing .muted { fill: var(--muted); }
+    .drawing .line { stroke: #8a96a8; }
+    body.dark .drawing .line { stroke: #c4ccda; }
+    .drawing .blue { stroke: var(--primary); fill: rgba(47, 115, 255, 0.08); }
+
+    .modal {
+      position: absolute;
+      inset-block-start: 145px;
+      inset-inline-end: 34px;
+      width: min(420px, calc(100% - 56px));
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      z-index: 5;
+      display: none;
+    }
+
+    .modal.is-open { display: block; }
+
+    .modal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .modal-title { margin: 0; font-size: 20px; font-weight: 900; }
+    .modal-close {
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      font-size: 31px;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .rules {
+      list-style: none;
+      margin: 18px 0 20px;
+      padding: 0;
       display: grid;
       gap: 14px;
-      justify-items: stretch;
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.8;
     }
 
-    .field-group {
+    .rules li {
       display: grid;
-      gap: 8px;
+      grid-template-columns: auto 1fr;
+      gap: 10px;
+      align-items: start;
     }
 
-    .field-group.is-hidden {
-      display: none;
+    .rules li::before {
+      content: "✓";
+      display: inline-grid;
+      place-items: center;
+      inline-size: 18px;
+      block-size: 18px;
+      border: 2px solid var(--primary);
+      border-radius: 50%;
+      color: var(--primary);
+      font-size: 12px;
+      margin-top: 4px;
     }
 
-    label {
-      text-align: center;
-      font-weight: 800;
-      font-size: 15px;
-      line-height: 1.7;
-    }
-
-    select,
-    input {
+    .modal-action {
       inline-size: 100%;
-      block-size: 40px;
-      border: 2px solid var(--field-border);
-      border-radius: 5px;
+      block-size: 44px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
       background: var(--field);
       color: var(--text);
-      font: 700 15px/1 Tahoma, Vazirmatn, IRANSans, Arial, sans-serif;
-      outline: none;
-      transition: border-color 150ms ease, box-shadow 150ms ease, background 150ms ease;
-    }
-
-    input {
-      direction: ltr;
-      text-align: left;
-      padding: 0 10px;
-    }
-
-    select {
-      appearance: none;
-      padding: 0 11px 0 40px;
-      background-image:
-        linear-gradient(45deg, transparent 50%, white 50%),
-        linear-gradient(135deg, white 50%, transparent 50%),
-        linear-gradient(to left, var(--primary-dark), var(--primary-dark));
-      background-position:
-        left 18px center,
-        left 12px center,
-        left 0 top 0;
-      background-size:
-        7px 7px,
-        7px 7px,
-        40px 100%;
-      background-repeat: no-repeat;
-      background-color: var(--primary);
-      border-color: var(--primary);
-      color: #ffffff;
       cursor: pointer;
+      font-weight: 800;
     }
 
-    select:focus,
-    input:focus {
-      border-color: #5ea3e4;
-      box-shadow: 0 0 0 3px rgba(35, 115, 182, 0.18);
-    }
+    .form-card { display: flex; flex-direction: column; gap: 22px; }
 
-    option:disabled {
-      color: #aab2bd;
-    }
-
-    .sr-only {
-      position: absolute;
-      inline-size: 1px;
-      block-size: 1px;
-      overflow: hidden;
-      clip: rect(0 0 0 0);
-      white-space: nowrap;
-    }
-
-    .button-wrap {
+    .form-head {
       display: flex;
+      align-items: center;
       justify-content: center;
-      margin-top: 18px;
+      gap: 14px;
+      margin-bottom: 8px;
     }
 
-    button.calculate {
-      inline-size: 160px;
-      block-size: 44px;
-      border: 0;
-      border-radius: 8px;
-      background: var(--button);
-      color: #ffffff;
-      font: 800 15px/1 Tahoma, Vazirmatn, IRANSans, Arial, sans-serif;
-      cursor: pointer;
-      box-shadow: 0 11px 24px rgba(47, 109, 243, 0.26);
-      transition: transform 150ms ease, background 150ms ease, box-shadow 150ms ease;
+    .form-icon {
+      inline-size: 54px;
+      block-size: 54px;
+      border-radius: 50%;
+      background: rgba(47, 115, 255, 0.08);
+      border: 1px solid var(--line);
+      font-size: 28px;
     }
 
-    button.calculate:hover {
-      transform: translateY(-1px);
-      background: var(--button-hover);
-      box-shadow: 0 14px 28px rgba(47, 109, 243, 0.34);
+    .form-head h2 { margin: 0; font-size: 21px; font-weight: 900; }
+
+    .calculator { display: grid; gap: 21px; }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 108px minmax(0, 1fr);
+      align-items: start;
+      gap: 13px;
     }
 
-    button.calculate:active {
-      transform: translateY(0);
-    }
+    label { font-weight: 800; line-height: 52px; }
 
-    .preview {
-      inline-size: 100%;
-      margin-top: 36px;
-      border: 2px solid var(--result-border);
-      border-radius: 17px;
-      background: var(--result-bg);
-      box-shadow: var(--shadow);
-      padding: 20px 14px;
-      text-align: center;
-      transition: background 180ms ease, border-color 180ms ease;
-    }
+    .control-wrap { display: grid; gap: 7px; }
 
-    .preview h2 {
-      position: absolute;
-      inline-size: 1px;
-      block-size: 1px;
+    .control {
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      direction: ltr;
+      border: 1px solid var(--line);
+      border-radius: 9px;
       overflow: hidden;
-      clip: rect(0 0 0 0);
-      white-space: nowrap;
+      background: var(--field);
+      min-height: 52px;
     }
 
-    .result-line {
-      margin: 0;
-      color: var(--result-text);
-      font-weight: 900;
-      font-size: clamp(17px, 4vw, 20px);
-      line-height: 1.8;
-      letter-spacing: 0.02em;
+    .unit {
+      display: grid;
+      place-items: center;
+      border-right: 1px solid var(--line);
+      color: var(--text);
+      background: rgba(148, 163, 184, 0.08);
+      font-weight: 800;
     }
 
-    .ramp-note {
-      display: none;
-      margin: 8px 0 0;
+    input, select {
+      inline-size: 100%;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: var(--text);
+      padding: 0 13px;
+      font-weight: 800;
+      text-align: left;
+      min-height: 52px;
+    }
+
+    select { appearance: none; cursor: pointer; }
+    .select-wrap { position: relative; }
+    .select-wrap::before {
+      content: "⌄";
+      position: absolute;
+      inset-inline-start: 16px;
+      inset-block-start: 12px;
       color: var(--muted);
-      font-size: 13px;
-      line-height: 1.7;
+      font-size: 24px;
+      pointer-events: none;
     }
 
-    .footer {
-      margin-top: auto;
-      padding-top: 28px;
-      color: var(--footer);
+    .hint {
+      margin: 0;
+      color: var(--muted);
       font-size: 12px;
       font-weight: 700;
       text-align: center;
     }
 
-    @media (max-width: 430px) {
-      .app {
-        padding-inline: 12px;
-      }
+    .calculate {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      inline-size: 100%;
+      min-height: 50px;
+      border: 0;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: #fff;
+      cursor: pointer;
+      font-weight: 900;
+      box-shadow: 0 12px 28px rgba(47, 115, 255, 0.28);
+    }
 
-      .calculator {
-        inline-size: min(100%, 270px);
-      }
+    .result-box {
+      border: 1px dashed rgba(47, 115, 255, 0.45);
+      border-radius: 16px;
+      background: rgba(47, 115, 255, 0.06);
+      padding: 14px;
+      text-align: center;
+    }
 
-      .preview {
-        margin-top: 30px;
-      }
+    .result-line {
+      margin: 0;
+      color: var(--success);
+      font-size: 19px;
+      font-weight: 900;
+      line-height: 1.9;
+    }
+
+    .edge-line {
+      margin: 0;
+      color: var(--warning);
+      font-size: 14px;
+      font-weight: 800;
+      min-height: 26px;
+    }
+
+    .bottom-row {
+      display: grid;
+      grid-template-columns: auto minmax(360px, 650px) auto 1fr;
+      align-items: center;
+      gap: 22px;
+      direction: ltr;
+    }
+
+    .download, .rules-button, .bottom-bar {
+      border-radius: 999px;
+      min-height: 70px;
+    }
+
+    .download, .rules-button {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      box-shadow: var(--soft-shadow);
+      padding: 0 26px;
+      color: var(--primary);
+      font-weight: 900;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .bottom-bar {
+      padding: 7px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      direction: rtl;
+    }
+
+    .nav-item {
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--text);
+      cursor: pointer;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 13px;
+      min-height: 56px;
+    }
+
+    .nav-item.active {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: #fff;
+    }
+
+    .nav-item.active .nav-icon { color: #fff; }
+    .version { color: var(--muted); font-weight: 800; justify-self: end; }
+
+    @media (max-width: 1050px) {
+      .app { padding: 16px; }
+      .topbar, .content, .bottom-row { grid-template-columns: 1fr; }
+      .theme-tools, .language-switch, .brand, .version { justify-self: center; }
+      .content { gap: 16px; }
+      .bottom-row { direction: rtl; }
+    }
+
+    @media (max-width: 620px) {
+      .card { padding: 18px; border-radius: 18px; }
+      .preview-card { min-height: 500px; }
+      .field-row { grid-template-columns: 1fr; gap: 5px; }
+      label { line-height: 1.6; }
+      .bottom-bar { grid-template-columns: 1fr; border-radius: 22px; }
+      .view-tabs { position: static; margin-bottom: 10px; width: max-content; }
+      .diagram { padding-top: 0; min-height: auto; }
+      .modal { inset: 78px 18px auto; width: auto; }
     }
   </style>
 </head>
-<body class="dark">
+<body>
   <main class="app">
-    <div class="theme-row">
-      <button class="toggle" id="themeToggle" type="button" aria-label="تغییر حالت روشن و تاریک" aria-pressed="true"></button>
-      <span>Dark</span>
-    </div>
-
-    <h1>محاسبه‌گر رمپ</h1>
-    <hr class="divider" />
-
-    <form class="calculator" id="rampForm">
-      <div class="field-group">
-        <label class="sr-only" for="rampType">نوع رمپ</label>
-        <select id="rampType" aria-label="نوع رمپ">
-          <option value="car" selected>رمپ خودرو</option>
-          <option value="disabled">رمپ معلول</option>
-          <option value="human">رمپ آدم</option>
-        </select>
+    <header class="topbar">
+      <div class="theme-tools" aria-label="تنظیمات پوسته">
+        <span class="theme-icon">☀️</span>
+        <button class="toggle" id="themeToggle" type="button" aria-label="تغییر حالت روشن و تاریک" aria-pressed="false"></button>
+        <span class="theme-icon">🌙</span>
+        <div class="language-switch" aria-label="انتخاب زبان">
+          <strong>فارسی</strong>
+          <span>|</span>
+          <span>English</span>
+        </div>
       </div>
-
-      <div class="field-group">
-        <label for="height">ارتفاع (سانتی‌متر)</label>
-        <input id="height" type="number" inputmode="decimal" min="1" step="1" value="350" />
+      <div class="brand">
+        <h1>محاسبه رمپ</h1>
+        <span class="brand-icon" aria-hidden="true">🚘</span>
       </div>
+      <div></div>
+    </header>
 
-      <div class="field-group">
-        <label for="slope">شیب (%)</label>
-        <input id="slope" type="number" inputmode="decimal" min="1" step="0.1" value="17" />
-      </div>
+    <section class="content">
+      <article class="card preview-card" aria-label="پیش‌نمایش رمپ">
+        <div class="view-tabs" role="tablist" aria-label="نوع نمایش">
+          <button class="view-tab active" type="button" data-view="plan">پلان 🧭</button>
+          <button class="view-tab" type="button" data-view="elevation">نما 📐</button>
+        </div>
 
-      <div class="field-group" id="edgeSlopeGroup">
-        <label for="edgeSlope">شیب ابتدا و انتهای رمپ خودرو (%)</label>
-        <select id="edgeSlope">
-          <option value="10" selected>۱۰</option>
-          <option value="5">۵</option>
-        </select>
-      </div>
+        <div class="diagram" id="planDiagram" aria-label="نمای پلان رمپ خودرو">
+          <svg class="drawing" viewBox="0 0 760 470" role="img" aria-labelledby="planTitle">
+            <title id="planTitle">پلان و نمای جانبی رمپ خودرو</title>
+            <defs>
+              <pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                <line x1="0" y1="0" x2="0" y2="8" stroke="#c9d1df" stroke-width="2" />
+              </pattern>
+              <marker id="arrow" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+                <path d="M0,0 L8,4 L0,8 Z" fill="#748094" />
+              </marker>
+            </defs>
+            <line class="line" x1="30" y1="250" x2="720" y2="250" stroke-width="1" opacity="0.4" />
+            <polygon points="170,95 560,150 560,205 170,205" fill="rgba(148,163,184,.08)" stroke="#8a96a8" stroke-width="2" />
+            <rect x="145" y="95" width="25" height="110" fill="url(#hatch)" stroke="#8a96a8" />
+            <line class="line" x1="190" y1="55" x2="560" y2="55" stroke-width="1.5" marker-start="url(#arrow)" marker-end="url(#arrow)" />
+            <line class="line" x1="190" y1="45" x2="190" y2="95" stroke-dasharray="7 6" />
+            <line class="line" x1="560" y1="45" x2="560" y2="95" stroke-dasharray="7 6" />
+            <text x="375" y="39" text-anchor="middle" font-size="18">۶.۰۰ m</text>
+            <line class="line" x1="90" y1="105" x2="90" y2="200" stroke-width="1.5" marker-start="url(#arrow)" marker-end="url(#arrow)" />
+            <line class="line" x1="90" y1="105" x2="145" y2="105" stroke-dasharray="7 6" opacity="0.55" />
+            <line class="line" x1="90" y1="200" x2="145" y2="200" stroke-dasharray="7 6" opacity="0.55" />
+            <text x="52" y="160" text-anchor="middle" font-size="18">۳.۵۰ m</text>
+            <line class="line" x1="610" y1="95" x2="610" y2="205" stroke-width="1.5" marker-start="url(#arrow)" marker-end="url(#arrow)" />
+            <line class="line" x1="560" y1="95" x2="610" y2="95" stroke-dasharray="7 6" opacity="0.55" />
+            <line class="line" x1="560" y1="205" x2="610" y2="205" stroke-dasharray="7 6" opacity="0.55" />
+            <text x="645" y="162" text-anchor="middle" font-size="18">۵.۰۰ m</text>
+            <text class="muted" x="675" y="210" font-size="14">سطح بالاتر</text>
+            <g transform="translate(255 120) rotate(5)">
+              <rect x="0" y="0" width="165" height="70" rx="34" fill="none" stroke="#7f8b9e" stroke-width="3" />
+              <rect x="20" y="9" width="125" height="52" rx="25" fill="none" stroke="#a8b2c1" stroke-width="2" />
+              <line x1="53" y1="9" x2="53" y2="61" stroke="#a8b2c1" />
+              <line x1="112" y1="9" x2="112" y2="61" stroke="#a8b2c1" />
+            </g>
+            <text class="muted" x="650" y="305" font-size="15">تراز بالا</text>
+            <text x="650" y="327" font-size="15">+۱.۰۰</text>
+            <text class="muted" x="88" y="385" font-size="15">تراز پایین</text>
+            <text x="88" y="407" font-size="15">±۰.۰۰</text>
+            <polyline points="120,390 200,385 560,320 635,320" fill="none" stroke="#7f8b9e" stroke-width="3" />
+            <line class="line" x1="120" y1="410" x2="635" y2="410" stroke-width="1" marker-start="url(#arrow)" marker-end="url(#arrow)" />
+            <line class="line" x1="200" y1="395" x2="200" y2="430" stroke-dasharray="7 6" />
+            <line class="line" x1="560" y1="320" x2="560" y2="430" stroke-dasharray="7 6" />
+            <text x="160" y="445" text-anchor="middle" font-size="16">۱.۰۰ m</text>
+            <text class="muted" x="160" y="467" text-anchor="middle" font-size="14">ابتدا</text>
+            <text x="380" y="445" text-anchor="middle" font-size="16">۴.۰۰ m</text>
+            <text class="muted" x="380" y="467" text-anchor="middle" font-size="14">شیب اصلی</text>
+            <text x="598" y="445" text-anchor="middle" font-size="16">۱.۰۰ m</text>
+            <text class="muted" x="598" y="467" text-anchor="middle" font-size="14">انتها</text>
+            <text x="310" y="382" font-size="32" opacity="0.7">🚗</text>
+          </svg>
+        </div>
 
-      <div class="button-wrap">
-        <button class="calculate" type="submit">محاسبه</button>
-      </div>
-    </form>
+        <div class="diagram" id="elevationDiagram" hidden aria-label="نمای جانبی رمپ">
+          <svg class="drawing" viewBox="0 0 760 470" role="img" aria-labelledby="elevationTitle">
+            <title id="elevationTitle">نمای جانبی رمپ</title>
+            <line class="line" x1="90" y1="360" x2="680" y2="360" stroke-width="2" />
+            <polyline class="blue" points="110,330 230,330 560,170 660,170" stroke-width="4" fill="none" />
+            <line class="line" x1="230" y1="330" x2="230" y2="390" stroke-dasharray="7 6" />
+            <line class="line" x1="560" y1="170" x2="560" y2="390" stroke-dasharray="7 6" />
+            <text x="170" y="415" text-anchor="middle" font-size="18">ابتدا</text>
+            <text x="390" y="415" text-anchor="middle" font-size="18">شیب اصلی</text>
+            <text x="610" y="415" text-anchor="middle" font-size="18">انتها</text>
+            <text x="575" y="140" font-size="18">سطح بالاتر</text>
+            <text x="95" y="310" font-size="18">سطح پایین</text>
+            <text x="360" y="245" font-size="42">🚗</text>
+          </svg>
+        </div>
 
-    <section class="preview" aria-live="polite" aria-label="پیش‌نمایش نتیجه">
-      <h2>پیش‌نمایش</h2>
-      <p class="result-line" id="mainResult">طول رمپ : ۲۱.۴۱۲ متر</p>
-      <p class="result-line" id="edgeResult">+۳ توقف رمپ</p>
-      <p class="ramp-note" id="rampNote">فرمول محاسبه با توجه به نوع رمپ انتخاب‌شده اعمال می‌شود.</p>
+        <aside class="modal" id="rulesModal" aria-modal="true" role="dialog" aria-labelledby="rulesTitle">
+          <div class="modal-head">
+            <button class="modal-close" id="closeRules" type="button" aria-label="بستن">×</button>
+            <h2 class="modal-title" id="rulesTitle">ضوابط رمپ <span aria-hidden="true">ⓘ</span></h2>
+          </div>
+          <ul class="rules">
+            <li>حداکثر شیب اصلی رمپ خودرو ۲۰٪ است.</li>
+            <li>حداکثر شیب در ابتدا و انتهای رمپ ۱۵٪ است.</li>
+            <li>حداقل طول پاگرد ابتدا و انتها ۱.۵۰ متر است.</li>
+            <li>حداقل عرض رمپ برای عبور یک خودرو ۳.۵۰ متر است.</li>
+            <li>در صورت تغییر جهت، حداقل طول پاگرد ۱.۵۰ متر است.</li>
+            <li>شیب جانبی رمپ حداکثر ۲٪ در نظر گرفته شود.</li>
+          </ul>
+          <button class="modal-action" id="dismissRules" type="button">بستن</button>
+        </aside>
+      </article>
+
+      <aside class="card form-card" aria-label="مشخصات رمپ">
+        <div class="form-head">
+          <h2 id="formTitle">مشخصات رمپ خودرو</h2>
+          <span class="form-icon" id="formIcon" aria-hidden="true">🚗</span>
+        </div>
+
+        <form class="calculator" id="rampForm">
+          <div class="field-row">
+            <label for="height">ارتفاع</label>
+            <div class="control-wrap">
+              <div class="control"><span class="unit">m</span><input id="height" type="number" inputmode="decimal" min="0.01" step="0.01" value="1.00" /></div>
+              <p class="hint">اختلاف تراز بین مبدا و مقصد</p>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <label for="slope">شیب اصلی</label>
+            <div class="control-wrap">
+              <div class="control"><span class="unit">%</span><input id="slope" type="number" inputmode="decimal" min="1" step="0.1" value="16.0" /></div>
+              <p class="hint">حداکثر مجاز: ۲۰٪</p>
+            </div>
+          </div>
+
+          <div class="field-row" id="startSlopeGroup">
+            <label for="startSlope">شیب ابتدا</label>
+            <div class="control-wrap">
+              <div class="control"><span class="unit">%</span><input id="startSlope" type="number" inputmode="decimal" min="1" step="0.1" value="12.5" /></div>
+              <p class="hint">حداکثر مجاز: ۱۵٪</p>
+            </div>
+          </div>
+
+          <div class="field-row" id="endSlopeGroup">
+            <label for="edgeSlope">شیب انتها</label>
+            <div class="control-wrap">
+              <div class="control"><span class="unit">%</span><select id="edgeSlope"><option value="10">۱۰</option><option value="5">۵</option></select></div>
+              <p class="hint">برای فرمول فعلی ۵٪ یا ۱۰٪</p>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <label for="rampType">نوع رمپ</label>
+            <div class="control-wrap select-wrap">
+              <div class="control"><span class="unit">⌄</span><select id="rampType"><option value="car" selected>رمپ خودرو</option><option value="disabled">رمپ معلول</option><option value="human">رمپ عابر</option></select></div>
+              <p class="hint">انتخاب نوع رمپ برای محاسبات</p>
+            </div>
+          </div>
+
+          <button class="calculate" type="submit">محاسبه 🧮</button>
+        </form>
+
+        <section class="result-box" aria-live="polite" aria-label="نتیجه محاسبه">
+          <p class="result-line" id="mainResult">طول رمپ : ۰ متر</p>
+          <p class="edge-line" id="edgeResult"></p>
+        </section>
+      </aside>
     </section>
 
-    <footer class="footer">ساخته شده توسط علی خداپرست و آرین گروهی</footer>
+    <footer class="bottom-row">
+      <button class="download" type="button">دانلود نرم‌افزار ⬇</button>
+      <nav class="bottom-bar" aria-label="انتخاب نوع رمپ">
+        <button class="nav-item active" type="button" data-ramp="car"><span>رمپ خودرو</span><span class="nav-icon">🚗</span></button>
+        <button class="nav-item" type="button" data-ramp="disabled"><span>رمپ معلول</span><span class="nav-icon">♿</span></button>
+        <button class="nav-item" type="button" data-ramp="human"><span>رمپ عابر</span><span class="nav-icon">🚶</span></button>
+      </nav>
+      <button class="rules-button" id="openRules" type="button">ضوابط و مقررات 📋</button>
+      <span class="version">نسخه ۱.۳.۰</span>
+    </footer>
   </main>
 
   <script>
@@ -364,11 +692,21 @@
     const rampTypeInput = document.getElementById('rampType');
     const heightInput = document.getElementById('height');
     const slopeInput = document.getElementById('slope');
-    const edgeSlopeGroup = document.getElementById('edgeSlopeGroup');
+    const startSlopeGroup = document.getElementById('startSlopeGroup');
+    const endSlopeGroup = document.getElementById('endSlopeGroup');
     const edgeSlopeInput = document.getElementById('edgeSlope');
     const mainResult = document.getElementById('mainResult');
     const edgeResult = document.getElementById('edgeResult');
-    const rampNote = document.getElementById('rampNote');
+    const formTitle = document.getElementById('formTitle');
+    const formIcon = document.getElementById('formIcon');
+    const rulesModal = document.getElementById('rulesModal');
+    const openRules = document.getElementById('openRules');
+    const closeRules = document.getElementById('closeRules');
+    const dismissRules = document.getElementById('dismissRules');
+    const planDiagram = document.getElementById('planDiagram');
+    const elevationDiagram = document.getElementById('elevationDiagram');
+    const viewTabs = document.querySelectorAll('.view-tab');
+    const navItems = document.querySelectorAll('.nav-item');
 
     const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
 
@@ -442,13 +780,14 @@
     }
 
     function updateRampType() {
-      const isCarRamp = rampTypeInput.value === 'car';
-      edgeSlopeGroup.classList.toggle('is-hidden', !isCarRamp);
-      rampNote.textContent = isCarRamp
-        ? 'فرمول رمپ خودرو با شیب ابتدا و انتهای رمپ محاسبه می‌شود.'
-        : rampTypeInput.value === 'disabled'
-          ? 'برای رمپ معلول، شیب بیشتر از ۸٪ مجاز نیست.'
-          : 'برای رمپ آدم، شیب بیشتر از ۱۲.۵٪ مجاز نیست.';
+      const rampType = rampTypeInput.value;
+      const isCarRamp = rampType === 'car';
+      const label = isCarRamp ? 'خودرو' : rampType === 'disabled' ? 'معلول' : 'عابر';
+      formTitle.textContent = `مشخصات رمپ ${label}`;
+      formIcon.textContent = isCarRamp ? '🚗' : rampType === 'disabled' ? '♿' : '🚶';
+      startSlopeGroup.style.display = isCarRamp ? '' : 'none';
+      endSlopeGroup.style.display = isCarRamp ? '' : 'none';
+      navItems.forEach(item => item.classList.toggle('active', item.dataset.ramp === rampType));
     }
 
     function renderRampResult(result) {
@@ -463,7 +802,8 @@
     }
 
     function calculateRamp() {
-      const heightCentimeters = Math.max(Number(heightInput.value) || 0, 0);
+      const heightMeters = Math.max(Number(heightInput.value) || 0, 0);
+      const heightCentimeters = heightMeters * 100;
       const slopePercent = Math.max(Number(slopeInput.value) || 1, 1);
       const edgeSlopePercent = Number(edgeSlopeInput.value);
       const rampType = rampTypeInput.value;
@@ -475,13 +815,34 @@
 
       updateRampType();
       renderRampResult(result);
-      rampNote.style.display = 'block';
+    }
+
+    function setRampType(type) {
+      rampTypeInput.value = type;
+      calculateRamp();
     }
 
     themeToggle.addEventListener('click', () => {
       const isDark = !body.classList.contains('dark');
       body.classList.toggle('dark', isDark);
       themeToggle.setAttribute('aria-pressed', String(isDark));
+    });
+
+    openRules.addEventListener('click', () => rulesModal.classList.add('is-open'));
+    closeRules.addEventListener('click', () => rulesModal.classList.remove('is-open'));
+    dismissRules.addEventListener('click', () => rulesModal.classList.remove('is-open'));
+
+    viewTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const showPlan = tab.dataset.view === 'plan';
+        viewTabs.forEach(item => item.classList.toggle('active', item === tab));
+        planDiagram.hidden = !showPlan;
+        elevationDiagram.hidden = showPlan;
+      });
+    });
+
+    navItems.forEach(item => {
+      item.addEventListener('click', () => setRampType(item.dataset.ramp));
     });
 
     rampTypeInput.addEventListener('change', calculateRamp);
@@ -492,9 +853,7 @@
       calculateRamp();
     });
 
-    updateRampType();
     calculateRamp();
-    rampNote.style.display = 'none';
   </script>
 </body>
 </html>
