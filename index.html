@@ -55,6 +55,9 @@
 
     button, input, select { font: inherit; }
 
+    .svg-sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+    .icon { inline-size: 1.35em; block-size: 1.35em; vertical-align: middle; }
+
     .app {
       width: min(100%, 1420px);
       min-height: 100vh;
@@ -506,21 +509,31 @@
   </style>
 </head>
 <body>
+  <svg class="svg-sprite" aria-hidden="true" focusable="false">
+    <symbol id="icon-car" viewBox="0 0 24 24"><path d="M5 12l1.4-4.2A3 3 0 0 1 9.2 6h5.6a3 3 0 0 1 2.8 1.8L19 12h1a1 1 0 0 1 1 1v4h-2a2 2 0 0 1-4 0H9a2 2 0 0 1-4 0H3v-4a1 1 0 0 1 1-1h1Zm2.2 0h9.6l-.9-2.8a1.2 1.2 0 0 0-1.1-.7H9.2a1.2 1.2 0 0 0-1.1.7L7.2 12ZM7 18a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm10 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" fill="currentColor"/></symbol>
+    <symbol id="icon-wheelchair" viewBox="0 0 24 24"><path d="M11 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm-1 4v3h4v2h-4.4l-1-3H7a6 6 0 1 0 5.7 7.8l1.8.9A8 8 0 1 1 7 9V7h2a1 1 0 0 1 1 1Zm4.8 6h2.6l3 5-1.7 1-2.4-4h-3.1l-.7-2h2.3Z" fill="currentColor"/></symbol>
+    <symbol id="icon-walk" viewBox="0 0 24 24"><path d="M13 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm-1.2 4 2.7 1.5 2.1 3.1-1.7 1.1-1.8-2.6-1.3-.7-1.1 4.1 2.8 2.6-1.4 1.5-3.6-3.3.9-3.5-1 .7-1.4 2.2-1.7-1.1 1.7-2.7 3-2.2c.5-.4 1.2-.6 1.8-.3Z" fill="currentColor"/></symbol>
+    <symbol id="icon-rules" viewBox="0 0 24 24"><path d="M6 3h9l3 3v15H6V3Zm8 1.8V7h2.2L14 4.8ZM8 9h8v1.8H8V9Zm0 4h8v1.8H8V13Zm0 4h5v1.8H8V17Z" fill="currentColor"/></symbol>
+    <symbol id="icon-calc" viewBox="0 0 24 24"><path d="M6 3h12v18H6V3Zm2 2v4h8V5H8Zm0 6v2h2v-2H8Zm4 0v2h2v-2h-2Zm4 0v2h2v-2h-2Zm-8 4v2h2v-2H8Zm4 0v2h2v-2h-2Zm4 0v4h2v-4h-2Zm-8 4v2h6v-2H8Z" fill="currentColor"/></symbol>
+    <symbol id="icon-sun" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0-5 1.2 3h-2.4L12 2Zm0 20-1.2-3h2.4L12 22ZM2 12l3-1.2v2.4L2 12Zm20 0-3 1.2v-2.4l3 1.2ZM4.2 4.2l3 1.3-1.7 1.7-1.3-3Zm15.6 15.6-3-1.3 1.7-1.7 1.3 3Zm0-15.6-1.3 3-1.7-1.7 3-1.3ZM4.2 19.8l1.3-3 1.7 1.7-3 1.3Z" fill="currentColor"/></symbol>
+    <symbol id="icon-moon" viewBox="0 0 24 24"><path d="M20 15.5A8.5 8.5 0 0 1 8.5 4a8 8 0 1 0 11.5 11.5Z" fill="currentColor"/></symbol>
+    <symbol id="icon-download" viewBox="0 0 24 24"><path d="M11 3h2v10l3.5-3.5 1.4 1.4L12 16.8l-5.9-5.9 1.4-1.4L11 13V3ZM5 19h14v2H5v-2Z" fill="currentColor"/></symbol>
+  </svg>
   <main class="app">
     <header class="topbar">
       <div class="theme-tools" aria-label="تنظیمات پوسته">
-        <span class="theme-icon">☀️</span>
+        <svg class="theme-icon icon"><use href="#icon-sun"></use></svg>
         <button class="toggle" id="themeToggle" type="button" aria-label="تغییر حالت روشن و تاریک" aria-pressed="false"></button>
-        <span class="theme-icon">🌙</span>
-        <div class="language-switch" aria-label="انتخاب زبان">
-          <strong>فارسی</strong>
+        <svg class="theme-icon icon"><use href="#icon-moon"></use></svg>
+        <button class="language-switch" id="languageToggle" type="button" aria-label="تغییر زبان">
+          <strong id="faLabel">فارسی</strong>
           <span>|</span>
-          <span>English</span>
-        </div>
+          <span id="enLabel">English</span>
+        </button>
       </div>
       <div class="brand">
         <h1>محاسبه رمپ</h1>
-        <span class="brand-icon" aria-hidden="true">🚘</span>
+        <span class="brand-icon" aria-hidden="true"><svg class="icon"><use href="#icon-car"></use></svg></span>
       </div>
       <div></div>
     </header>
@@ -528,8 +541,8 @@
     <section class="content">
       <article class="card preview-card" aria-label="پیش‌نمایش رمپ">
         <div class="view-tabs" role="tablist" aria-label="نوع نمایش">
-          <button class="view-tab active" type="button" data-view="plan">پلان 🧭</button>
-          <button class="view-tab" type="button" data-view="elevation">نما 📐</button>
+          <button class="view-tab active" type="button" data-view="plan">پلان <span aria-hidden="true">▧</span></button>
+          <button class="view-tab" type="button" data-view="elevation">نما <span aria-hidden="true">◿</span></button>
         </div>
 
         <div class="diagram" id="planDiagram" aria-label="نمای پلان رمپ خودرو">
@@ -579,7 +592,7 @@
             <text class="muted" x="380" y="467" text-anchor="middle" font-size="14">شیب اصلی</text>
             <text x="598" y="445" text-anchor="middle" font-size="16">۱.۰۰ m</text>
             <text class="muted" x="598" y="467" text-anchor="middle" font-size="14">انتها</text>
-            <text x="310" y="382" font-size="32" opacity="0.7">🚗</text>
+            <g transform="translate(300 355) scale(1.8)" opacity="0.7"><path d="M5 12l1.4-4.2A3 3 0 0 1 9.2 6h5.6a3 3 0 0 1 2.8 1.8L19 12h1v4h-2a2 2 0 0 1-4 0H9a2 2 0 0 1-4 0H3v-4h2Z" fill="currentColor"/></g>
           </svg>
         </div>
 
@@ -595,7 +608,7 @@
             <text x="610" y="415" text-anchor="middle" font-size="18">انتها</text>
             <text x="575" y="140" font-size="18">سطح بالاتر</text>
             <text x="95" y="310" font-size="18">سطح پایین</text>
-            <text x="360" y="245" font-size="42">🚗</text>
+            <g transform="translate(350 215) scale(2)" opacity="0.8"><path d="M5 12l1.4-4.2A3 3 0 0 1 9.2 6h5.6a3 3 0 0 1 2.8 1.8L19 12h1v4h-2a2 2 0 0 1-4 0H9a2 2 0 0 1-4 0H3v-4h2Z" fill="currentColor"/></g>
           </svg>
         </div>
 
@@ -619,7 +632,7 @@
       <aside class="card form-card" aria-label="مشخصات رمپ">
         <div class="form-head">
           <h2 id="formTitle">مشخصات رمپ خودرو</h2>
-          <span class="form-icon" id="formIcon" aria-hidden="true">🚗</span>
+          <span class="form-icon" id="formIcon" aria-hidden="true"><svg class="icon"><use href="#icon-car"></use></svg></span>
         </div>
 
         <form class="calculator" id="rampForm">
@@ -663,7 +676,7 @@
             </div>
           </div>
 
-          <button class="calculate" type="submit">محاسبه 🧮</button>
+          <button class="calculate" type="submit">محاسبه <svg class="icon" aria-hidden="true"><use href="#icon-calc"></use></svg></button>
         </form>
 
         <section class="result-box" aria-live="polite" aria-label="نتیجه محاسبه">
@@ -674,13 +687,13 @@
     </section>
 
     <footer class="bottom-row">
-      <button class="download" type="button">دانلود نرم‌افزار ⬇</button>
+      <button class="download" type="button">دانلود نرم‌افزار <svg class="icon" aria-hidden="true"><use href="#icon-download"></use></svg></button>
       <nav class="bottom-bar" aria-label="انتخاب نوع رمپ">
-        <button class="nav-item active" type="button" data-ramp="car"><span>رمپ خودرو</span><span class="nav-icon">🚗</span></button>
-        <button class="nav-item" type="button" data-ramp="disabled"><span>رمپ معلول</span><span class="nav-icon">♿</span></button>
-        <button class="nav-item" type="button" data-ramp="human"><span>رمپ عابر</span><span class="nav-icon">🚶</span></button>
+        <button class="nav-item active" type="button" data-ramp="car"><span>رمپ خودرو</span><span class="nav-icon"><svg class="icon"><use href="#icon-car"></use></svg></span></button>
+        <button class="nav-item" type="button" data-ramp="disabled"><span>رمپ معلول</span><span class="nav-icon"><svg class="icon"><use href="#icon-wheelchair"></use></svg></span></button>
+        <button class="nav-item" type="button" data-ramp="human"><span>رمپ عابر</span><span class="nav-icon"><svg class="icon"><use href="#icon-walk"></use></svg></span></button>
       </nav>
-      <button class="rules-button" id="openRules" type="button">ضوابط و مقررات 📋</button>
+      <button class="rules-button" id="openRules" type="button">ضوابط و مقررات <svg class="icon" aria-hidden="true"><use href="#icon-rules"></use></svg></button>
       <span class="version">نسخه ۱.۳.۰</span>
     </footer>
   </main>
@@ -707,6 +720,10 @@
     const elevationDiagram = document.getElementById('elevationDiagram');
     const viewTabs = document.querySelectorAll('.view-tab');
     const navItems = document.querySelectorAll('.nav-item');
+    const languageToggle = document.getElementById('languageToggle');
+    const faLabel = document.getElementById('faLabel');
+    const enLabel = document.getElementById('enLabel');
+    let currentLanguage = 'fa';
 
     const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
 
@@ -784,7 +801,7 @@
       const isCarRamp = rampType === 'car';
       const label = isCarRamp ? 'خودرو' : rampType === 'disabled' ? 'معلول' : 'عابر';
       formTitle.textContent = `مشخصات رمپ ${label}`;
-      formIcon.textContent = isCarRamp ? '🚗' : rampType === 'disabled' ? '♿' : '🚶';
+      formIcon.innerHTML = `<svg class="icon"><use href="#${isCarRamp ? 'icon-car' : rampType === 'disabled' ? 'icon-wheelchair' : 'icon-walk'}"></use></svg>`;
       startSlopeGroup.style.display = isCarRamp ? '' : 'none';
       endSlopeGroup.style.display = isCarRamp ? '' : 'none';
       navItems.forEach(item => item.classList.toggle('active', item.dataset.ramp === rampType));
@@ -821,6 +838,13 @@
       rampTypeInput.value = type;
       calculateRamp();
     }
+
+    languageToggle.addEventListener('click', () => {
+      currentLanguage = currentLanguage === 'fa' ? 'en' : 'fa';
+      faLabel.style.color = currentLanguage === 'fa' ? 'var(--primary)' : 'var(--muted)';
+      enLabel.style.color = currentLanguage === 'en' ? 'var(--primary)' : 'var(--muted)';
+      document.documentElement.lang = currentLanguage;
+    });
 
     themeToggle.addEventListener('click', () => {
       const isDark = !body.classList.contains('dark');
