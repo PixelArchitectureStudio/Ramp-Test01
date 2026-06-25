@@ -234,23 +234,28 @@
 
     .modal {
       position: fixed;
-      inset-block-start: 50%;
-      inset-inline-start: 50%;
+      top: 50%;
+      left: 50%;
       transform: translate(-50%, -50%);
-      width: min(420px, calc(100% - 56px));
+      width: min(420px, calc(100vw - 56px));
       border: 1px solid var(--line);
       border-radius: 18px;
       background: var(--panel);
       box-shadow: var(--shadow);
       padding: 18px;
-      z-index: 30;
+      z-index: 10000;
       display: none;
     }
 
     .modal-backdrop {
       position: fixed;
-      inset: 0;
-      z-index: 25;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9999;
       display: none;
       background: rgba(15, 23, 42, 0.38);
       backdrop-filter: blur(12px);
@@ -695,7 +700,9 @@
       <span class="version" id="versionText">نسخه ۱.۳.۰</span>
     </footer>
 
-    <div class="modal-backdrop" id="modalBackdrop"></div>
+  </main>
+
+  <div class="modal-backdrop" id="modalBackdrop"></div>
 
     <aside class="modal" id="rulesModal" aria-modal="true" role="dialog" aria-labelledby="rulesTitle">
       <div class="modal-head">
@@ -712,7 +719,7 @@
       </ul>
       <button class="modal-action" id="dismissRules" type="button">بستن</button>
     </aside>
-  </main>
+
 
   <script>
     const body = document.body;
