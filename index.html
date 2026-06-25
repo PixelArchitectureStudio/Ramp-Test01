@@ -383,38 +383,62 @@
       }));
     }
 
+    function roundLength(value) {
+      return Math.round(value * 1000) / 1000;
+    }
+
     function carRampLength(height, slope1, slope2) {
-      if (slope1 > 18) {
-        return { error: 'شیب غیرمجاز است!' };
-      }
+      const isUnauthorized = slope1 > 17;
 
       if (slope2 === 10) {
-        return { length: Math.round((((height - 20) / slope1) + 2) * 1000) / 1000, stop: '+۳ توقف رمپ' };
+        return {
+          length: roundLength(((height - 20) / slope1) + 2),
+          stop: '+۳ متر توقف رمپ',
+          warning: isUnauthorized ? 'هشدار: شیب غیرمجاز است!' : ''
+        };
       }
 
       if (slope2 === 5) {
-        return { length: Math.round((((height - 25) / slope1) + 4) * 1000) / 1000 };
+        return {
+          length: roundLength(((height - 25) / slope1) + 4),
+          warning: isUnauthorized ? 'هشدار: شیب غیرمجاز است!' : ''
+        };
       }
 
       return { error: 'شیب ابتدا و انتهای رمپ خودرو نامعتبر است!' };
     }
 
-    function disabledRampLength(height, slope) {
-      if (slope <= 8) {
-        const baseLength = height / slope;
-        return { length: Math.round((baseLength + Math.floor(baseLength / 8) * 1.5) * 100) / 100 };
+    function disabledRampLength(height, slope, regulations = true) {
+      const baseLength = height / slope;
+      let landingInterval = 9;
+      let isUnauthorized = false;
+
+      if (regulations) {
+        if (slope === 6) {
+          landingInterval = 8;
+        } else if (slope === 7) {
+          landingInterval = 5;
+        } else if (slope >= 8) {
+          landingInterval = 3;
+          isUnauthorized = slope > 8;
+        }
+      } else {
+        isUnauthorized = slope > 8;
       }
 
-      return { error: 'شیب غیرمجاز است!' };
+      return {
+        length: roundLength(baseLength + Math.floor(baseLength / landingInterval) * 1.5),
+        warning: isUnauthorized ? 'هشدار: شیب غیرمجاز است!' : ''
+      };
     }
 
     function humanRampLength(height, slope) {
-      if (slope <= 12.5) {
-        const baseLength = height / slope;
-        return { length: Math.round((baseLength + Math.floor(baseLength / 8) * 1.5) * 100) / 100 };
-      }
+      const baseLength = height / slope;
 
-      return { error: 'شیب غیرمجاز است!' };
+      return {
+        length: roundLength(baseLength + Math.floor(baseLength / 9) * 1.5),
+        warning: slope > 12.5 ? 'هشدار: شیب غیرمجاز است!' : ''
+      };
     }
 
     function updateRampType() {
@@ -435,7 +459,7 @@
       }
 
       mainResult.textContent = `طول رمپ : ${formatNumber(result.length)} متر`;
-      edgeResult.textContent = result.stop || '';
+      edgeResult.textContent = [result.stop, result.warning].filter(Boolean).join('، ');
     }
 
     function calculateRamp() {
