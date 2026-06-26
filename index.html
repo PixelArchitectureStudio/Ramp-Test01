@@ -335,7 +335,7 @@
       font-weight: 800;
     }
 
-    .form-card { display: flex; flex-direction: column; gap: 8px; overflow: hidden; height: min(64vh, 610px); }
+    .form-card { display: flex; flex-direction: column; gap: 8px; overflow: visible; height: auto; max-height: calc(100vh - 150px); }
 
     .form-head {
       display: flex;
@@ -467,7 +467,7 @@
       align-items: center;
       gap: 14px;
       direction: ltr;
-      margin-bottom: 22px;
+      margin-bottom: 34px;
     }
 
     .download, .rules-button, .bottom-bar {
@@ -522,8 +522,9 @@
     @media (orientation: landscape) and (min-width: 900px) {
       .app { max-height: 100vh; }
       .content { min-height: 0; }
-      .preview-card, .form-card { height: min(64vh, 610px); max-height: 610px; }
-      .bottom-row { margin-bottom: 22px; }
+      .preview-card { height: min(64vh, 610px); max-height: 610px; }
+      .form-card { height: auto; max-height: calc(100vh - 150px); }
+      .bottom-row { margin-bottom: 34px; }
       .rules-button { justify-self: end; }
     }
 
