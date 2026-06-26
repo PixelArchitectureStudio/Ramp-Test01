@@ -59,7 +59,7 @@
     button, input, select { font: inherit; }
 
     .svg-sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
-    .icon { inline-size: 1.35em; block-size: 1.35em; vertical-align: middle; }
+    .icon { inline-size: 1.05em; block-size: 1.05em; vertical-align: middle; }
 
     .app {
       width: min(100%, 1420px);
@@ -110,12 +110,12 @@
     .language-switch strong { color: var(--primary); }
     .language-switch span:nth-child(2) { color: var(--muted); }
 
-    .theme-icon { font-size: 26px; line-height: 1; }
+    .theme-icon { font-size: 20px; line-height: 1; }
 
     .toggle {
       position: relative;
-      inline-size: 50px;
-      block-size: 26px;
+      inline-size: 42px;
+      block-size: 22px;
       border: 0;
       border-radius: 999px;
       background: linear-gradient(90deg, #183b8f, var(--primary));
@@ -126,17 +126,17 @@
     .toggle::after {
       content: "";
       position: absolute;
-      inset-block-start: 3px;
-      inset-inline-start: 4px;
-      inline-size: 20px;
-      block-size: 20px;
+      inset-block-start: 2px;
+      inset-inline-start: 3px;
+      inline-size: 18px;
+      block-size: 18px;
       border-radius: 50%;
       background: #fff;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.24);
       transition: transform 160ms ease;
     }
 
-    body.dark .toggle::after { transform: translateX(22px); }
+    body.dark .toggle::after { transform: translateX(18px); }
 
     .brand {
       justify-self: center;
@@ -159,12 +159,12 @@
     }
 
     .brand-icon {
-      inline-size: 46px;
-      block-size: 46px;
+      inline-size: 38px;
+      block-size: 38px;
       border: 2px solid rgba(47, 115, 255, 0.22);
       border-radius: 50%;
       background: rgba(47, 115, 255, 0.08);
-      font-size: 30px;
+      font-size: 24px;
     }
 
     .content {
@@ -202,7 +202,7 @@
     .view-tab {
       border: 0;
       border-radius: 9px;
-      padding: 11px 22px;
+      padding: 8px 16px;
       color: var(--muted);
       background: transparent;
       cursor: pointer;
@@ -345,12 +345,12 @@
     }
 
     .form-icon {
-      inline-size: 54px;
-      block-size: 54px;
+      inline-size: 42px;
+      block-size: 42px;
       border-radius: 50%;
       background: rgba(47, 115, 255, 0.08);
       border: 1px solid var(--line);
-      font-size: 28px;
+      font-size: 22px;
     }
 
     .form-head h2 { margin: 0; font-size: 21px; font-weight: 900; }
@@ -424,9 +424,9 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 12px;
+      gap: 8px;
       inline-size: 100%;
-      min-height: 50px;
+      min-height: 42px;
       border: 0;
       border-radius: 999px;
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
@@ -470,20 +470,20 @@
 
     .download, .rules-button, .bottom-bar {
       border-radius: 999px;
-      min-height: 58px;
+      min-height: 46px;
     }
 
     .download, .rules-button {
       border: 1px solid var(--line);
       background: var(--panel);
       box-shadow: var(--soft-shadow);
-      padding: 0 26px;
+      padding: 0 18px;
       color: var(--primary);
       font-weight: 900;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
     }
 
     .bottom-bar {
@@ -503,8 +503,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 13px;
-      min-height: 46px;
+      gap: 8px;
+      min-height: 38px;
     }
 
     .nav-item.active {
