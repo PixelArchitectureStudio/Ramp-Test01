@@ -3,967 +3,1745 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>محاسبه‌گر رمپ</title>
+  <meta name="color-scheme" content="light dark" />
+  <title>Ramp Calculation Tool — ابزار محاسبه رمپ</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap');
+
     :root {
-      color-scheme: light;
-      --page: #eef4ff;
-      --panel: rgba(255, 255, 255, 0.96);
-      --panel-soft: rgba(255, 255, 255, 0.78);
-      --text: #111827;
-      --muted: #718096;
-      --line: #d6e0ef;
-      --field: #f8fbff;
-      --primary: #2f6df6;
-      --primary-dark: #2458d8;
-      --button-text: #ffffff;
-      --shadow: 0 22px 55px rgba(37, 54, 92, 0.14);
-      --soft-shadow: 0 12px 32px rgba(37, 54, 92, 0.09);
-      --success: #168047;
-      --warning: #d97706;
+      --bg: #fbfcfd;
+      --surface: rgba(255,255,255,.90);
+      --surface-solid: #ffffff;
+      --surface-2: #f1f5fb;
+      --text: #191926;
+      --muted: #7e8ba8;
+      --line: #d8e2f0;
+      --line-strong: #bcc8db;
+      --accent: #79a1fd;
+      --accent-2: #5f8efc;
+      --accent-soft: rgba(121,161,253,.16);
+      --success: #5f8efc;
+      --warning: #6a94b2;
+      --danger: #667196;
+      --shadow: 0 20px 70px rgba(80,104,150,.12);
+      --radius-xl: 24px;
+      --radius-lg: 18px;
+      --radius-md: 13px;
+      --font: Vazirmatn, IRANSans, "Segoe UI", Tahoma, Arial, sans-serif;
     }
 
-    body.dark {
-      color-scheme: dark;
-      --page: #0b1020;
-      --panel: rgba(21, 28, 52, 0.94);
-      --panel-soft: rgba(15, 21, 42, 0.88);
-      --text: #f7f9ff;
-      --muted: #9db7e7;
-      --line: #28355f;
-      --field: #0d1429;
-      --primary: #7aa2ff;
-      --primary-dark: #5c82ea;
-      --button-text: #071023;
-      --shadow: 0 22px 55px rgba(0, 0, 0, 0.34);
-      --soft-shadow: 0 12px 32px rgba(0, 0, 0, 0.22);
-      --success: #8fb3ff;
-      --warning: #f2c86b;
+    [data-theme="dark"] {
+      --bg: #121629;
+      --surface: rgba(16,22,41,.88);
+      --surface-solid: #161c36;
+      --surface-2: #1d2547;
+      --text: #eef4ff;
+      --muted: #93a7d0;
+      --line: #2a3258;
+      --line-strong: #36406e;
+      --accent-soft: rgba(120,161,252,.20);
+      --shadow: 0 20px 70px rgba(0,10,35,.42);
     }
 
-    * { box-sizing: border-box; }
-
+    *, *::before, *::after {
+      box-sizing: border-box;
+      font-family: var(--font);
+    }
+    html { scroll-behavior: smooth; font-family: var(--font); }
     body {
       margin: 0;
-      height: 100vh;
-      overflow: hidden;
-      background:
-        radial-gradient(circle at top left, rgba(47, 115, 255, 0.12), transparent 30%),
-        radial-gradient(circle at bottom right, rgba(47, 115, 255, 0.1), transparent 32%),
-        var(--page);
+      min-height: 100vh;
+      font-family: var(--font);
       color: var(--text);
-      font-family: Tahoma, Vazirmatn, IRANSans, Arial, sans-serif;
-      transition: background 180ms ease, color 180ms ease;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(121,161,253,.18), transparent 30%),
+        radial-gradient(circle at 95% 100%, rgba(147,167,208,.12), transparent 30%),
+        var(--bg);
+      transition: background .25s ease, color .25s ease;
     }
 
-    button, input, select { font: inherit; }
+    button, input, select, textarea, option {
+      font-family: var(--font);
+      font: inherit;
+    }
+    button { color: inherit; }
 
-    .svg-sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
-    .icon { inline-size: 1.05em; block-size: 1.05em; vertical-align: middle; }
+    /* Language changes translate text only; the interface geometry never mirrors. */
+    html { direction: rtl; }
+    html[data-lang="en"] .brand-text,
+    html[data-lang="en"] .form-title,
+    html[data-lang="en"] .form-subtitle,
+    html[data-lang="en"] label,
+    html[data-lang="en"] .switch-label,
+    html[data-lang="en"] .card-title,
+    html[data-lang="en"] .card-caption,
+    html[data-lang="en"] .drawing-note,
+    html[data-lang="en"] .result-label,
+    html[data-lang="en"] .detail-line span:first-child,
+    html[data-lang="en"] .modal-title,
+    html[data-lang="en"] .modal-content,
+    html[data-lang="en"] .rule-card,
+    html[data-lang="en"] .footer > div:first-child {
+      direction: ltr;
+      text-align: left;
+    }
 
-    .app {
-      width: min(100%, 1420px);
-      height: 100vh;
+    .app-shell {
+      width: min(1480px, calc(100% - 32px));
       margin: 0 auto;
-      padding: 8px 18px;
-      display: grid;
-      grid-template-rows: auto minmax(0, 1fr) auto;
-      gap: 8px;
-    }
-
-    .topbar, .bottom-bar, .card {
-      border: 1px solid var(--line);
-      background: var(--panel);
-      box-shadow: var(--soft-shadow);
-      backdrop-filter: blur(14px);
+      padding: 22px 0 28px;
     }
 
     .topbar {
-      border: 0;
-      background: transparent;
-      box-shadow: none;
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: center;
-      gap: 18px;
-    }
-
-    .theme-tools, .language-switch {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      justify-self: start;
-      direction: ltr;
-    }
-
-    .language-switch {
-      justify-self: start;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 11px 16px;
-      background: var(--panel-soft);
-      color: var(--muted);
-      font-weight: 700;
-      box-shadow: var(--soft-shadow);
-    }
-
-    .language-switch strong { color: var(--primary); }
-    .language-switch span:nth-child(2) { color: var(--muted); }
-
-    .theme-icon { font-size: 20px; line-height: 1; }
-
-    .toggle {
-      position: relative;
-      inline-size: 42px;
-      block-size: 22px;
-      border: 0;
-      border-radius: 999px;
-      background: linear-gradient(90deg, #183b8f, var(--primary));
-      cursor: pointer;
-      padding: 0;
-    }
-
-    .toggle::after {
-      content: "";
-      position: absolute;
-      inset-block-start: 2px;
-      inset-inline-start: 3px;
-      inline-size: 18px;
-      block-size: 18px;
-      border-radius: 50%;
-      background: #fff;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.24);
-      transition: transform 160ms ease;
-    }
-
-    body.dark .toggle::after { transform: translateX(18px); }
-
-    .brand {
-      justify-self: center;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(22px, 2.4vw, 34px);
-      font-weight: 900;
-      letter-spacing: -0.04em;
-    }
-
-    .brand-icon, .form-icon, .nav-icon {
-      display: inline-grid;
-      place-items: center;
-      color: var(--primary);
-    }
-
-    .brand-icon {
-      inline-size: 32px;
-      block-size: 32px;
-      border: 2px solid rgba(47, 115, 255, 0.22);
-      border-radius: 50%;
-      background: rgba(47, 115, 255, 0.08);
-      font-size: 24px;
-    }
-
-    .content {
-      display: grid;
-      grid-template-columns: minmax(0, 1.9fr) minmax(340px, 1fr);
-      gap: 18px;
-      align-items: start;
-    }
-
-    .card {
-      border-radius: 24px;
-      padding: 12px;
-    }
-
-    .preview-card {
-      position: relative;
-      min-height: 0;
-      overflow: hidden;
-      height: min(64vh, 610px);
-    }
-
-    .view-tabs {
-      position: absolute;
-      inset-block-start: 16px;
-      inset-inline-start: 16px;
-      display: flex;
-      gap: 8px;
-      padding: 6px;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      background: var(--panel-soft);
-      box-shadow: var(--soft-shadow);
-      z-index: 3;
-    }
-
-    .view-tab {
-      border: 0;
-      border-radius: 9px;
-      padding: 8px 16px;
-      color: var(--muted);
-      background: transparent;
-      cursor: pointer;
-      font-weight: 800;
-    }
-
-    .view-tab.active {
-      color: #fff;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      box-shadow: 0 8px 18px rgba(47, 115, 255, 0.28);
-    }
-
-    .diagram {
-      min-height: 0;
-      height: 100%;
-      display: grid;
-      place-items: center;
-      padding-top: 36px;
-    }
-
-    .drawing {
-      width: min(100%, 640px);
-      color: var(--text);
-    }
-
-    .drawing text { fill: currentColor; font-weight: 700; }
-    .drawing .muted { fill: var(--muted); }
-    .drawing .line { stroke: #8a96a8; }
-    body.dark .drawing .line { stroke: #c4ccda; }
-    .drawing .blue { stroke: var(--primary); fill: rgba(47, 115, 255, 0.08); }
-
-    .modal {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: min(420px, calc(100vw - 56px));
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: var(--panel);
-      box-shadow: var(--shadow);
-      padding: 12px;
-      z-index: 10000;
-      display: none;
-    }
-
-    .modal-backdrop {
-      position: fixed;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 9999;
-      display: none;
-      background: rgba(15, 23, 42, 0.42);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-    }
-
-    .modal.is-open, .modal-backdrop.is-open { display: block; }
-
-    body.modal-open .app {
-      filter: blur(8px);
-      transform: scale(0.998);
-      pointer-events: none;
-      user-select: none;
-    }
-
-    .modal-head {
+      min-height: 68px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
-      padding-bottom: 14px;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .modal-title { margin: 0; font-size: 20px; font-weight: 900; }
-    .modal-close {
-      border: 0;
-      background: transparent;
-      color: var(--muted);
-      font-size: 31px;
-      cursor: pointer;
-      line-height: 1;
-    }
-
-    .rules {
-      list-style: none;
-      margin: 18px 0 20px;
-      padding: 0;
-      display: grid;
-      gap: 14px;
-      color: var(--text);
-      font-size: 12px;
-      line-height: 1.8;
-    }
-
-    .rules li {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 10px;
-      align-items: start;
-    }
-
-    .rules li::before {
-      content: "✓";
-      display: inline-grid;
-      place-items: center;
-      inline-size: 18px;
-      block-size: 18px;
-      border: 2px solid var(--primary);
-      border-radius: 50%;
-      color: var(--primary);
-      font-size: 10px;
-      margin-top: 4px;
-    }
-
-    .modal-action {
-      inline-size: 100%;
-      block-size: 44px;
-      border-radius: 10px;
+      gap: 18px;
+      padding: 12px 14px 12px 18px;
+      background: var(--surface);
       border: 1px solid var(--line);
-      background: var(--field);
-      color: var(--text);
-      cursor: pointer;
-      font-weight: 800;
+      border-radius: 20px;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 10px 40px rgba(30,35,40,.06);
+      position: sticky;
+      top: 12px;
+      z-index: 20;
     }
 
-    .form-card { display: flex; flex-direction: column; gap: 8px; overflow: visible; height: auto; max-height: calc(100vh - 150px); }
+    .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .brand-mark {
+      width: 42px; height: 42px; border-radius: 13px;
+      display: grid; place-items: center;
+      background: var(--accent); color: white;
+      box-shadow: none;
+      flex: 0 0 auto;
+    }
+    .brand-mark svg { width: 24px; height: 24px; }
+    .brand-text { line-height: 1.2; min-width: 0; }
+    .brand-title { font-size: 16px; font-weight: 800; letter-spacing: -.2px; }
+    .brand-subtitle { margin-top: 5px; color: var(--muted); font-size: 11px; white-space: nowrap; }
 
-    .form-head {
-      display: flex;
+    .top-actions { display: flex; align-items: center; gap: 8px; }
+    .icon-btn, .lang-btn, .rules-btn {
+      height: 40px;
+      border: 1px solid var(--line);
+      background: var(--surface-solid);
+      border-radius: 12px;
+      cursor: pointer;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 14px;
-      margin-bottom: 2px;
-    }
-
-    .form-icon {
-      inline-size: 34px;
-      block-size: 34px;
-      border-radius: 50%;
-      background: rgba(47, 115, 255, 0.08);
-      border: 1px solid var(--line);
-      font-size: 22px;
-    }
-
-    .form-head h2 { margin: 0; font-size: 18px; font-weight: 900; }
-
-    .calculator { display: grid; gap: 8px; }
-
-    .field-row {
-      display: grid;
-      grid-template-columns: 86px minmax(0, 1fr);
-      align-items: start;
       gap: 8px;
+      transition: .2s ease;
+    }
+    .icon-btn { width: 40px; }
+    .lang-btn { padding: 0 13px; font-weight: 800; font-size: 12px; }
+    .rules-btn { padding: 0 14px; min-width: 92px; font-weight: 800; font-size: 12px; }
+    .icon-btn:hover, .lang-btn:hover, .rules-btn:hover { border-color: var(--line-strong); transform: translateY(-1px); }
+    .icon-btn svg, .rules-btn svg { width: 19px; height: 19px; }
+    .rules-btn span { white-space: nowrap; }
+
+    .type-tabs {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 8px;
+      margin: 18px 0;
+      padding: 7px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      border-radius: 17px;
+      backdrop-filter: blur(14px);
+      isolation: isolate;
+      overflow: hidden;
+    }
+    .type-indicator {
+      position: absolute;
+      top: 7px;
+      bottom: 7px;
+      left: 0;
+      width: 0;
+      z-index: 0;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: none;
+      transform: translateX(0);
+      transition:
+        transform .30s ease,
+        width .30s ease,
+        background-color .22s ease;
+      pointer-events: none;
+    }
+    .type-tabs.no-indicator-transition .type-indicator { transition: none; }
+    .type-tabs.is-switching .type-indicator {
+      box-shadow: none;
+    }
+    .type-tab {
+      position: relative;
+      z-index: 1;
+      border: 0;
+      background: transparent;
+      border-radius: 12px;
+      padding: 13px 12px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 9px;
+      color: var(--muted);
+      font-weight: 800;
+      transition: color .25s ease, transform .25s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .type-tab:hover:not(.active) { color: var(--text); transform: translateY(-1px); }
+    .type-tab svg {
+      width: 20px;
+      height: 20px;
+      transition: transform .24s ease, opacity .24s ease;
+    }
+    .type-tab span { transition: opacity .24s ease; }
+    .type-tab.active { color: #fff; }
+    .type-tab.active svg { transform: scale(1.04); }
+    .type-tab.tab-enter svg,
+    .type-tab.tab-enter span { animation: tabFadeIn .24s ease; }
+    @keyframes tabFadeIn {
+      from { opacity: .45; }
+      to { opacity: 1; }
+    }
+    .drawing-area.switch-animate #rampDrawing { animation: drawingSwitch .34s ease; }
+    .form-card.switch-animate .form-title,
+    .form-card.switch-animate .form-subtitle,
+    .form-card.switch-animate .form-section.active { animation: contentSwitch .34s ease; }
+    @keyframes drawingSwitch {
+      from { opacity: .40; }
+      to { opacity: 1; }
+    }
+    @keyframes contentSwitch {
+      from { opacity: .30; }
+      to { opacity: 1; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .type-indicator, .type-tab, .type-tab svg, .type-tab span { transition: none !important; animation: none !important; }
+      .drawing-area.switch-animate #rampDrawing,
+      .form-card.switch-animate .form-title,
+      .form-card.switch-animate .form-subtitle,
+      .form-card.switch-animate .form-section.active { animation: none !important; }
     }
 
-    label { font-weight: 800; line-height: 38px; font-size: 12px; }
-
-    .control-wrap { display: grid; gap: 3px; }
-
-    .control {
+    .workspace {
       display: grid;
-      grid-template-columns: 38px 1fr;
+      grid-template-columns: minmax(0, 1.65fr) minmax(340px, .75fr);
+      gap: 18px;
+      align-items: stretch;
+      direction: ltr;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+      overflow: hidden;
+    }
+
+    .visual-card { min-height: 650px; display: flex; flex-direction: column; direction: rtl; }
+    .form-card { direction: rtl; padding: 20px; }
+
+    .card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 20px 22px 16px;
+      border-bottom: 1px solid var(--line);
+    }
+    .card-title { font-size: 16px; font-weight: 900; }
+    .card-caption { color: var(--muted); font-size: 12px; margin-top: 4px; }
+
+    .view-tabs {
+      display: flex;
+      gap: 4px;
+      padding: 4px;
+      background: var(--surface-2);
+      border-radius: 11px;
+    }
+    .view-tab {
+      border: 0;
+      background: transparent;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--muted);
+      cursor: pointer;
+    }
+    .view-tab.active { background: var(--surface-solid); color: var(--text); box-shadow: 0 3px 10px rgba(0,0,0,.07); }
+
+    .drawing-area {
+      position: relative;
+      flex: 1;
+      min-height: 460px;
+      padding: 22px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      background-color: var(--surface-2);
+      background-image:
+        linear-gradient(rgba(127, 145, 170, 0.12) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(127, 145, 170, 0.12) 1px, transparent 1px);
+      background-size: 28px 28px;
+      background-position: center center;
+    }
+    .drawing-area::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, transparent 58%, var(--surface) 130%);
+      pointer-events: none;
+    }
+    #rampDrawing { width: 100%; height: 100%; min-height: 420px; position: relative; z-index: 1; }
+    #rampDrawing text { font-family: var(--font); fill: var(--text); }
+
+    .drawing-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 20px;
+      border-top: 1px solid var(--line);
+    }
+    .drawing-note { color: var(--muted); font-size: 11px; }
+    .mini-actions { display: flex; gap: 8px; }
+    .small-btn {
+      border: 1px solid var(--line);
+      background: var(--surface-solid);
+      border-radius: 10px;
+      padding: 9px 11px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-weight: 800;
+      font-size: 11px;
+      cursor: pointer;
+    }
+    .small-btn svg { width: 16px; height: 16px; }
+    .small-btn.active {
+      color: var(--accent-2);
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .form-title { margin: 0 0 4px; font-size: 20px; font-weight: 900; }
+    .form-subtitle { color: var(--muted); font-size: 12px; margin-bottom: 19px; line-height: 1.8; }
+    .form-section { display: none; }
+    .form-section.active { display: block; animation: fadeIn .2s ease; }
+    @keyframes fadeIn { from { opacity: .4; transform: translateY(3px); } }
+
+    .field { margin-bottom: 14px; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    label { display: block; margin-bottom: 7px; font-size: 12px; font-weight: 800; }
+    .input-wrap { position: relative; }
+    .measurement-input {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 92px;
+      gap: 8px;
+      align-items: center;
+    }
+    .height-value { padding-inline-end: 13px; }
+    .height-unit-select {
+      direction: ltr;
+      text-align: center;
+      font-weight: 850;
+      padding-inline: 10px;
+    }
+    input, select {
+      width: 100%; height: 48px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--surface-solid);
+      color: var(--text);
+      outline: none;
+      padding: 0 13px;
+      transition: .2s ease;
+    }
+    input { direction: ltr; text-align: left; padding-inline-end: 54px; }
+    select { cursor: pointer; }
+    input:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+
+    /* Always-visible, touch-friendly number controls */
+    input[type="number"] {
+      -moz-appearance: textfield;
+      appearance: textfield;
+      padding-right: 92px;
+    }
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    .input-wrap.has-unit input[type="number"] { padding-right: 124px; }
+    .number-stepper {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      z-index: 3;
+      height: 36px;
+      display: grid;
+      grid-template-columns: 36px 36px;
       direction: ltr;
       border: 1px solid var(--line);
       border-radius: 9px;
       overflow: hidden;
-      background: var(--field);
-      min-height: 36px;
+      background: var(--surface-2);
     }
-
-    .unit {
+    .number-step-btn {
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
       display: grid;
       place-items: center;
-      border-right: 1px solid var(--line);
-      color: var(--text);
-      background: rgba(148, 163, 184, 0.08);
-      font-weight: 800;
-    }
-
-    input, select {
-      inline-size: 100%;
-      border: 0;
-      outline: 0;
-      background: transparent;
-      color: var(--text);
-      padding: 0 10px;
-      font-weight: 800;
-      text-align: left;
-      min-height: 36px;
-    }
-
-    select { appearance: none; cursor: pointer; }
-    .select-wrap { position: relative; }
-    .select-wrap::before {
-      content: "⌄";
-      position: absolute;
-      inset-inline-start: 16px;
-      inset-block-start: 12px;
-      color: var(--muted);
-      font-size: 24px;
-      pointer-events: none;
-    }
-
-    .hint {
-      margin: 0;
-      color: var(--muted);
-      font-size: 10px;
-      font-weight: 700;
-      text-align: center;
-    }
-
-    .calculate {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      inline-size: 100%;
-      min-height: 36px;
-      border: 0;
-      border-radius: 999px;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: var(--button-text);
       cursor: pointer;
-      font-weight: 900;
-      box-shadow: 0 12px 28px rgba(47, 115, 255, 0.28);
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      transition: background .16s ease, color .16s ease;
     }
+    .number-step-btn + .number-step-btn { border-left: 1px solid var(--line); }
+    .number-step-btn svg { width: 16px; height: 16px; pointer-events: none; }
+    .number-step-btn:hover { background: var(--accent-soft); color: var(--accent-2); }
+    .number-step-btn:active { background: var(--accent-soft); color: var(--accent); }
+    .number-step-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+    .number-step-btn:disabled { opacity: .32; cursor: default; background: transparent; color: var(--muted); }
+    .unit {
+      position: absolute;
+      right: 87px;
+      left: auto;
+      top: 50%; transform: translateY(-50%);
+      font-size: 11px; color: var(--muted); pointer-events: none;
+    }
+
+    .switch-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      min-height: 52px;
+      padding: 9px 12px;
+      border: 1px solid var(--line);
+      background: var(--surface-solid);
+      border-radius: 12px;
+      margin-bottom: 10px;
+    }
+    .switch-label strong { display: block; font-size: 12px; }
+    .switch-label small { display: block; color: var(--muted); font-size: 10px; margin-top: 4px; }
+    .switch { position: relative; width: 43px; height: 25px; flex: 0 0 auto; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; inset: 0; background: var(--line-strong); border-radius: 99px; cursor: pointer; transition: .2s; }
+    .slider::before { content: ""; width: 19px; height: 19px; position: absolute; top: 3px; inset-inline-start: 3px; border-radius: 50%; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,.2); transition: .2s; }
+    .switch input:checked + .slider { background: var(--accent); }
+    .switch input:checked + .slider::before { transform: translateX(-18px); }
+
+    .calculate-btn {
+      width: 100%; height: 52px;
+      border: 0; border-radius: 13px;
+      background: var(--accent); color: white;
+      font-weight: 900; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 9px;
+      box-shadow: none;
+      transition: .2s ease;
+      margin-top: 16px;
+    }
+    .calculate-btn:hover { background: var(--accent-2); transform: translateY(-1px); }
+    .calculate-btn svg { width: 19px; height: 19px; }
 
     .result-box {
-      border: 1px dashed rgba(47, 115, 255, 0.45);
-      border-radius: 16px;
-      background: rgba(47, 115, 255, 0.06);
-      padding: 8px;
-      text-align: center;
-    }
-
-    .result-line {
-      margin: 0;
-      color: var(--success);
-      font-size: 16px;
-      font-weight: 900;
-      line-height: 1.45;
-    }
-
-    .edge-line {
-      margin: 0;
-      color: var(--warning);
-      font-size: 12px;
-      font-weight: 800;
-      min-height: 20px;
-    }
-
-    .bottom-row {
-      display: grid;
-      grid-template-columns: auto minmax(300px, 1fr) auto auto;
-      align-items: center;
-      gap: 14px;
-      direction: ltr;
-      margin-bottom: 34px;
-    }
-
-    .download, .rules-button, .bottom-bar {
-      border-radius: 999px;
-      min-height: 32px;
-    }
-
-    .download, .rules-button {
+      margin-top: 18px;
       border: 1px solid var(--line);
-      background: var(--panel);
-      box-shadow: var(--soft-shadow);
-      padding: 0 14px;
-      color: var(--primary);
+      border-radius: 16px;
+      background: var(--surface-solid);
+      overflow: hidden;
+    }
+    .result-main { padding: 17px; display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; }
+    .result-label { color: var(--muted); font-size: 11px; margin-bottom: 5px; }
+    .result-value { font-size: 30px; font-weight: 950; letter-spacing: -1px; direction: ltr; }
+    .result-value span { font-size: 13px; color: var(--muted); letter-spacing: 0; margin-inline-start: 4px; }
+    .result-badge {
+      display: none;
+      align-items: center;
+      min-height: 38px;
+      border-radius: 10px;
+      font-size: 11px;
       font-weight: 900;
-      cursor: pointer;
-      display: inline-flex;
+      white-space: nowrap;
+      overflow: hidden;
+      box-shadow: 0 6px 18px rgba(0,0,0,.05);
+    }
+    .result-badge.show { display: inline-flex; }
+    .badge-state {
+      display: none;
       align-items: center;
       gap: 8px;
+      padding: 9px 12px;
+    }
+    .badge-state.active { display: inline-flex; }
+    .badge-state svg { width: 18px; height: 18px; flex: 0 0 auto; }
+    .badge-state.good { background: rgba(26,160,91,.14); color: #179754; }
+    .badge-state.caution { background: rgba(230,176,26,.16); color: #b88707; }
+    .badge-state.bad { background: rgba(225,77,77,.14); color: #d84343; }
+
+    .result-details { padding: 12px 17px; display: grid; gap: 8px; }
+    .detail-line { display: flex; justify-content: space-between; gap: 12px; font-size: 11px; }
+    .detail-line span:first-child { color: var(--muted); }
+    .detail-line strong { direction: ltr; }
+    .warning-line { margin-top: 2px; padding: 10px 11px; border-radius: 10px; font-size: 11px; line-height: 1.7; display: none; }
+    .warning-line.show { display: block; }
+    .warning-line.ok { background: rgba(26,160,91,.10); color: #179754; }
+    .warning-line.warning { background: rgba(230,176,26,.12); color: #b88707; }
+    .warning-line.danger { background: rgba(225,77,77,.10); color: #d84343; }
+
+    .footer {
+      display: flex; justify-content: space-between; align-items: center; gap: 12px;
+      margin-top: 18px; padding: 14px 18px;
+      border: 1px solid var(--line); border-radius: 15px; background: var(--surface);
+      color: var(--muted); font-size: 11px;
+    }
+    .footer-actions { display: flex; gap: 8px; }
+    .footer button { border: 0; background: transparent; color: var(--text); cursor: pointer; font-weight: 800; font-size: 11px; }
+
+    .modal-backdrop {
+      position: fixed; inset: 0; z-index: 100;
+      display: grid; place-items: center;
+      padding: 18px;
+      background: rgba(9,11,13,.55);
+      backdrop-filter: blur(8px);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 180ms ease, visibility 0s linear 180ms;
+    }
+    .modal-backdrop.open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transition: opacity 180ms ease, visibility 0s linear 0s;
+    }
+    .modal-backdrop.closing {
+      opacity: 0;
+      visibility: visible;
+      pointer-events: none;
+      transition: opacity 140ms ease;
+    }
+    .modal {
+      width: min(680px, 100%); max-height: min(760px, 90vh); overflow: auto;
+      background: var(--surface-solid); border: 1px solid var(--line); border-radius: 22px; box-shadow: var(--shadow);
+      opacity: 0;
+      transform: scale(.98);
+      transition: opacity 180ms ease, transform 180ms ease;
+      will-change: opacity, transform;
+    }
+    .modal-backdrop.open .modal {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .modal-backdrop.closing .modal {
+      opacity: 0;
+      transform: scale(.98);
+      transition-duration: 140ms;
+    }
+    .modal-head { position: sticky; top: 0; z-index: 2; display: flex; justify-content: space-between; align-items: center; padding: 18px 20px; border-bottom: 1px solid var(--line); background: var(--surface-solid); }
+    .modal-title { font-weight: 900; }
+    .modal-content { padding: 20px; line-height: 2; color: var(--muted); font-size: 12px; }
+    .rule-card { border: 1px solid var(--line); border-radius: 14px; padding: 14px; margin-bottom: 10px; }
+    .rule-card strong { display: block; color: var(--text); margin-bottom: 4px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .modal-backdrop,
+      .modal { transition: none !important; }
     }
 
-    .bottom-bar {
-      padding: 5px;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      direction: rtl;
+    .toast {
+      position: fixed; left: 50%; bottom: 24px; z-index: 200;
+      transform: translate(-50%, 20px); opacity: 0; pointer-events: none;
+      padding: 11px 15px; border-radius: 12px; background: #15171a; color: #fff; font-size: 12px; font-weight: 800;
+      transition: .25s ease;
     }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
-    .nav-item {
-      border: 0;
-      border-radius: 999px;
-      background: transparent;
-      color: var(--text);
-      cursor: pointer;
-      font-weight: 900;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      min-height: 32px;
+    @media (max-width: 980px) {
+      .workspace { grid-template-columns: 1fr; }
+      .visual-card { min-height: 580px; }
+      .form-card { order: -1; }
     }
-
-    .nav-item.active {
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: #fff;
-    }
-
-    .nav-item.active .nav-icon { color: #fff; }
-    .version { color: var(--muted); font-weight: 800; justify-self: end; }
-
-    .download, .rules-button, .nav-item { white-space: nowrap; }
-
-    @media (orientation: landscape) and (min-width: 900px) {
-      .app { max-height: 100vh; }
-      .content { min-height: 0; }
-      .preview-card { height: min(64vh, 610px); max-height: 610px; }
-      .form-card { height: auto; max-height: calc(100vh - 150px); }
-      .bottom-row { margin-bottom: 34px; }
-      .rules-button { justify-self: end; }
-    }
-
-    @media (max-width: 1050px) {
-      .app { padding: 16px; }
-      .topbar, .content, .bottom-row { grid-template-columns: 1fr; }
-      .theme-tools, .language-switch, .brand, .version { justify-self: center; }
-      .content { gap: 16px; }
-      .bottom-row { direction: rtl; }
-    }
-
     @media (max-width: 620px) {
-      .card { padding: 12px; border-radius: 18px; }
-      .preview-card { min-height: 500px; }
-      .field-row { grid-template-columns: 1fr; gap: 5px; }
-      label { line-height: 1.6; }
-      .bottom-bar { grid-template-columns: 1fr; border-radius: 22px; }
-      .view-tabs { position: static; margin-bottom: 10px; width: max-content; }
-      .diagram { padding-top: 0; min-height: auto; }
-      .modal { inset: 78px 18px auto; width: auto; }
+      .app-shell { width: min(100% - 18px, 1480px); padding-top: 9px; }
+      .topbar { top: 6px; border-radius: 15px; padding: 9px; }
+      .brand-subtitle { display: none; }
+      .brand-title { font-size: 14px; }
+      .rules-btn { min-width: auto; padding: 0 10px; }
+      .rules-btn span { font-size: 11px; }
+      .type-tabs { gap: 4px; }
+      .type-tab { flex-direction: column; gap: 5px; padding: 10px 4px; font-size: 10px; }
+      .workspace { gap: 10px; }
+      .card { border-radius: 18px; }
+      .form-card { padding: 15px; }
+      .field-row { grid-template-columns: 1fr; gap: 0; }
+      .measurement-input { grid-template-columns: minmax(0, 1fr) 84px; }
+      .card-head { align-items: flex-start; flex-direction: column; padding: 16px; }
+      .drawing-area { min-height: 350px; padding: 10px; }
+      #rampDrawing { min-height: 330px; }
+      .drawing-toolbar { align-items: flex-start; flex-direction: column; }
+      .footer { align-items: flex-start; flex-direction: column; }
     }
   </style>
 </head>
 <body>
-  <svg class="svg-sprite" aria-hidden="true" focusable="false">
-    <symbol id="icon-car" viewBox="0 0 24 24"><path d="M5 12l1.4-4.2A3 3 0 0 1 9.2 6h5.6a3 3 0 0 1 2.8 1.8L19 12h1a1 1 0 0 1 1 1v4h-2a2 2 0 0 1-4 0H9a2 2 0 0 1-4 0H3v-4a1 1 0 0 1 1-1h1Zm2.2 0h9.6l-.9-2.8a1.2 1.2 0 0 0-1.1-.7H9.2a1.2 1.2 0 0 0-1.1.7L7.2 12ZM7 18a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm10 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" fill="currentColor"/></symbol>
-    <symbol id="icon-wheelchair" viewBox="0 0 24 24"><path d="M11 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm-1 4v3h4v2h-4.4l-1-3H7a6 6 0 1 0 5.7 7.8l1.8.9A8 8 0 1 1 7 9V7h2a1 1 0 0 1 1 1Zm4.8 6h2.6l3 5-1.7 1-2.4-4h-3.1l-.7-2h2.3Z" fill="currentColor"/></symbol>
-    <symbol id="icon-walk" viewBox="0 0 24 24"><path d="M13 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm-1.2 4 2.7 1.5 2.1 3.1-1.7 1.1-1.8-2.6-1.3-.7-1.1 4.1 2.8 2.6-1.4 1.5-3.6-3.3.9-3.5-1 .7-1.4 2.2-1.7-1.1 1.7-2.7 3-2.2c.5-.4 1.2-.6 1.8-.3Z" fill="currentColor"/></symbol>
-    <symbol id="icon-rules" viewBox="0 0 24 24"><path d="M6 3h9l3 3v15H6V3Zm8 1.8V7h2.2L14 4.8ZM8 9h8v1.8H8V9Zm0 4h8v1.8H8V13Zm0 4h5v1.8H8V17Z" fill="currentColor"/></symbol>
-    <symbol id="icon-calc" viewBox="0 0 24 24"><path d="M6 3h12v18H6V3Zm2 2v4h8V5H8Zm0 6v2h2v-2H8Zm4 0v2h2v-2h-2Zm4 0v2h2v-2h-2Zm-8 4v2h2v-2H8Zm4 0v2h2v-2h-2Zm4 0v4h2v-4h-2Zm-8 4v2h6v-2H8Z" fill="currentColor"/></symbol>
-    <symbol id="icon-sun" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0-5 1.2 3h-2.4L12 2Zm0 20-1.2-3h2.4L12 22ZM2 12l3-1.2v2.4L2 12Zm20 0-3 1.2v-2.4l3 1.2ZM4.2 4.2l3 1.3-1.7 1.7-1.3-3Zm15.6 15.6-3-1.3 1.7-1.7 1.3 3Zm0-15.6-1.3 3-1.7-1.7 3-1.3ZM4.2 19.8l1.3-3 1.7 1.7-3 1.3Z" fill="currentColor"/></symbol>
-    <symbol id="icon-moon" viewBox="0 0 24 24"><path d="M20 15.5A8.5 8.5 0 0 1 8.5 4a8 8 0 1 0 11.5 11.5Z" fill="currentColor"/></symbol>
-    <symbol id="icon-download" viewBox="0 0 24 24"><path d="M11 3h2v10l3.5-3.5 1.4 1.4L12 16.8l-5.9-5.9 1.4-1.4L11 13V3ZM5 19h14v2H5v-2Z" fill="currentColor"/></symbol>
-  </svg>
-  <main class="app">
+  <div class="app-shell">
     <header class="topbar">
-      <div class="theme-tools" aria-label="تنظیمات پوسته">
-        <svg class="theme-icon icon"><use href="#icon-sun"></use></svg>
-        <button class="toggle" id="themeToggle" type="button" aria-label="تغییر حالت روشن و تاریک" aria-pressed="false"></button>
-        <svg class="theme-icon icon"><use href="#icon-moon"></use></svg>
-        <button class="language-switch" id="languageToggle" type="button" aria-label="تغییر زبان">
-          <strong id="faLabel">فارسی</strong>
-          <span>|</span>
-          <span id="enLabel">English</span>
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 18h18"/><path d="M5 16h3l8-9h3"/><path d="M8 16l8-9"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <div class="brand-title" data-i18n="appTitle">ابزار محاسبه رمپ</div>
+          <div class="brand-subtitle" data-i18n="appSubtitle">محاسبه، کنترل ضوابط و ترسیم شماتیک</div>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button class="lang-btn" id="langBtn" title="Change language">EN</button>
+        <button class="rules-btn" id="rulesBtn" title="ضوابط">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/><path d="M8 7h8M8 11h8"/></svg>
+          <span data-i18n="rulesShort">ضوابط</span>
+        </button>
+        <button class="icon-btn" id="themeBtn" title="حالت نمایش">
+          <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"/></svg>
         </button>
       </div>
-      <div class="brand">
-        <h1 id="pageTitle">محاسبه رمپ</h1>
-        <span class="brand-icon" aria-hidden="true"><svg class="icon"><use href="#icon-car"></use></svg></span>
-      </div>
-      <div></div>
     </header>
 
-    <section class="content">
-      <article class="card preview-card" aria-label="پیش‌نمایش رمپ">
-        <div class="view-tabs" role="tablist" aria-label="نوع نمایش">
-          <button class="view-tab active" id="planTab" type="button" data-view="plan">پلان <span aria-hidden="true">▧</span></button>
-          <button class="view-tab" id="elevationTab" type="button" data-view="elevation">نما <span aria-hidden="true">◿</span></button>
+    <nav class="type-tabs no-indicator-transition" aria-label="Ramp types">
+      <span class="type-indicator" aria-hidden="true"></span>
+      <button class="type-tab active" data-type="car">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m5 17-1-5 2-5h12l2 5-1 5"/><path d="M5 12h14M7 17h10"/><circle cx="7" cy="17" r="1.5"/><circle cx="17" cy="17" r="1.5"/></svg>
+        <span data-i18n="carRamp">رمپ خودرو</span>
+      </button>
+      <button class="type-tab" data-type="disabled">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="5" r="2"/><path d="M10 8v5h4l3 5"/><path d="m8 11-2 5"/><circle cx="9" cy="16" r="5"/></svg>
+        <span data-i18n="disabledRamp">رمپ معلول</span>
+      </button>
+      <button class="type-tab" data-type="human">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><path d="m10 22 1-7-2-3 1-4h4l2 4 3 2"/><path d="m14 22-1-7"/></svg>
+        <span data-i18n="humanRamp">رمپ عمومی</span>
+      </button>
+    </nav>
+
+    <main class="workspace">
+      <section class="card visual-card">
+        <div class="card-head">
+          <div>
+            <div class="card-title" id="drawingTitle">نمای شماتیک رمپ خودرو</div>
+            <div class="card-caption" data-i18n="drawingSubtitle">ترسیم با تغییر ورودی‌ها به‌صورت زنده به‌روزرسانی می‌شود</div>
+          </div>
+          <div class="view-tabs">
+            <button class="view-tab active" data-view="section" data-i18n="section">نما</button>
+            <button class="view-tab" data-view="plan" data-i18n="plan">پلان</button>
+          </div>
         </div>
-
-        <div class="diagram" id="planDiagram" aria-label="نمای پلان رمپ خودرو">
-          <svg class="drawing" viewBox="0 0 760 250" role="img" aria-labelledby="planTitle">
-            <title id="planTitle">پلان رمپ خودرو</title>
-            <defs>
-              <pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-                <line x1="0" y1="0" x2="0" y2="8" stroke="#c9d1df" stroke-width="2" />
-              </pattern>
-              <marker id="arrow" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
-                <path d="M0,0 L8,4 L0,8 Z" fill="#748094" />
-              </marker>
-            </defs>
-            <polygon points="170,95 560,150 560,205 170,205" fill="rgba(148,163,184,.08)" stroke="#8a96a8" stroke-width="2" />
-            <rect x="145" y="95" width="25" height="110" fill="url(#hatch)" stroke="#8a96a8" />
-            <line class="line" x1="190" y1="55" x2="560" y2="55" stroke-width="1.5" marker-start="url(#arrow)" marker-end="url(#arrow)" />
-            <line class="line" x1="190" y1="45" x2="190" y2="95" stroke-dasharray="7 6" />
-            <line class="line" x1="560" y1="45" x2="560" y2="95" stroke-dasharray="7 6" />
-            <text x="375" y="39" text-anchor="middle" font-size="18">۶.۰۰ m</text>
-            <line class="line" x1="90" y1="105" x2="90" y2="200" stroke-width="1.5" marker-start="url(#arrow)" marker-end="url(#arrow)" />
-            <line class="line" x1="90" y1="105" x2="145" y2="105" stroke-dasharray="7 6" opacity="0.55" />
-            <line class="line" x1="90" y1="200" x2="145" y2="200" stroke-dasharray="7 6" opacity="0.55" />
-            <text x="52" y="160" text-anchor="middle" font-size="18">۳.۵۰ m</text>
-            <line class="line" x1="610" y1="95" x2="610" y2="205" stroke-width="1.5" marker-start="url(#arrow)" marker-end="url(#arrow)" />
-            <line class="line" x1="560" y1="95" x2="610" y2="95" stroke-dasharray="7 6" opacity="0.55" />
-            <line class="line" x1="560" y1="205" x2="610" y2="205" stroke-dasharray="7 6" opacity="0.55" />
-            <text x="645" y="162" text-anchor="middle" font-size="18">۵.۰۰ m</text>
-            <text class="muted" x="675" y="210" font-size="14">سطح بالاتر</text>
-            <g transform="translate(255 120) rotate(5)">
-              <rect x="0" y="0" width="165" height="70" rx="34" fill="none" stroke="#7f8b9e" stroke-width="3" />
-              <rect x="20" y="9" width="125" height="52" rx="25" fill="none" stroke="#a8b2c1" stroke-width="2" />
-              <line x1="53" y1="9" x2="53" y2="61" stroke="#a8b2c1" />
-              <line x1="112" y1="9" x2="112" y2="61" stroke="#a8b2c1" />
-            </g>
-          </svg>
+        <div class="drawing-area">
+          <svg id="rampDrawing" viewBox="0 0 900 500" role="img" aria-label="Ramp schematic"></svg>
         </div>
-
-        <div class="diagram" id="elevationDiagram" hidden aria-label="نمای جانبی رمپ">
-          <svg class="drawing" viewBox="0 100 760 340" role="img" aria-labelledby="elevationTitle">
-            <title id="elevationTitle">نمای جانبی رمپ</title>
-            <line class="line" x1="90" y1="360" x2="680" y2="360" stroke-width="2" />
-            <polyline class="blue" points="110,330 230,330 560,170 660,170" stroke-width="4" fill="none" />
-            <line class="line" x1="230" y1="330" x2="230" y2="390" stroke-dasharray="7 6" />
-            <line class="line" x1="560" y1="170" x2="560" y2="390" stroke-dasharray="7 6" />
-            <text x="170" y="415" text-anchor="middle" font-size="18">ابتدا</text>
-            <text x="390" y="415" text-anchor="middle" font-size="18">شیب اصلی</text>
-            <text x="610" y="415" text-anchor="middle" font-size="18">انتها</text>
-            <text x="575" y="140" font-size="18">سطح بالاتر</text>
-            <text x="95" y="310" font-size="18">سطح پایین</text>
-            <g transform="translate(350 215) scale(2)" opacity="0.8"><path d="M5 12l1.4-4.2A3 3 0 0 1 9.2 6h5.6a3 3 0 0 1 2.8 1.8L19 12h1v4h-2a2 2 0 0 1-4 0H9a2 2 0 0 1-4 0H3v-4h2Z" fill="currentColor"/></g>
-          </svg>
+        <div class="drawing-toolbar">
+          <div class="drawing-note" data-i18n="schematicNote">ترسیم شماتیک است و جایگزین نقشه اجرایی نیست.</div>
+          <div class="mini-actions">
+            <button class="small-btn" id="svgBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+              <span>SVG</span>
+            </button>
+            <button class="small-btn" id="dxfBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3h11l5 5v13H4z"/><path d="M14 3v6h6"/><path d="M7 16h10"/></svg>
+              <span>DXF</span>
+            </button>
+          </div>
         </div>
+      </section>
 
-      </article>
+      <aside class="card form-card">
+        <h1 class="form-title" id="formTitle">محاسبه رمپ خودرو</h1>
+        <div class="form-subtitle" id="formSubtitle">ارتفاع، شیب اصلی و شیب شکست ابتدا و انتهای رمپ را وارد کنید.</div>
 
-      <aside class="card form-card" aria-label="مشخصات رمپ">
-        <div class="form-head">
-          <h2 id="formTitle">مشخصات رمپ خودرو</h2>
-          <span class="form-icon" id="formIcon" aria-hidden="true"><svg class="icon"><use href="#icon-car"></use></svg></span>
-        </div>
-
-        <form class="calculator" id="rampForm">
+        <section class="form-section active" data-form="car">
+          <div class="field">
+            <label for="carHeight" data-i18n="height">اختلاف ارتفاع</label>
+            <div class="measurement-input">
+              <div class="input-wrap"><input class="height-value" id="carHeight" type="number" min="1" step="1" value="350"></div>
+              <select class="height-unit-select" id="carHeightUnit" aria-label="Height unit">
+                <option value="cm">cm</option>
+                <option value="m">m</option>
+              </select>
+            </div>
+          </div>
           <div class="field-row">
-            <label id="heightLabel" for="height">ارتفاع</label>
-            <div class="control-wrap">
-              <div class="control"><span class="unit">m</span><input id="height" type="number" inputmode="decimal" min="0.01" step="0.01" value="1.00" /></div>
-              <p class="hint" id="heightHint">اختلاف تراز بین مبدا و مقصد</p>
+            <div class="field">
+              <label for="carSlope" data-i18n="mainSlope">شیب اصلی</label>
+              <div class="input-wrap"><input id="carSlope" type="number" min="0.1" step="0.1" value="15"><span class="unit">%</span></div>
+            </div>
+            <div class="field">
+              <label for="carTransition" data-i18n="transitionSlope">شیب ابتدا و انتها</label>
+              <select id="carTransition">
+                <option value="10">10%</option>
+                <option value="5">5%</option>
+              </select>
             </div>
           </div>
-
-          <div class="field-row">
-            <label id="slopeLabel" for="slope">شیب اصلی</label>
-            <div class="control-wrap">
-              <div class="control"><span class="unit">%</span><input id="slope" type="number" inputmode="decimal" min="1" step="0.1" value="16.0" /></div>
-              <p class="hint" id="slopeHint">حداکثر مجاز: ۲۰٪</p>
-            </div>
-          </div>
-
-          <div class="field-row" id="startSlopeGroup">
-            <label id="startSlopeLabel" for="startSlope">شیب ابتدا</label>
-            <div class="control-wrap">
-              <div class="control"><span class="unit">%</span><input id="startSlope" type="number" inputmode="decimal" min="1" step="0.1" value="12.5" /></div>
-              <p class="hint" id="startSlopeHint">حداکثر مجاز: ۱۵٪</p>
-            </div>
-          </div>
-
-          <div class="field-row" id="endSlopeGroup">
-            <label id="endSlopeLabel" for="edgeSlope">شیب انتها</label>
-            <div class="control-wrap">
-              <div class="control"><span class="unit">%</span><select id="edgeSlope"><option value="10">۱۰</option><option value="5">۵</option></select></div>
-              <p class="hint" id="endSlopeHint">برای فرمول فعلی ۵٪ یا ۱۰٪</p>
-            </div>
-          </div>
-
-          <div class="field-row">
-            <label id="rampTypeLabel" for="rampType">نوع رمپ</label>
-            <div class="control-wrap select-wrap">
-              <div class="control"><span class="unit">⌄</span><select id="rampType"><option value="car" selected>رمپ خودرو</option><option value="disabled">رمپ معلول</option><option value="human">رمپ عابر</option></select></div>
-              <p class="hint" id="rampTypeHint">انتخاب نوع رمپ برای محاسبات</p>
-            </div>
-          </div>
-
-          <button class="calculate" id="calculateButton" type="submit">محاسبه <svg class="icon" aria-hidden="true"><use href="#icon-calc"></use></svg></button>
-        </form>
-
-        <section class="result-box" aria-live="polite" aria-label="نتیجه محاسبه">
-          <p class="result-line" id="mainResult">طول رمپ : ۰ متر</p>
-          <p class="edge-line" id="edgeResult"></p>
         </section>
+
+        <section class="form-section" data-form="disabled">
+          <div class="field-row">
+            <div class="field">
+              <label for="disabledHeight" data-i18n="height">اختلاف ارتفاع</label>
+              <div class="measurement-input">
+                <div class="input-wrap"><input class="height-value" id="disabledHeight" type="number" min="1" step="1" value="120"></div>
+                <select class="height-unit-select" id="disabledHeightUnit" aria-label="Height unit">
+                  <option value="cm">cm</option>
+                  <option value="m">m</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label for="disabledSlope" data-i18n="slope">شیب</label>
+              <select id="disabledSlope">
+                <option value="5">5%</option><option value="6">6%</option><option value="7">7%</option><option value="8" selected>8%</option><option value="9">9%</option><option value="10">10%</option>
+              </select>
+            </div>
+          </div>
+          <div class="switch-row">
+            <div class="switch-label"><strong data-i18n="regulations">کنترل ضوابط</strong><small data-i18n="regulationsHelp">محدودیت شیب و طول بازوها اعمال شود</small></div>
+            <label class="switch"><input id="disabledRegulations" type="checkbox" checked><span class="slider"></span></label>
+          </div>
+          <div class="switch-row">
+            <div class="switch-label"><strong data-i18n="companion">همراه دارد</strong><small data-i18n="companionHelp">محاسبه مطابق حالت دارای همراه</small></div>
+            <label class="switch"><input id="disabledCompanion" type="checkbox" checked><span class="slider"></span></label>
+          </div>
+        </section>
+
+        <section class="form-section" data-form="human">
+          <div class="field-row">
+            <div class="field">
+              <label for="humanHeight" data-i18n="height">اختلاف ارتفاع</label>
+              <div class="measurement-input">
+                <div class="input-wrap"><input class="height-value" id="humanHeight" type="number" min="1" step="1" value="120"></div>
+                <select class="height-unit-select" id="humanHeightUnit" aria-label="Height unit">
+                  <option value="cm">cm</option>
+                  <option value="m">m</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label for="humanSlope" data-i18n="slope">شیب</label>
+              <div class="input-wrap"><input id="humanSlope" type="number" min="0.1" step="0.1" value="12"><span class="unit">%</span></div>
+            </div>
+          </div>
+        </section>
+
+        <button class="calculate-btn" id="calculateBtn">
+          <span data-i18n="calculate">محاسبه رمپ</span>
+        </button>
+
+        <div class="result-box" aria-live="polite">
+          <div class="result-main">
+            <div>
+              <div class="result-label" data-i18n="totalLength">طول محاسبه‌شده</div>
+              <div class="result-value" id="resultValue">— <span id="resultUnit">cm</span></div>
+            </div>
+            <div class="result-badge" id="resultBadge" aria-live="polite">
+              <div class="badge-state good" data-badge-level="good">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.3 2.2 2.2 4.8-5.1"/></svg>
+                <span data-i18n="badgeGood">مجاز</span>
+              </div>
+              <div class="badge-state caution" data-badge-level="caution">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2.7 19a1 1 0 0 0 .87 1.5h16.86a1 1 0 0 0 .87-1.5L12 3Z"/><path d="M12 9v4.5"/><path d="M12 17h.01"/></svg>
+                <span data-i18n="badgeCaution">مجاز با احتیاط</span>
+              </div>
+              <div class="badge-state bad" data-badge-level="bad">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m9 9 6 6M15 9l-6 6"/></svg>
+                <span data-i18n="badgeBad">غیرمجاز</span>
+              </div>
+            </div>
+          </div>
+          <div class="result-details">
+            <div class="detail-line"><span data-i18n="pureRamp">طول خالص مسیر شیبدار</span><strong id="pureLength">—</strong></div>
+            <div class="detail-line"><span data-i18n="landings">تعداد پاگرد</span><strong id="landingCount">0</strong></div>
+            <div class="detail-line"><span data-i18n="extraLength">طول افزوده</span><strong id="extraLength">—</strong></div>
+            <div class="warning-line" id="warningLine"></div>
+          </div>
+        </div>
       </aside>
-    </section>
+    </main>
 
-    <footer class="bottom-row">
-      <button class="download" id="downloadButton" type="button">دانلود نرم‌افزار <svg class="icon" aria-hidden="true"><use href="#icon-download"></use></svg></button>
-      <nav class="bottom-bar" aria-label="انتخاب نوع رمپ">
-        <button class="nav-item active" type="button" data-ramp="car"><span>رمپ خودرو</span><span class="nav-icon"><svg class="icon"><use href="#icon-car"></use></svg></span></button>
-        <button class="nav-item" type="button" data-ramp="disabled"><span>رمپ معلول</span><span class="nav-icon"><svg class="icon"><use href="#icon-wheelchair"></use></svg></span></button>
-        <button class="nav-item" type="button" data-ramp="human"><span>رمپ عابر</span><span class="nav-icon"><svg class="icon"><use href="#icon-walk"></use></svg></span></button>
-      </nav>
-      <button class="rules-button" id="openRules" type="button">ضوابط و مقررات <svg class="icon" aria-hidden="true"><use href="#icon-rules"></use></svg></button>
-      <span class="version" id="versionText">نسخه ۱.۳.۰</span>
-    </footer>
-
-  </main>
-
-  <div class="modal-backdrop" id="modalBackdrop"></div>
-
-    <aside class="modal" id="rulesModal" aria-modal="true" role="dialog" aria-labelledby="rulesTitle">
-      <div class="modal-head">
-        <button class="modal-close" id="closeRules" type="button" aria-label="بستن">×</button>
-        <h2 class="modal-title" id="rulesTitle">ضوابط رمپ <span aria-hidden="true">ⓘ</span></h2>
+    <footer class="footer">
+      <div><span data-i18n="version">نسخه</span> 2.7.6 · Synchronized units 2026-07-18</div>
+      <div class="footer-actions">
+        <button id="copyBtn" data-i18n="copyResult">کپی نتیجه</button>
+        <button id="downloadBtn" data-i18n="downloadApp">دانلود نرم‌افزار</button>
       </div>
-      <ul class="rules">
-        <li>حداکثر شیب اصلی رمپ خودرو ۲۰٪ است.</li>
-        <li>حداکثر شیب در ابتدا و انتهای رمپ ۱۵٪ است.</li>
-        <li>حداقل طول پاگرد ابتدا و انتها ۱.۵۰ متر است.</li>
-        <li>حداقل عرض رمپ برای عبور یک خودرو ۳.۵۰ متر است.</li>
-        <li>در صورت تغییر جهت، حداقل طول پاگرد ۱.۵۰ متر است.</li>
-        <li>شیب جانبی رمپ حداکثر ۲٪ در نظر گرفته شود.</li>
-      </ul>
-      <button class="modal-action" id="dismissRules" type="button">بستن</button>
-    </aside>
+    </footer>
+  </div>
 
+  <div class="modal-backdrop" id="rulesModal" role="dialog" aria-modal="true" aria-labelledby="rulesTitle">
+    <div class="modal">
+      <div class="modal-head">
+        <div class="modal-title" id="rulesTitle" data-i18n="rulesTitle">منطق ضوابط استفاده‌شده</div>
+        <button class="icon-btn" id="closeRules" aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+      <div class="modal-content" id="rulesContent"></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
 
   <script>
-    const body = document.body;
-    const themeToggle = document.getElementById('themeToggle');
-    const form = document.getElementById('rampForm');
-    const rampTypeInput = document.getElementById('rampType');
-    const heightInput = document.getElementById('height');
-    const slopeInput = document.getElementById('slope');
-    const startSlopeGroup = document.getElementById('startSlopeGroup');
-    const endSlopeGroup = document.getElementById('endSlopeGroup');
-    const edgeSlopeInput = document.getElementById('edgeSlope');
-    const mainResult = document.getElementById('mainResult');
-    const edgeResult = document.getElementById('edgeResult');
-    const formTitle = document.getElementById('formTitle');
-    const formIcon = document.getElementById('formIcon');
-    const rulesModal = document.getElementById('rulesModal');
-    const modalBackdrop = document.getElementById('modalBackdrop');
-    const openRules = document.getElementById('openRules');
-    const closeRules = document.getElementById('closeRules');
-    const dismissRules = document.getElementById('dismissRules');
-    const planDiagram = document.getElementById('planDiagram');
-    const elevationDiagram = document.getElementById('elevationDiagram');
-    const viewTabs = document.querySelectorAll('.view-tab');
-    const navItems = document.querySelectorAll('.nav-item');
-    const languageToggle = document.getElementById('languageToggle');
-    const faLabel = document.getElementById('faLabel');
-    const enLabel = document.getElementById('enLabel');
-    let currentLanguage = 'fa';
+    (() => {
+      "use strict";
 
-    const copy = {
-      fa: { title: 'محاسبه رمپ', plan: 'پلان ▧', elevation: 'نما ◿', formPrefix: 'مشخصات رمپ', car: 'خودرو', disabled: 'معلول', human: 'عابر', height: 'ارتفاع', heightHint: 'اختلاف تراز بین مبدا و مقصد', slope: 'شیب اصلی', slopeHint: 'حداکثر مجاز: ۲۰٪', startSlope: 'شیب ابتدا', startSlopeHint: 'حداکثر مجاز: ۱۵٪', endSlope: 'شیب انتها', endSlopeHint: 'برای فرمول فعلی ۵٪ یا ۱۰٪', rampType: 'نوع رمپ', rampTypeHint: 'انتخاب نوع رمپ برای محاسبات', calculate: 'محاسبه', download: 'دانلود نرم‌افزار', rules: 'ضوابط و مقررات', version: 'نسخه ۱.۳.۰', resultPrefix: 'طول رمپ', invalid: 'لطفاً شیب مجاز وارد کنید.' },
-      en: { title: 'Ramp Calculator', plan: 'Plan ▧', elevation: 'Elevation ◿', formPrefix: 'Ramp Specs', car: 'Car', disabled: 'Accessible', human: 'Pedestrian', height: 'Height', heightHint: 'Level difference between start and destination', slope: 'Main slope', slopeHint: 'Maximum allowed: 20%', startSlope: 'Start slope', startSlopeHint: 'Maximum allowed: 15%', endSlope: 'End slope', endSlopeHint: 'Current formula supports 5% or 10%', rampType: 'Ramp type', rampTypeHint: 'Choose ramp type for calculation', calculate: 'Calculate', download: 'Download app', rules: 'Rules & Regulations', version: 'Version 1.3.0', resultPrefix: 'Ramp length', invalid: 'Please enter an allowed slope.' }
-    };
-
-    const localizedNodes = {
-      pageTitle: document.getElementById('pageTitle'),
-      planTab: document.getElementById('planTab'),
-      elevationTab: document.getElementById('elevationTab'),
-      heightLabel: document.getElementById('heightLabel'),
-      heightHint: document.getElementById('heightHint'),
-      slopeLabel: document.getElementById('slopeLabel'),
-      slopeHint: document.getElementById('slopeHint'),
-      startSlopeLabel: document.getElementById('startSlopeLabel'),
-      startSlopeHint: document.getElementById('startSlopeHint'),
-      endSlopeLabel: document.getElementById('endSlopeLabel'),
-      endSlopeHint: document.getElementById('endSlopeHint'),
-      rampTypeLabel: document.getElementById('rampTypeLabel'),
-      rampTypeHint: document.getElementById('rampTypeHint'),
-      calculateButton: document.getElementById('calculateButton'),
-      downloadButton: document.getElementById('downloadButton'),
-      versionText: document.getElementById('versionText')
-    };
-
-    const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
-
-    function toPersianNumber(value) {
-      return String(value).replace(/\d/g, digit => persianDigits[digit]);
-    }
-
-    function formatNumber(value, digits = 3) {
-      return toPersianNumber(Number(value).toLocaleString('en-US', {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: digits
-      }));
-    }
-
-    function roundLength(value) {
-      return Math.round(value * 1000) / 1000;
-    }
-
-    function carRampLength(height, slope1, slope2) {
-      const isUnauthorized = slope1 > 17;
-
-      if (slope2 === 10) {
-        return {
-          length: roundLength(((height - 20) / slope1) + 2),
-          stop: '+۳ متر توقف رمپ',
-          warning: isUnauthorized ? 'هشدار: شیب غیرمجاز است!' : ''
-        };
-      }
-
-      if (slope2 === 5) {
-        return {
-          length: roundLength(((height - 25) / slope1) + 4),
-          warning: isUnauthorized ? 'هشدار: شیب غیرمجاز است!' : ''
-        };
-      }
-
-      return { error: 'شیب ابتدا و انتهای رمپ خودرو نامعتبر است!' };
-    }
-
-    function disabledRampLength(height, slope, regulations = true) {
-      const baseLength = height / slope;
-      let landingInterval = 9;
-      let isUnauthorized = false;
-
-      if (regulations) {
-        if (slope === 6) {
-          landingInterval = 8;
-        } else if (slope === 7) {
-          landingInterval = 5;
-        } else if (slope >= 8) {
-          landingInterval = 3;
-          isUnauthorized = slope > 8;
+      const I18N = {
+        fa: {
+          appTitle: "ابزار محاسبه رمپ", appSubtitle: "محاسبه، کنترل ضوابط و ترسیم دقیق",
+          carRamp: "رمپ خودرو", disabledRamp: "رمپ معلول", humanRamp: "رمپ عمومی",
+          drawingSubtitle: "ترسیم دقیق بر اساس ابعاد و مختصات محاسبه‌شده به‌صورت زنده به‌روزرسانی می‌شود", section: "نما", plan: "پلان",
+          schematicNote: "ترسیم با ابعاد واقعی انجام می‌شود و جزئیات مهم مستقیماً نمایش داده می‌شود.", details: "جزئیات", hideDetails: "بستن جزئیات", height: "اختلاف ارتفاع", cm: "cm",
+          mainSlope: "شیب اصلی", transitionSlope: "شیب ابتدا و انتها", slope: "شیب", regulations: "کنترل ضوابط",
+          regulationsHelp: "محدودیت شیب و طول بازوها اعمال شود", companion: "همراه دارد", companionHelp: "محاسبه مطابق حالت دارای همراه",
+          calculate: "محاسبه رمپ", totalLength: "طول محاسبه‌شده", meter: "m", pureRamp: "طول خالص مسیر شیبدار",
+          landings: "تعداد پاگرد", extraLength: "طول افزوده", version: "نسخه", copyResult: "کپی نتیجه", downloadApp: "دانلود نرم‌افزار",
+          rulesTitle: "منطق ضوابط استفاده‌شده", rulesShort: "ضوابط", allowed: "مجاز", unauthorized: "شیب غیرمجاز", invalid: "ورودی نامعتبر", statusGood: "مجاز و مناسب", statusCaution: "مجاز ولی بهتر است کمتر باشد", statusBad: "غیرمجاز", badgeGood: "مجاز", badgeCaution: "مجاز با احتیاط", badgeBad: "غیرمجاز", statusGoodHelp: "شیب در محدوده مناسب قرار دارد.", statusCautionHelp: "قابل استفاده است، اما شیب کمتر پیشنهاد می‌شود.", statusBadHelp: "شیب از محدوده مجاز بیشتر است.",
+          carTitle: "محاسبه رمپ خودرو", disabledTitle: "محاسبه رمپ معلول", humanTitle: "محاسبه رمپ عمومی",
+          carSubtitle: "ارتفاع، شیب اصلی و شیب شکست ابتدا و انتهای رمپ را وارد کنید.",
+          disabledSubtitle: "ارتفاع، شیب و وضعیت ضوابط و همراه را تعیین کنید.",
+          humanSubtitle: "ارتفاع و شیب رمپ عمومی را وارد کنید؛ حد مجاز شیب ۱۲٫۵٪ است.",
+          carDrawing: "ترسیم دقیق رمپ خودرو", disabledDrawing: "ترسیم دقیق رمپ معلول", humanDrawing: "ترسیم دقیق رمپ عمومی",
+          warningCar: "طبق فرمول فایل، شیب اصلی بیشتر از ۱۷٪ غیرمجاز است.",
+          warningDisabled: "در حالت کنترل ضوابط و بدون همراه، شیب بیشتر از ۸٪ غیرمجاز است و طول محاسبه نمی‌شود.",
+          warningHuman: "طبق فرمول فایل، شیب بیشتر از ۱۲٫۵٪ غیرمجاز است.", advisoryCar: "شیب در محدوده قابل قبول است، اما بهتر است برای خودرو از مقدار کمتری استفاده شود.", advisoryDisabled: "شیب هنوز قابل استفاده است، اما برای راحتی و ایمنی بهتر است کمتر در نظر گرفته شود.", advisoryHuman: "شیب هنوز قابل قبول است، اما برای استفاده راحت‌تر بهتر است کمتر باشد.",
+          invalidMessage: "ارتفاع و شیب باید عدد مثبت باشند.", noResult: "—", stop: "توقفگاه", transition: "شکست شیب", ramp: "رمپ", landing: "پاگرد",
+          copied: "نتیجه کپی شد", downloaded: "فایل نرم‌افزار دانلود شد", svgDownloaded: "فایل SVG دانلود شد", dxfDownloaded: "فایل DXF دانلود شد",
+          noCalculation: "برای این ترکیب ورودی، فرمول اصلی خروجی تعریف نکرده است.", withCompanion: "با همراه", withoutCompanion: "بدون همراه"
+        },
+        en: {
+          appTitle: "Ramp Calculation Tool", appSubtitle: "Calculation, regulation checks and precise drawings",
+          carRamp: "Car ramp", disabledRamp: "Accessible ramp", humanRamp: "General ramp",
+          drawingSubtitle: "The drawing updates live using the calculated dimensions and coordinates", section: "Section", plan: "Plan",
+          schematicNote: "The drawing uses real calculated dimensions and shows the key details directly.", details: "Details", hideDetails: "Hide details", height: "Height difference", cm: "cm",
+          mainSlope: "Main slope", transitionSlope: "Entry & exit slope", slope: "Slope", regulations: "Apply regulations",
+          regulationsHelp: "Apply slope and maximum-run restrictions", companion: "With companion", companionHelp: "Use the companion calculation mode",
+          calculate: "Calculate ramp", totalLength: "Calculated length", meter: "m", pureRamp: "Pure sloped-run length",
+          landings: "Number of landings", extraLength: "Added length", version: "Version", copyResult: "Copy result", downloadApp: "Download app",
+          rulesTitle: "Calculation rules in this build", rulesShort: "Rules", allowed: "Allowed", unauthorized: "Unauthorized slope", invalid: "Invalid input", statusGood: "Allowed and recommended", statusCaution: "Allowed but not preferred", statusBad: "Unauthorized", badgeGood: "Allowed", badgeCaution: "Allowed with caution", badgeBad: "Unauthorized", statusGoodHelp: "The slope is within the recommended range.", statusCautionHelp: "It can be used, but a lower slope is recommended.", statusBadHelp: "The slope exceeds the permitted range.",
+          carTitle: "Car ramp calculation", disabledTitle: "Accessible ramp calculation", humanTitle: "General ramp calculation",
+          carSubtitle: "Enter height, main slope, and the entry/exit transition slope.",
+          disabledSubtitle: "Set height, slope, regulation mode, and companion status.",
+          humanSubtitle: "Enter height and slope; the maximum authorized slope is 12.5%.",
+          carDrawing: "Precise car ramp drawing", disabledDrawing: "Precise accessible ramp drawing", humanDrawing: "Precise general ramp drawing",
+          warningCar: "According to the supplied formula, a main slope above 17% is unauthorized.",
+          warningDisabled: "With regulations enabled and no companion, slopes above 8% are unauthorized and no length is returned.",
+          warningHuman: "According to the supplied formula, a slope above 12.5% is unauthorized.", advisoryCar: "The slope is still acceptable, but a lower value is preferable for car ramps.", advisoryDisabled: "The slope is still usable, but a gentler slope is better for comfort and safety.", advisoryHuman: "The slope is still acceptable, but a lower slope is better for comfort.",
+          invalidMessage: "Height and slope must be positive numbers.", noResult: "—", stop: "Ramp stop", transition: "Transition", ramp: "Ramp", landing: "Landing",
+          copied: "Result copied", downloaded: "App file downloaded", svgDownloaded: "SVG downloaded", dxfDownloaded: "DXF downloaded",
+          noCalculation: "The original formula does not define an output for this input combination.", withCompanion: "With companion", withoutCompanion: "Without companion"
         }
-      } else {
-        isUnauthorized = slope > 8;
+      };
+
+      const state = {
+        lang: localStorage.getItem("rampLang") || "fa",
+        theme: localStorage.getItem("rampTheme") || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"),
+        type: "car",
+        view: "section",
+        showDetails: true,
+        hasCalculated: false,
+        heightUnit: localStorage.getItem("rampHeightUnit") || "cm",
+        result: null
+      };
+
+      const $ = (s, root=document) => root.querySelector(s);
+      const $$ = (s, root=document) => [...root.querySelectorAll(s)];
+      const t = key => I18N[state.lang][key] ?? key;
+      const num = id => Number($(id).value);
+      const HEIGHT_CONTROLS = [
+        { input: "#carHeight", unit: "#carHeightUnit" },
+        { input: "#disabledHeight", unit: "#disabledHeightUnit" },
+        { input: "#humanHeight", unit: "#humanHeightUnit" }
+      ];
+      const fmt = n => Number.isFinite(n) ? n.toFixed(3) : "—";
+
+      function selectedLengthUnit() {
+        return state.heightUnit === "cm" ? "cm" : "m";
       }
 
-      return {
-        length: roundLength(baseLength + Math.floor(baseLength / landingInterval) * 1.5),
-        warning: isUnauthorized ? 'هشدار: شیب غیرمجاز است!' : ''
-      };
-    }
-
-    function humanRampLength(height, slope) {
-      const baseLength = height / slope;
-
-      return {
-        length: roundLength(baseLength + Math.floor(baseLength / 9) * 1.5),
-        warning: slope > 12.5 ? 'هشدار: شیب غیرمجاز است!' : ''
-      };
-    }
-
-    function updateRampType() {
-      const rampType = rampTypeInput.value;
-      const isCarRamp = rampType === 'car';
-      const activeCopy = copy[currentLanguage];
-      const label = isCarRamp ? activeCopy.car : rampType === 'disabled' ? activeCopy.disabled : activeCopy.human;
-      formTitle.textContent = `${activeCopy.formPrefix} ${label}`;
-      formIcon.innerHTML = `<svg class="icon"><use href="#${isCarRamp ? 'icon-car' : rampType === 'disabled' ? 'icon-wheelchair' : 'icon-walk'}"></use></svg>`;
-      startSlopeGroup.style.display = isCarRamp ? '' : 'none';
-      endSlopeGroup.style.display = isCarRamp ? '' : 'none';
-      navItems.forEach(item => item.classList.toggle('active', item.dataset.ramp === rampType));
-    }
-
-    function renderRampResult(result) {
-      if (result.error) {
-        mainResult.textContent = result.error;
-        edgeResult.textContent = copy[currentLanguage].invalid;
-        return;
+      function lengthScaleFactor() {
+        return state.heightUnit === "cm" ? 100 : 1;
       }
 
-      mainResult.textContent = `${copy[currentLanguage].resultPrefix} : ${formatNumber(result.length)} ${currentLanguage === 'fa' ? 'متر' : 'm'}`;
-      edgeResult.textContent = [result.stop, result.warning].filter(Boolean).join('، ');
-    }
+      function lengthDecimals() {
+        return state.heightUnit === "cm" ? 1 : 3;
+      }
 
-    function calculateRamp() {
-      const heightMeters = Math.max(Number(heightInput.value) || 0, 0);
-      const heightCentimeters = heightMeters * 100;
-      const slopePercent = Math.max(Number(slopeInput.value) || 1, 1);
-      const edgeSlopePercent = Number(edgeSlopeInput.value);
-      const rampType = rampTypeInput.value;
-      const result = rampType === 'car'
-        ? carRampLength(heightCentimeters, slopePercent, edgeSlopePercent)
-        : rampType === 'disabled'
-          ? disabledRampLength(heightCentimeters, slopePercent)
-          : humanRampLength(heightCentimeters, slopePercent);
+      function formatLengthNumber(meters, decimals = lengthDecimals()) {
+        if (!Number.isFinite(Number(meters))) return "—";
+        return (Number(meters) * lengthScaleFactor()).toFixed(decimals);
+      }
 
-      updateRampType();
-      renderRampResult(result);
-    }
+      function formatLength(meters, decimals = lengthDecimals()) {
+        const number = formatLengthNumber(meters, decimals);
+        return number === "—" ? number : `${number} ${selectedLengthUnit()}`;
+      }
 
-    function setRampType(type) {
-      rampTypeInput.value = type;
-      calculateRamp();
-    }
+      function heightValueToCm(inputSelector) {
+        const value = num(inputSelector);
+        return state.heightUnit === "m" ? value * 100 : value;
+      }
 
-    function applyLanguage() {
-      const activeCopy = copy[currentLanguage];
-      localizedNodes.pageTitle.textContent = activeCopy.title;
-      localizedNodes.planTab.textContent = activeCopy.plan;
-      localizedNodes.elevationTab.textContent = activeCopy.elevation;
-      localizedNodes.heightLabel.textContent = activeCopy.height;
-      localizedNodes.heightHint.textContent = activeCopy.heightHint;
-      localizedNodes.slopeLabel.textContent = activeCopy.slope;
-      localizedNodes.slopeHint.textContent = activeCopy.slopeHint;
-      localizedNodes.startSlopeLabel.textContent = activeCopy.startSlope;
-      localizedNodes.startSlopeHint.textContent = activeCopy.startSlopeHint;
-      localizedNodes.endSlopeLabel.textContent = activeCopy.endSlope;
-      localizedNodes.endSlopeHint.textContent = activeCopy.endSlopeHint;
-      localizedNodes.rampTypeLabel.textContent = activeCopy.rampType;
-      localizedNodes.rampTypeHint.textContent = activeCopy.rampTypeHint;
-      localizedNodes.calculateButton.childNodes[0].textContent = `${activeCopy.calculate} `;
-      localizedNodes.downloadButton.childNodes[0].textContent = `${activeCopy.download} `;
-      openRules.childNodes[0].textContent = `${activeCopy.rules} `;
-      localizedNodes.versionText.textContent = activeCopy.version;
-      faLabel.style.color = currentLanguage === 'fa' ? 'var(--primary)' : 'var(--muted)';
-      enLabel.style.color = currentLanguage === 'en' ? 'var(--primary)' : 'var(--muted)';
-      document.documentElement.lang = currentLanguage;
-      document.documentElement.dir = currentLanguage === 'fa' ? 'rtl' : 'ltr';
-      calculateRamp();
-    }
+      function cleanInputNumber(value, unit) {
+        if (!Number.isFinite(value)) return "";
+        const digits = unit === "m" ? 3 : 1;
+        return String(Number(value.toFixed(digits)));
+      }
 
-    languageToggle.addEventListener('click', () => {
-      currentLanguage = currentLanguage === 'fa' ? 'en' : 'fa';
-      applyLanguage();
-    });
+      function applyHeightUnitAttributes(unit) {
+        HEIGHT_CONTROLS.forEach(({ input, unit: unitSelector }) => {
+          const inputEl = $(input);
+          const unitEl = $(unitSelector);
+          if (!inputEl || !unitEl) return;
+          unitEl.value = unit;
+          inputEl.min = unit === "m" ? "0.01" : "1";
+          inputEl.step = unit === "m" ? "0.01" : "1";
+        });
+      }
 
-    themeToggle.addEventListener('click', () => {
-      const isDark = !body.classList.contains('dark');
-      body.classList.toggle('dark', isDark);
-      themeToggle.setAttribute('aria-pressed', String(isDark));
-    });
+      function changeHeightUnit(nextUnit, convertValues = true) {
+        const normalized = nextUnit === "m" ? "m" : "cm";
+        const previous = state.heightUnit;
 
-    function setRulesModal(isOpen) {
-      rulesModal.classList.toggle('is-open', isOpen);
-      modalBackdrop.classList.toggle('is-open', isOpen);
-      body.classList.toggle('modal-open', isOpen);
-    }
+        if (convertValues && previous !== normalized) {
+          HEIGHT_CONTROLS.forEach(({ input }) => {
+            const inputEl = $(input);
+            const current = Number(inputEl?.value);
+            if (!inputEl || !Number.isFinite(current)) return;
+            const converted = previous === "cm" && normalized === "m"
+              ? current / 100
+              : current * 100;
+            inputEl.value = cleanInputNumber(converted, normalized);
+          });
+        }
 
-    openRules.addEventListener('click', () => setRulesModal(true));
-    closeRules.addEventListener('click', () => setRulesModal(false));
-    dismissRules.addEventListener('click', () => setRulesModal(false));
-    modalBackdrop.addEventListener('click', () => setRulesModal(false));
+        state.heightUnit = normalized;
+        localStorage.setItem("rampHeightUnit", normalized);
+        applyHeightUnitAttributes(normalized);
+        $$('.input-wrap input[type="number"]').forEach(updateNumberStepperState);
+        calculateCurrent(true);
+      }
 
-    viewTabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        const showPlan = tab.dataset.view === 'plan';
-        viewTabs.forEach(item => item.classList.toggle('active', item === tab));
-        planDiagram.hidden = !showPlan;
-        elevationDiagram.hidden = showPlan;
-      });
-    });
+      function initializeHeightUnits() {
+        const initialUnit = state.heightUnit === "m" ? "m" : "cm";
+        if (initialUnit === "m") {
+          HEIGHT_CONTROLS.forEach(({ input }) => {
+            const inputEl = $(input);
+            const currentCm = Number(inputEl?.value);
+            if (inputEl && Number.isFinite(currentCm)) {
+              inputEl.value = cleanInputNumber(currentCm / 100, "m");
+            }
+          });
+        }
+        state.heightUnit = initialUnit;
+        applyHeightUnitAttributes(initialUnit);
+      }
+      const nearlyInteger = value => Math.abs(value - Math.round(value)) < 1e-9;
 
-    navItems.forEach(item => {
-      item.addEventListener('click', () => setRampType(item.dataset.ramp));
-    });
+      function landingInfo(runLength, interval, subtractAtExact = true) {
+        if (!(runLength > 0) || !(interval > 0)) return { count: 0, extra: 0 };
+        let count = Math.floor(runLength / interval);
+        if (subtractAtExact && nearlyInteger(runLength / interval)) count -= 1;
+        count = Math.max(0, count);
+        return { count, extra: count * 1.5 };
+      }
 
-    rampTypeInput.addEventListener('change', calculateRamp);
-    edgeSlopeInput.addEventListener('change', calculateRamp);
+      // Exact UI translation of the uploaded Python formula.
+      function calculateCar(heightCm, slope, transitionSlope) {
+        if (!(heightCm > 0) || !(slope > 0)) return invalidResult();
+        const deduction = transitionSlope === 10 ? 20 : 25;
+        const addedTransitions = transitionSlope === 10 ? 2 : 4;
+        if (heightCm <= deduction) return invalidResult();
+        const pure = (heightCm - deduction) / slope;
+        const rampLength = pure + addedTransitions;
+        const stopLength = transitionSlope === 10 ? 3 : 0;
+        const unauthorized = slope > 17;
+        return {
+          valid: true, blocked: false, unauthorized,
+          total: rampLength, pure, landings: 0, extra: addedTransitions,
+          stopLength, displayTotal: rampLength,
+          message: unauthorized ? t("warningCar") : "",
+          params: { heightCm, slope, transitionSlope }
+        };
+      }
 
-    form.addEventListener('submit', event => {
-      event.preventDefault();
-      calculateRamp();
-    });
+      function calculateDisabled(heightCm, slope, regulations, companion) {
+        if (!(heightCm > 0) || !(slope > 0)) return invalidResult();
+        const run = heightCm / slope;
 
-    applyLanguage();
+        if (regulations && !companion && slope > 8) {
+          return {
+            valid: true, blocked: true, unauthorized: true,
+            total: NaN, pure: run, landings: 0, extra: 0, stopLength: 0,
+            message: t("warningDisabled"), params: { heightCm, slope, regulations, companion }
+          };
+        }
+
+        let interval = 9;
+        if (regulations && !companion) {
+          const intervals = { 5: 9, 6: 8, 7: 5, 8: 3 };
+          interval = intervals[slope];
+          if (!interval) {
+            return {
+              valid: true, blocked: true, unauthorized: false,
+              total: NaN, pure: run, landings: 0, extra: 0, stopLength: 0,
+              message: t("noCalculation"), params: { heightCm, slope, regulations, companion }
+            };
+          }
+        }
+
+        // In the supplied file, companion mode and regulations-off mode both use 9 m.
+        const { count, extra } = landingInfo(run, interval, true);
+        const unauthorized = !regulations && slope > 8;
+        return {
+          valid: true, blocked: false, unauthorized,
+          total: run + extra, pure: run, landings: count, extra, stopLength: 0,
+          interval, message: unauthorized ? t("warningDisabled") : "",
+          params: { heightCm, slope, regulations, companion }
+        };
+      }
+
+      function calculateHuman(heightCm, slope) {
+        if (!(heightCm > 0) || !(slope > 0)) return invalidResult();
+        const run = heightCm / slope;
+        // The original human-ramp function adds a landing even when run/9 is exact.
+        const { count, extra } = landingInfo(run, 9, false);
+        const unauthorized = slope > 12.5;
+        return {
+          valid: true, blocked: false, unauthorized,
+          total: run + extra, pure: run, landings: count, extra, stopLength: 0,
+          interval: 9, message: unauthorized ? t("warningHuman") : "",
+          params: { heightCm, slope }
+        };
+      }
+
+      function invalidResult() {
+        return { valid: false, blocked: true, unauthorized: false, total: NaN, pure: NaN, landings: 0, extra: 0, stopLength: 0, message: t("invalidMessage"), params: {} };
+      }
+
+      function calculateCurrent(markCalculated = state.hasCalculated) {
+        let result;
+        if (state.type === "car") {
+          result = calculateCar(heightValueToCm("#carHeight"), num("#carSlope"), num("#carTransition"));
+        } else if (state.type === "disabled") {
+          result = calculateDisabled(heightValueToCm("#disabledHeight"), num("#disabledSlope"), $("#disabledRegulations").checked, $("#disabledCompanion").checked);
+        } else {
+          result = calculateHuman(heightValueToCm("#humanHeight"), num("#humanSlope"));
+        }
+        state.hasCalculated = Boolean(markCalculated);
+        state.result = result;
+        renderResult();
+        renderDrawing();
+        return result;
+      }
+
+      function classifyCompliance(r) {
+        if (!r.valid) {
+          return { level: "bad", badgeKey: "invalid", message: r.message || t("invalidMessage") };
+        }
+
+        if (state.type === "car") {
+          const slope = Number(r.params?.slope || 0);
+          if (slope > 17 || r.blocked || r.unauthorized) return { level: "bad", badgeKey: "statusBad", message: t("warningCar") };
+          if (slope > 15) return { level: "caution", badgeKey: "statusCaution", message: t("advisoryCar") };
+          return { level: "good", badgeKey: "statusGood", message: "" };
+        }
+
+        if (state.type === "disabled") {
+          const slope = Number(r.params?.slope || 0);
+          const companion = Boolean(r.params?.companion);
+          const maxAllowed = companion ? 10 : 8;
+          if (slope > maxAllowed || r.blocked || r.unauthorized) return { level: "bad", badgeKey: "statusBad", message: r.message || t("warningDisabled") };
+          if (slope > 5) return { level: "caution", badgeKey: "statusCaution", message: t("advisoryDisabled") };
+          return { level: "good", badgeKey: "statusGood", message: "" };
+        }
+
+        const slope = Number(r.params?.slope || 0);
+        if (slope > 12.5 || r.blocked || r.unauthorized) return { level: "bad", badgeKey: "statusBad", message: t("warningHuman") };
+        if (slope > 8) return { level: "caution", badgeKey: "statusCaution", message: t("advisoryHuman") };
+        return { level: "good", badgeKey: "statusGood", message: "" };
+      }
+
+      function updateStatusScale(level) {
+        const visible = state.hasCalculated;
+        const badge = $("#resultBadge");
+        badge.classList.toggle("show", visible);
+        $$(".badge-state").forEach(item => {
+          item.classList.toggle("active", visible && item.dataset.badgeLevel === level);
+        });
+      }
+
+      function renderResult() {
+        const r = state.result || invalidResult();
+        $("#resultValue").childNodes[0].nodeValue = r.blocked || !r.valid ? "— " : `${formatLengthNumber(r.total)} `;
+        $("#resultUnit").textContent = selectedLengthUnit();
+        $("#pureLength").textContent = Number.isFinite(r.pure) ? formatLength(r.pure) : "—";
+        $("#landingCount").textContent = String(r.landings || 0);
+        $("#extraLength").textContent = formatLength(r.extra || 0);
+
+        const compliance = classifyCompliance(r);
+        updateStatusScale(compliance.level);
+
+        const warning = $("#warningLine");
+        warning.className = "warning-line";
+        warning.textContent = compliance.message || "";
+        warning.classList.add(compliance.level === "good" ? "ok" : compliance.level === "caution" ? "warning" : "danger");
+        warning.classList.toggle("show", Boolean(compliance.message));
+
+        if (state.type === "car" && r.valid) {
+          $("#landingCount").textContent = "0";
+          $("#extraLength").textContent = `${formatLength(r.extra)}${r.stopLength ? ` + ${formatLength(r.stopLength)} ${t("stop")}` : ""}`;
+        }
+      }
+
+      function renderDrawing() {
+        const svg = $("#rampDrawing");
+        const r = state.result || invalidResult();
+        svg.innerHTML = state.view === "section" ? drawSection(r) : drawPlan(r);
+      }
+
+      function escapeXML(value) {
+        return String(value).replace(/[<>&'"]/g, c => ({"<":"&lt;",">":"&gt;","&":"&amp;","'":"&apos;",'"':"&quot;"}[c]));
+      }
+
+      function formatM(value) {
+        return formatLength(value);
+      }
+
+      function stationStep(total) {
+        if (total <= 12) return 1;
+        if (total <= 25) return 2;
+        if (total <= 60) return 5;
+        return 10;
+      }
+
+      function buildRampGeometry(r) {
+        const heightM = (r.params?.heightCm || 100) / 100;
+        const widthM = state.type === "car" ? 3.50 : 1.20;
+        const points = [{ name: "P0", x: 0, z: 0 }];
+        const segments = [];
+
+        function addSegment(kind, len, rise, label, slopePct = null) {
+          len = Math.max(0, Number(len) || 0);
+          rise = Number(rise) || 0;
+          const prev = points[points.length - 1];
+          const next = {
+            name: `P${points.length}`,
+            x: +(prev.x + len).toFixed(3),
+            z: +(prev.z + rise).toFixed(3)
+          };
+          segments.push({
+            kind,
+            label,
+            len: +len.toFixed(3),
+            rise: +rise.toFixed(3),
+            slopePct: slopePct !== null ? slopePct : (len > 0 ? +(rise / len * 100).toFixed(2) : 0),
+            start: prev,
+            end: next
+          });
+          points.push(next);
+        }
+
+        if (state.type === "car") {
+          const transitionSlope = Number(r.params?.transitionSlope || 10);
+          const deductionM = (transitionSlope === 10 ? 20 : 25) / 100;
+          const transitionLenEach = (r.extra || (transitionSlope === 10 ? 2 : 4)) / 2;
+          const transitionRiseEach = deductionM / 2;
+          const mainRise = Math.max(0, heightM - deductionM);
+          addSegment("run", transitionLenEach, transitionRiseEach, `${t("transition")} 1`, transitionSlope);
+          addSegment("run", Math.max(0, r.pure || 0), mainRise, t("ramp"), Number(r.params?.slope || 0));
+          addSegment("run", transitionLenEach, transitionRiseEach, `${t("transition")} 2`, transitionSlope);
+          if (r.stopLength) addSegment("stop", r.stopLength, 0, t("stop"), 0);
+        } else {
+          const pure = Math.max(0, r.pure || 0);
+          const interval = Number(r.interval || 9);
+          const baseSlope = Number(r.params?.slope || 0);
+          const risePerMeter = pure > 0 ? heightM / pure : 0;
+          let remaining = pure;
+          let runIndex = 1;
+          let landingIndex = 1;
+
+          for (let i = 0; i < (r.landings || 0); i++) {
+            const runLen = Math.min(interval, remaining);
+            if (runLen > 1e-9) {
+              addSegment("run", runLen, runLen * risePerMeter, `${t("ramp")} ${runIndex++}`, baseSlope);
+              remaining = Math.max(0, remaining - runLen);
+            }
+            addSegment("landing", 1.5, 0, `${t("landing")} ${landingIndex++}`, 0);
+          }
+
+          if (remaining > 1e-9 || !segments.some(s => s.kind === "run")) {
+            addSegment("run", remaining, remaining * risePerMeter, `${t("ramp")} ${runIndex++}`, baseSlope);
+          }
+        }
+
+        const totalX = points[points.length - 1]?.x || 0;
+        const totalRise = Math.max(...points.map(p => p.z), 0);
+        return { widthM, heightM, points, segments, totalX, totalRise };
+      }
+
+      function pointTable(geom, x, y, width) {
+        const maxRows = Math.min(geom.points.length, 9);
+        const rows = geom.points.slice(0, maxRows).map((p, i) => {
+          const yy = y + 30 + i * 18;
+          return `
+            <text x="${x + 12}" y="${yy}" font-size="10" font-weight="800">${p.name}</text>
+            <text x="${x + width * 0.50}" y="${yy}" font-size="10" text-anchor="middle">${formatLengthNumber(p.x)}</text>
+            <text x="${x + width - 12}" y="${yy}" font-size="10" text-anchor="end">${formatLengthNumber(p.z)}</text>`;
+        }).join("");
+        const more = geom.points.length > maxRows
+          ? `<text x="${x + width / 2}" y="${y + 34 + maxRows * 18}" text-anchor="middle" font-size="10" fill="var(--muted)">+${geom.points.length - maxRows}</text>`
+          : "";
+        return `
+          <g>
+            <rect x="${x}" y="${y}" width="${width}" height="${42 + maxRows * 18}" rx="12" fill="var(--surface-solid)" stroke="var(--line-strong)"/>
+            <text x="${x + 12}" y="${y + 18}" font-size="10" font-weight="900">Pt</text>
+            <text x="${x + width * 0.50}" y="${y + 18}" font-size="10" font-weight="900" text-anchor="middle">X (${selectedLengthUnit()})</text>
+            <text x="${x + width - 12}" y="${y + 18}" font-size="10" font-weight="900" text-anchor="end">Z (${selectedLengthUnit()})</text>
+            <line x1="${x + 10}" y1="${y + 24}" x2="${x + width - 10}" y2="${y + 24}" stroke="var(--line-strong)"/>
+            ${rows}${more}
+          </g>`;
+      }
+
+      function segmentDisplayLabel(seg, pixelLength) {
+        if (pixelLength < 65) return "";
+        const lengthText = formatLength(seg.len, state.heightUnit === "cm" ? 1 : 2);
+        if (pixelLength < 120) return lengthText;
+        return `${escapeXML(seg.label)} · ${lengthText}`;
+      }
+
+      function drawSection(r) {
+        const geom = buildRampGeometry(r);
+        const stroke = "var(--text)", muted = "var(--muted)", line = "var(--line-strong)", accent = "var(--accent)";
+        const hasDetails = true;
+        const left = 88, right = 812, top = 100, bottom = 350;
+        const totalX = Math.max(1, geom.totalX || 1);
+        const totalZ = Math.max(0.35, geom.totalRise || geom.heightM || 0.35);
+        const scale = Math.min((right - left) / totalX, (bottom - top) / totalZ);
+        const drawW = totalX * scale;
+        const originX = left + ((right - left) - drawW) / 2;
+        const baseY = bottom;
+        const toX = value => originX + value * scale;
+        const toY = value => baseY - value * scale;
+
+        let polyline = "";
+        let fillPath = `M ${toX(0)} ${toY(0)}`;
+        geom.points.forEach((p, i) => {
+          const px = toX(p.x), py = toY(p.z);
+          polyline += `${i === 0 ? "M" : "L"} ${px} ${py} `;
+          fillPath += ` L ${px} ${py}`;
+        });
+        fillPath += ` L ${toX(geom.totalX)} ${toY(0)} Z`;
+
+        let segments = "";
+        geom.segments.forEach(seg => {
+          const x1 = toX(seg.start.x), y1 = toY(seg.start.z), x2 = toX(seg.end.x), y2 = toY(seg.end.z);
+          const pxLen = Math.hypot(x2 - x1, y2 - y1);
+          const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+          const color = seg.kind === "landing" ? accent : seg.kind === "stop" ? muted : stroke;
+          const width = seg.kind === "landing" ? 5 : 3.5;
+          const label = segmentDisplayLabel(seg, pxLen);
+          segments += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${color}" stroke-width="${width}" ${seg.kind === "stop" ? 'stroke-dasharray="8 5"' : ''} stroke-linecap="round"/>`;
+          if (label) {
+            segments += `<text x="${mx}" y="${my - 13}" text-anchor="middle" font-size="10" font-weight="800">${label}</text>`;
+          }
+        });
+
+        let details = "";
+        if (hasDetails) {
+          geom.points.forEach(p => {
+            const px = toX(p.x), py = toY(p.z);
+            details += `
+              <circle cx="${px}" cy="${py}" r="3.5" fill="${accent}" stroke="var(--surface-solid)" stroke-width="2"/>
+              <text x="${px + 6}" y="${py - 7}" font-size="9" font-weight="800">${p.name}</text>`;
+          });
+        }
+
+        const slopeText = state.type === "car"
+          ? `${t("slope")}: ${Number(r.params?.slope || 0)}%  ·  ${t("transition")}: ${Number(r.params?.transitionSlope || 0)}%`
+          : `${t("slope")}: ${Number(r.params?.slope || 0)}%`;
+        const resultLabel = r.blocked || !r.valid ? t("noResult") : formatLength(r.total);
+
+        return `
+          <defs>
+            <marker id="arr" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="${muted}"/></marker>
+            <linearGradient id="cleanFill" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="var(--accent)" stop-opacity=".07"/><stop offset="1" stop-color="var(--accent)" stop-opacity=".17"/></linearGradient>
+          </defs>
+          <text x="88" y="40" font-size="14" font-weight="900">${escapeXML(t("section"))}</text>
+          <rect x="610" y="22" width="202" height="34" rx="10" fill="var(--surface-solid)" stroke="${line}"/>
+          <text x="711" y="44" text-anchor="middle" font-size="11" font-weight="800">${escapeXML(slopeText)}</text>
+
+          <line x1="${toX(0)}" y1="${baseY}" x2="${toX(totalX)}" y2="${baseY}" stroke="${line}" stroke-width="1.5"/>
+          <line x1="${toX(totalX)}" y1="${toY(0)}" x2="${toX(totalX)}" y2="${toY(geom.totalRise)}" stroke="${line}" stroke-dasharray="5 5" opacity=".65"/>
+          <path d="${fillPath}" fill="url(#cleanFill)"/>
+          <path d="${polyline}" fill="none" stroke="${stroke}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+          ${segments}
+          ${details}
+
+          <line x1="${toX(0)}" y1="${baseY + 42}" x2="${toX(totalX)}" y2="${baseY + 42}" stroke="${muted}" marker-start="url(#arr)" marker-end="url(#arr)"/>
+          <line x1="${toX(0)}" y1="${baseY + 25}" x2="${toX(0)}" y2="${baseY + 50}" stroke="${muted}"/>
+          <line x1="${toX(totalX)}" y1="${baseY + 25}" x2="${toX(totalX)}" y2="${baseY + 50}" stroke="${muted}"/>
+          <text x="${(toX(0) + toX(totalX)) / 2}" y="${baseY + 63}" font-size="12" text-anchor="middle" font-weight="900">${formatM(totalX)}</text>
+
+          <line x1="${toX(0) - 35}" y1="${toY(0)}" x2="${toX(0) - 35}" y2="${toY(geom.totalRise)}" stroke="${muted}" marker-start="url(#arr)" marker-end="url(#arr)"/>
+          <line x1="${toX(0) - 28}" y1="${toY(0)}" x2="${toX(0) - 10}" y2="${toY(0)}" stroke="${muted}"/>
+          <line x1="${toX(0) - 28}" y1="${toY(geom.totalRise)}" x2="${toX(0) - 10}" y2="${toY(geom.totalRise)}" stroke="${muted}"/>
+          <text x="${toX(0) - 48}" y="${(toY(0) + toY(geom.totalRise)) / 2}" font-size="11" text-anchor="middle" font-weight="900" transform="rotate(-90 ${toX(0) - 48} ${(toY(0) + toY(geom.totalRise)) / 2})">${formatM(geom.totalRise)}</text>
+
+          <text x="88" y="470" font-size="11" fill="${muted}">${escapeXML(t("totalLength"))}: ${escapeXML(resultLabel)}</text>
+          ${(r.unauthorized || r.blocked) ? `<rect x="72" y="70" width="760" height="350" rx="18" fill="none" stroke="${accent}" stroke-width="2" stroke-dasharray="7 8" opacity=".42"/>` : ""}
+        `;
+      }
+
+      function drawPlan(r) {
+        const geom = buildRampGeometry(r);
+        const stroke = "var(--text)", muted = "var(--muted)", line = "var(--line-strong)", accent = "var(--accent)";
+        const hasDetails = true;
+        const left = 88, right = 812, top = 135, bottom = 315;
+        const totalX = Math.max(1, geom.totalX || 1);
+        const widthM = Math.max(0.8, geom.widthM || 1.2);
+        const scale = Math.min((right - left) / totalX, (bottom - top) / widthM);
+        const drawW = totalX * scale;
+        const drawH = widthM * scale;
+        const originX = left + ((right - left) - drawW) / 2;
+        const originY = top + ((bottom - top) - drawH) / 2;
+        const toX = value => originX + value * scale;
+
+        let rects = "";
+        let labels = "";
+        geom.segments.forEach((seg, index) => {
+          const x1 = toX(seg.start.x), x2 = toX(seg.end.x);
+          const pxLen = x2 - x1;
+          const fill = seg.kind === "landing" ? "var(--surface-solid)" : seg.kind === "stop" ? "var(--surface-2)" : "var(--accent)";
+          const opacity = seg.kind === "landing" ? 1 : seg.kind === "stop" ? .55 : (index % 2 ? .08 : .15);
+          rects += `<rect x="${x1}" y="${originY}" width="${Math.max(1, pxLen)}" height="${drawH}" fill="${fill}" fill-opacity="${opacity}" stroke="${seg.kind === 'landing' ? accent : line}" ${seg.kind === 'stop' ? 'stroke-dasharray="7 6"' : ''}/>`;
+          const label = segmentDisplayLabel(seg, pxLen);
+          if (label) labels += `<text x="${(x1 + x2) / 2}" y="${originY - 12}" text-anchor="middle" font-size="10" font-weight="800">${label}</text>`;
+        });
+
+        let details = "";
+        if (hasDetails) {
+          geom.points.forEach(p => {
+            const px = toX(p.x);
+            details += `
+              <line x1="${px}" y1="${originY + drawH}" x2="${px}" y2="${originY + drawH + 10}" stroke="${muted}"/>
+              <text x="${px}" y="${originY + drawH + 23}" text-anchor="middle" font-size="9" font-weight="800">${p.name}</text>`;
+          });
+        }
+
+        const resultLabel = r.blocked || !r.valid ? t("noResult") : formatLength(r.total);
+        return `
+          <defs><marker id="dimArr" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="${muted}"/></marker></defs>
+          <text x="88" y="40" font-size="14" font-weight="900">${escapeXML(t("plan"))}</text>
+          <rect x="635" y="22" width="177" height="34" rx="10" fill="var(--surface-solid)" stroke="${line}"/>
+          <text x="723" y="44" text-anchor="middle" font-size="11" font-weight="800">${escapeXML(t("totalLength"))}: ${escapeXML(resultLabel)}</text>
+
+          ${rects}
+          <rect x="${originX}" y="${originY}" width="${drawW}" height="${drawH}" fill="none" stroke="${stroke}" stroke-width="2"/>
+          <line x1="${originX}" y1="${originY + drawH / 2}" x2="${originX + drawW}" y2="${originY + drawH / 2}" stroke="${stroke}" stroke-dasharray="7 6" opacity=".38"/>
+          ${labels}
+          ${details}
+
+          <line x1="${originX}" y1="${originY + drawH + 52}" x2="${originX + drawW}" y2="${originY + drawH + 52}" stroke="${muted}" marker-start="url(#dimArr)" marker-end="url(#dimArr)"/>
+          <line x1="${originX}" y1="${originY + drawH + 35}" x2="${originX}" y2="${originY + drawH + 60}" stroke="${muted}"/>
+          <line x1="${originX + drawW}" y1="${originY + drawH + 35}" x2="${originX + drawW}" y2="${originY + drawH + 60}" stroke="${muted}"/>
+          <text x="${originX + drawW / 2}" y="${originY + drawH + 74}" text-anchor="middle" font-size="12" font-weight="900">${formatM(totalX)}</text>
+
+          <line x1="${originX - 34}" y1="${originY}" x2="${originX - 34}" y2="${originY + drawH}" stroke="${muted}" marker-start="url(#dimArr)" marker-end="url(#dimArr)"/>
+          <line x1="${originX - 27}" y1="${originY}" x2="${originX - 9}" y2="${originY}" stroke="${muted}"/>
+          <line x1="${originX - 27}" y1="${originY + drawH}" x2="${originX - 9}" y2="${originY + drawH}" stroke="${muted}"/>
+          <text x="${originX - 48}" y="${originY + drawH / 2}" text-anchor="middle" font-size="11" font-weight="900" transform="rotate(-90 ${originX - 48} ${originY + drawH / 2})">${formatM(widthM)}</text>
+
+          ${(r.unauthorized || r.blocked) ? `<rect x="72" y="70" width="760" height="350" rx="18" fill="none" stroke="${accent}" stroke-width="2" stroke-dasharray="7 8" opacity=".42"/>` : ""}
+        `;
+      }
+
+      function updateTypeIndicator(type, immediate = false) {
+        const tabs = $(".type-tabs");
+        const indicator = $(".type-indicator");
+        const target = $(`.type-tab[data-type="${type}"]`);
+        if (!tabs || !indicator || !target) return;
+
+        if (immediate) tabs.classList.add("no-indicator-transition");
+        indicator.style.width = `${target.offsetWidth}px`;
+        indicator.style.transform = `translateX(${target.offsetLeft}px)`;
+
+        if (immediate) {
+          requestAnimationFrame(() => requestAnimationFrame(() => tabs.classList.remove("no-indicator-transition")));
+        }
+      }
+
+      function restartSwitchAnimation() {
+        const drawingArea = $(".drawing-area");
+        const formCard = $(".form-card");
+        [drawingArea, formCard].forEach(el => {
+          el.classList.remove("switch-animate");
+          void el.offsetWidth;
+          el.classList.add("switch-animate");
+        });
+        clearTimeout(restartSwitchAnimation.timer);
+        restartSwitchAnimation.timer = setTimeout(() => {
+          drawingArea.classList.remove("switch-animate");
+          formCard.classList.remove("switch-animate");
+        }, 260);
+      }
+
+      function setType(type, immediate = false) {
+        const previousType = state.type;
+        const changed = previousType !== type;
+        state.type = type;
+
+        const tabs = $(".type-tabs");
+        const activeButton = $(`.type-tab[data-type="${type}"]`);
+        $$(".type-tab").forEach(b => {
+          b.classList.toggle("active", b.dataset.type === type);
+          b.classList.remove("tab-enter");
+        });
+        updateTypeIndicator(type, immediate);
+
+        if (changed && !immediate) {
+          tabs.classList.add("is-switching");
+          void activeButton.offsetWidth;
+          activeButton.classList.add("tab-enter");
+          clearTimeout(setType.timer);
+          setType.timer = setTimeout(() => {
+            tabs.classList.remove("is-switching");
+            activeButton.classList.remove("tab-enter");
+          }, 320);
+        }
+
+        $$(".form-section").forEach(s => s.classList.toggle("active", s.dataset.form === type));
+        $("#formTitle").textContent = t(`${type}Title`);
+        $("#formSubtitle").textContent = t(`${type}Subtitle`);
+        $("#drawingTitle").textContent = t(`${type}Drawing`);
+        calculateCurrent(true);
+        if (changed && !immediate) restartSwitchAnimation();
+      }
+
+      function setView(view) {
+        state.view = view;
+        $$(".view-tab").forEach(b => b.classList.toggle("active", b.dataset.view === view));
+        renderDrawing();
+      }
+      function updateNumberStepperLabels() {
+        const increase = state.lang === "fa" ? "افزایش مقدار" : "Increase value";
+        const decrease = state.lang === "fa" ? "کاهش مقدار" : "Decrease value";
+        $$(".number-step-btn").forEach(button => {
+          const label = button.dataset.stepDirection === "up" ? increase : decrease;
+          button.setAttribute("aria-label", label);
+          button.title = label;
+        });
+      }
+
+      function updateNumberStepperState(input) {
+        const wrap = input?.closest(".input-wrap");
+        if (!wrap) return;
+        const current = Number(input.value);
+        const min = input.min === "" ? -Infinity : Number(input.min);
+        const max = input.max === "" ? Infinity : Number(input.max);
+        const down = wrap.querySelector('.number-step-btn[data-step-direction="down"]');
+        const up = wrap.querySelector('.number-step-btn[data-step-direction="up"]');
+        if (down) down.disabled = Number.isFinite(current) && Number.isFinite(min) && current <= min;
+        if (up) up.disabled = Number.isFinite(current) && Number.isFinite(max) && current >= max;
+      }
+
+      function stepNumberInput(input, direction) {
+        if (!input || input.disabled || input.readOnly) return;
+        try {
+          direction > 0 ? input.stepUp() : input.stepDown();
+        } catch {
+          const step = Number(input.step) || 1;
+          const current = Number(input.value) || 0;
+          const min = input.min === "" ? -Infinity : Number(input.min);
+          const max = input.max === "" ? Infinity : Number(input.max);
+          input.value = String(Math.min(max, Math.max(min, current + direction * step)));
+        }
+        input.dispatchEvent(new Event("input", { bubbles: true }));
+        input.dispatchEvent(new Event("change", { bubbles: true }));
+        updateNumberStepperState(input);
+      }
+
+      function initializeNumberSteppers() {
+        $$('.input-wrap input[type="number"]').forEach(input => {
+          const wrap = input.closest(".input-wrap");
+          wrap.querySelector(".number-stepper")?.remove();
+          wrap.classList.toggle("has-unit", Boolean(wrap.querySelector(".unit")));
+
+          const stepper = document.createElement("div");
+          stepper.className = "number-stepper";
+          stepper.setAttribute("role", "group");
+          stepper.innerHTML = `
+            <button class="number-step-btn" type="button" data-step-direction="down">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14"/></svg>
+            </button>
+            <button class="number-step-btn" type="button" data-step-direction="up">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            </button>`;
+          wrap.appendChild(stepper);
+
+          let holdTimer = null;
+          let repeatTimer = null;
+          let holdStarted = false;
+          let activePointerId = null;
+
+          const stopHold = () => {
+            clearTimeout(holdTimer);
+            clearTimeout(repeatTimer);
+            holdTimer = null;
+            repeatTimer = null;
+            activePointerId = null;
+            requestAnimationFrame(() => { holdStarted = false; });
+          };
+
+          const repeatStep = (button, direction, delay = 115) => {
+            if (!button || button.disabled) return stopHold();
+            stepNumberInput(input, direction);
+            const nextDelay = Math.max(55, delay - 7);
+            repeatTimer = setTimeout(() => repeatStep(button, direction, nextDelay), delay);
+          };
+
+          stepper.addEventListener("pointerdown", event => {
+            const button = event.target.closest(".number-step-btn");
+            if (!button || button.disabled || event.button > 0) return;
+            event.preventDefault();
+            input.focus({ preventScroll: true });
+            activePointerId = event.pointerId;
+            button.setPointerCapture?.(event.pointerId);
+            const direction = button.dataset.stepDirection === "up" ? 1 : -1;
+            stepNumberInput(input, direction);
+            holdTimer = setTimeout(() => {
+              holdStarted = true;
+              repeatStep(button, direction);
+            }, 380);
+          });
+
+          ["pointerup", "pointercancel", "lostpointercapture"].forEach(type => {
+            stepper.addEventListener(type, event => {
+              if (activePointerId === null || event.pointerId === activePointerId || type === "lostpointercapture") stopHold();
+            });
+          });
+
+          stepper.addEventListener("click", event => {
+            const button = event.target.closest(".number-step-btn");
+            if (!button || button.disabled) return;
+            if (event.detail > 0) {
+              event.preventDefault();
+              return;
+            }
+            input.focus({ preventScroll: true });
+            stepNumberInput(input, button.dataset.stepDirection === "up" ? 1 : -1);
+          });
+          input.addEventListener("input", () => updateNumberStepperState(input));
+          input.addEventListener("change", () => updateNumberStepperState(input));
+          updateNumberStepperState(input);
+        });
+        updateNumberStepperLabels();
+      }
+
+      function setLanguage(lang) {
+        state.lang = lang;
+        localStorage.setItem("rampLang", lang);
+        document.documentElement.lang = lang;
+        document.documentElement.dir = "rtl";
+        document.documentElement.dataset.lang = lang;
+        $("#langBtn").textContent = lang === "fa" ? "EN" : "FA";
+        $$('[data-i18n]').forEach(el => el.textContent = t(el.dataset.i18n));
+        updateNumberStepperLabels();
+        renderRules();
+        setType(state.type, true);
+        requestAnimationFrame(() => updateTypeIndicator(state.type, true));
+      }
+
+      function setTheme(theme) {
+        state.theme = theme;
+        localStorage.setItem("rampTheme", theme);
+        document.documentElement.dataset.theme = theme;
+        $("#themeIcon").innerHTML = theme === "dark"
+          ? '<path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"/>'
+          : '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"/>';
+      }
+
+      function renderRules() {
+        const fa = state.lang === "fa";
+        $("#rulesContent").innerHTML = fa ? `
+          <div class="rule-card"><strong>رمپ خودرو</strong>برای شکست ۱۰٪، از ارتفاع ۲۰ سانتی‌متر کسر و ۲ متر به طول افزوده می‌شود؛ ۳ متر توقفگاه جداگانه گزارش می‌شود. برای شکست ۵٪، از ارتفاع ۲۵ سانتی‌متر کسر و ۴ متر افزوده می‌شود. شیب اصلی بیشتر از ۱۷٪ هشدار غیرمجاز دارد.</div>
+          <div class="rule-card"><strong>رمپ معلول بدون همراه</strong>با کنترل ضوابط: در شیب‌های ۵، ۶، ۷ و ۸ درصد، حداکثر طول هر بازو به‌ترتیب ۹، ۸، ۵ و ۳ متر است. هر پاگرد ۱٫۵ متر محاسبه می‌شود. شیب بیشتر از ۸٪ غیرمجاز است.</div>
+          <div class="rule-card"><strong>رمپ معلول با همراه</strong>برای شیب‌های ۵ تا ۱۰ درصد، طول بازو ۹ متر و طول هر پاگرد ۱٫۵ متر در نظر گرفته می‌شود.</div>
+          <div class="rule-card"><strong>رمپ عمومی</strong>طول مسیر شیبدار برابر ارتفاع تقسیم بر شیب است؛ به ازای هر ۹ متر، ۱٫۵ متر پاگرد افزوده می‌شود. شیب بیشتر از ۱۲٫۵٪ هشدار غیرمجاز دارد.</div>
+          <div class="rule-card"><strong>توجه</strong>این بخش عین منطق فایل پایتون ارسالی را به رابط تبدیل می‌کند و تأیید نهایی ضوابط پروژه باید با مقررات رسمی و شرایط سایت انجام شود.</div>` : `
+          <div class="rule-card"><strong>Car ramp</strong>For a 10% transition, 20 cm is deducted from the height and 2 m is added; a separate 3 m ramp stop is reported. For a 5% transition, 25 cm is deducted and 4 m is added. Main slopes above 17% are flagged.</div>
+          <div class="rule-card"><strong>Accessible ramp without companion</strong>With regulations on, maximum run lengths for 5%, 6%, 7%, and 8% are 9, 8, 5, and 3 m. Each landing is 1.5 m. Slopes above 8% are blocked.</div>
+          <div class="rule-card"><strong>Accessible ramp with companion</strong>For slopes from 5% through 10%, the run interval is 9 m and every landing adds 1.5 m.</div>
+          <div class="rule-card"><strong>General ramp</strong>Sloped-run length equals height divided by slope; 1.5 m is added for each 9 m interval. Slopes above 12.5% are flagged.</div>
+          <div class="rule-card"><strong>Note</strong>This build translates the supplied Python logic into the interface. Final compliance should be checked against official regulations and site conditions.</div>`;
+      }
+
+      function showToast(message) {
+        const toast = $("#toast"); toast.textContent = message; toast.classList.add("show");
+        clearTimeout(showToast.timer); showToast.timer = setTimeout(() => toast.classList.remove("show"), 1800);
+      }
+
+      function resultText() {
+        const r = state.result;
+        if (!r || !r.valid || r.blocked) return `${$("#formTitle").textContent}: ${t("noResult")} — ${r?.message || ""}`;
+        const status = r.unauthorized ? t("unauthorized") : t("allowed");
+        let text = `${$("#formTitle").textContent}\n${t("totalLength")}: ${formatLength(r.total)}\n${t("pureRamp")}: ${formatLength(r.pure)}\n${t("landings")}: ${r.landings}\n${t("extraLength")}: ${formatLength(r.extra)}\n${status}`;
+        if (state.type === "car" && r.stopLength) text += `\n${t("stop")}: ${formatLength(r.stopLength)}`;
+        return text;
+      }
+
+      function downloadBlob(content, type, filename) {
+        const blob = new Blob([content], {type});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a"); a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      }
+
+      function downloadCurrentHTML() {
+        const clone = document.documentElement.cloneNode(true);
+        clone.querySelector("#rulesModal")?.classList.remove("open", "closing");
+        const html = "<!DOCTYPE html>\n" + clone.outerHTML;
+        downloadBlob(html, "text/html;charset=utf-8", "Ramp-Studio-v2.html");
+        showToast(t("downloaded"));
+      }
+
+      function downloadSVG() {
+        const svg = $("#rampDrawing").cloneNode(true);
+        svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+        const styles = getComputedStyle(document.documentElement);
+        const map = {
+          "var(--text)": styles.getPropertyValue("--text").trim(), "var(--muted)": styles.getPropertyValue("--muted").trim(),
+          "var(--line-strong)": styles.getPropertyValue("--line-strong").trim(), "var(--accent)": styles.getPropertyValue("--accent").trim(),
+          "var(--surface-solid)": styles.getPropertyValue("--surface-solid").trim()
+        };
+        let text = new XMLSerializer().serializeToString(svg);
+        Object.entries(map).forEach(([a,b]) => text = text.split(a).join(b));
+        downloadBlob(text, "image/svg+xml", `ramp-${state.type}-${state.view}-${selectedLengthUnit()}.svg`);
+        showToast(t("svgDownloaded"));
+      }
+
+      function downloadDXF() {
+        const geom = buildRampGeometry(state.result || invalidResult());
+        const dxfScale = lengthScaleFactor();
+        const insUnits = state.heightUnit === "cm" ? 5 : 6;
+        const dxfValue = value => Number((Number(value) * dxfScale).toFixed(state.heightUnit === "cm" ? 3 : 6));
+        let entities = [];
+        const line = (x1,y1,x2,y2,layer="RAMP") => entities.push(`0
+LINE
+8
+${layer}
+10
+${dxfValue(x1)}
+20
+${dxfValue(y1)}
+30
+0
+11
+${dxfValue(x2)}
+21
+${dxfValue(y2)}
+31
+0`);
+        if (state.view === "section") {
+          geom.segments.forEach(seg => line(seg.start.x, seg.start.z, seg.end.x, seg.end.z, seg.kind.toUpperCase()));
+          line(0, 0, geom.totalX, 0, "GROUND");
+        } else {
+          const w = geom.widthM;
+          line(0,0,geom.totalX,0,"EDGE");
+          line(geom.totalX,0,geom.totalX,w,"EDGE");
+          line(geom.totalX,w,0,w,"EDGE");
+          line(0,w,0,0,"EDGE");
+          geom.points.forEach(p => line(p.x,0,p.x,w,"POINTS"));
+        }
+        const dxf = `0
+SECTION
+2
+HEADER
+9
+$INSUNITS
+70
+${insUnits}
+0
+ENDSEC
+0
+SECTION
+2
+ENTITIES
+${entities.join("\n")}
+0
+ENDSEC
+0
+EOF
+`;
+        downloadBlob(dxf, "application/dxf", `ramp-${state.type}-${state.view}-${selectedLengthUnit()}.dxf`);
+        showToast(t("dxfDownloaded"));
+      }
+
+      // Number controls
+      initializeNumberSteppers();
+
+      // Events
+      $$(".type-tab").forEach(btn => btn.addEventListener("click", () => setType(btn.dataset.type)));
+      $$(".view-tab").forEach(btn => btn.addEventListener("click", () => setView(btn.dataset.view)));
+      $("#calculateBtn").addEventListener("click", () => calculateCurrent(true));
+      $$('input, select:not(.height-unit-select)').forEach(el => el.addEventListener("input", () => calculateCurrent(true)));
+      $$('input, select:not(.height-unit-select)').forEach(el => el.addEventListener("change", () => calculateCurrent(true)));
+      $$(".height-unit-select").forEach(el => el.addEventListener("change", event => changeHeightUnit(event.target.value, true)));
+      $("#langBtn").addEventListener("click", () => setLanguage(state.lang === "fa" ? "en" : "fa"));
+      $("#themeBtn").addEventListener("click", () => setTheme(state.theme === "dark" ? "light" : "dark"));
+      const rulesModal = $("#rulesModal");
+      function openRulesModal() {
+        clearTimeout(closeRulesModal.timer);
+        rulesModal.classList.remove("closing");
+        requestAnimationFrame(() => rulesModal.classList.add("open"));
+      }
+      function closeRulesModal() {
+        if (!rulesModal.classList.contains("open")) return;
+        rulesModal.classList.remove("open");
+        rulesModal.classList.add("closing");
+        clearTimeout(closeRulesModal.timer);
+        closeRulesModal.timer = setTimeout(() => rulesModal.classList.remove("closing"), 150);
+      }
+      $("#rulesBtn").addEventListener("click", openRulesModal);
+      $("#closeRules").addEventListener("click", closeRulesModal);
+      rulesModal.addEventListener("click", e => { if (e.target === e.currentTarget) closeRulesModal(); });
+      document.addEventListener("keydown", e => { if (e.key === "Escape") closeRulesModal(); if (e.key === "Enter" && !rulesModal.classList.contains("open")) calculateCurrent(true); });
+      $("#copyBtn").addEventListener("click", async () => { try { await navigator.clipboard.writeText(resultText()); showToast(t("copied")); } catch { const ta=document.createElement("textarea"); ta.value=resultText(); document.body.appendChild(ta); ta.select(); document.execCommand("copy"); ta.remove(); showToast(t("copied")); } });
+      $("#downloadBtn").addEventListener("click", downloadCurrentHTML);
+      $("#svgBtn").addEventListener("click", downloadSVG);
+      $("#dxfBtn").addEventListener("click", downloadDXF);
+      window.addEventListener("resize", () => updateTypeIndicator(state.type, true));
+
+      // Initial state
+      setTheme(state.theme);
+      initializeHeightUnits();
+      setLanguage(state.lang);
+      updateTypeIndicator(state.type, true);
+      calculateCurrent(true);
+    })();
   </script>
 </body>
 </html>
