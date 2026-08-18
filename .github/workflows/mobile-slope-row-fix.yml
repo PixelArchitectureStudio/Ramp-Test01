@@ -1,0 +1,60 @@
+name: Apply mobile slope row fix
+
+on:
+  push:
+    paths:
+      - '.github/workflows/mobile-slope-row-fix.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch-index:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Patch responsive slope controls
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+
+          # Keep main slope and entry/exit slope side-by-side on portrait phones only.
+          target = '<div class="field-row">\n            <div class="field">\n              <label for="carSlope" data-i18n="mainSlope">شیب اصلی</label>'
+          replacement = '<div class="field-row car-slope-row">\n            <div class="field">\n              <label for="carSlope" data-i18n="mainSlope">شیب اصلی</label>'
+          if target in s:
+              s = s.replace(target, replacement, 1)
+
+          # Integer +/- stepping for the car main slope.
+          s = re.sub(r'(id="carSlope"[^>]*\bstep=")0\.1("[^>]*>)', r'\g<1>1\2', s, count=1)
+          s = re.sub(r'(id="carSlope"[^>]*\bmin=")0\.1("[^>]*>)', r'\g<1>1\2', s, count=1)
+
+          mobile_rule = '      .field-row { grid-template-columns: 1fr; gap: 0; }\n'
+          mobile_override = '''      .field-row { grid-template-columns: 1fr; gap: 0; }\n      .car-slope-row {\n        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);\n        gap: 8px;\n      }\n      .car-slope-row .field { min-width: 0; }\n      .car-slope-row label { font-size: 11px; white-space: nowrap; }\n      .car-slope-row input,\n      .car-slope-row select { min-width: 0; width: 100%; }\n'''
+          if '.car-slope-row {' not in s and mobile_rule in s:
+              s = s.replace(mobile_rule, mobile_override, 1)
+
+          # Update visible version badge.
+          s = re.sub(r'(<div class="footer-pill" id="versionBadge">)v[^<]+(</div>)', r'\1v2.10.6\2', s, count=1)
+
+          p.write_text(s, encoding='utf-8')
+          PY
+
+      - name: Commit updated index
+        run: |
+          if git diff --quiet -- index.html; then
+            echo "No index.html changes needed"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Keep slope controls side-by-side on mobile"
+          git push
