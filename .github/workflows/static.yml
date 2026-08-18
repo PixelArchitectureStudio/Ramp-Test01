@@ -2,27 +2,20 @@
 name: Deploy static content to Pages
 
 on:
-  # Runs on pushes targeting the default branch
   push:
     branches: ["main"]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
 jobs:
-  # Single deploy job since we're just deploying
   deploy:
     environment:
       name: github-pages
@@ -31,13 +24,116 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Build technical PDF export version
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          start = s.index('      async function downloadPDF() {')
+          end = s.index('      function downloadDXF()', start)
+
+          new_func = r'''      function svgMarkupToPngData(innerMarkup, width = 1800, height = 1000) {
+        return new Promise((resolve, reject) => {
+          const replacements = {
+            "var(--text)": "#191926",
+            "var(--muted)": "#667085",
+            "var(--line-strong)": "#98a2b3",
+            "var(--accent)": "#79a1fd",
+            "var(--surface-solid)": "#ffffff",
+            "var(--surface-2)": "#f5f7fb",
+            "var(--line)": "#d8e2f0"
+          };
+          let markup = innerMarkup;
+          Object.entries(replacements).forEach(([a,b]) => markup = markup.split(a).join(b));
+          const svgText = `<svg xmlns="http://www.w3.org/2000/svg" width="900" height="500" viewBox="0 0 900 500"><rect width="900" height="500" fill="#ffffff"/><style>text{font-family:Arial,Helvetica,sans-serif;fill:#191926}</style>${markup}</svg>`;
+          const blob = new Blob([svgText], { type: "image/svg+xml;charset=utf-8" });
+          const url = URL.createObjectURL(blob);
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement("canvas");
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext("2d");
+            ctx.fillStyle = "#fff";
+            ctx.fillRect(0, 0, width, height);
+            ctx.drawImage(img, 0, 0, width, height);
+            URL.revokeObjectURL(url);
+            resolve(canvas.toDataURL("image/png", 1));
+          };
+          img.onerror = err => { URL.revokeObjectURL(url); reject(err); };
+          img.src = url;
+        });
+      }
+
+      async function downloadPDF() {
+        try {
+          if (!window.jspdf?.jsPDF) throw new Error("jsPDF is unavailable");
+          const r = state.result || calculateCurrent(true) || invalidResult();
+          const { jsPDF } = window.jspdf;
+          const pdf = new jsPDF({ orientation: "landscape", unit: "mm", format: "a4", compress: true });
+          const pageW = pdf.internal.pageSize.getWidth();
+          const pageH = pdf.internal.pageSize.getHeight();
+          const margin = 17;
+
+          pdf.setFillColor(255,255,255);
+          pdf.rect(0,0,pageW,pageH,"F");
+          pdf.setTextColor(15,23,42);
+          pdf.setFont("helvetica","bold");
+          pdf.setFontSize(18);
+          pdf.text("Ramp Calculation Tool - PDF Export", margin, 16);
+
+          const heightM = Number(r.params?.heightCm || 0) / 100;
+          let summary = "";
+          if (state.type === "car") summary = `Car Ramp | Height ${heightM.toFixed(2)} m | Main slope ${Number(r.params?.slope || 0)}% | Entry/Exit ${Number(r.params?.transitionSlope || 0)}%`;
+          else if (state.type === "disabled") summary = `Accessible Ramp | Height ${heightM.toFixed(2)} m | Slope ${Number(r.params?.slope || 0)}%`;
+          else summary = `General Ramp | Height ${heightM.toFixed(2)} m | Slope ${Number(r.params?.slope || 0)}%`;
+
+          pdf.setFont("helvetica","normal");
+          pdf.setFontSize(9.5);
+          pdf.text(summary, pageW - margin, 16, { align: "right" });
+          pdf.setDrawColor(121,161,253);
+          pdf.setLineWidth(0.35);
+          pdf.line(margin, 21, pageW - margin, 21);
+
+          const planPng = await svgMarkupToPngData(drawPlan(r));
+          const sectionPng = await svgMarkupToPngData(drawSection(r));
+          pdf.addImage(planPng, "PNG", margin, 27, pageW - margin*2, 63, undefined, "FAST");
+          pdf.addImage(sectionPng, "PNG", margin, 98, pageW - margin*2, 86, undefined, "FAST");
+
+          pdf.setDrawColor(200,208,220);
+          pdf.setLineWidth(0.25);
+          pdf.line(margin, pageH - 14, pageW - margin, pageH - 14);
+          pdf.setFontSize(8.5);
+          pdf.setTextColor(100,116,139);
+          pdf.text("Generated from Ramp Calculator", margin, pageH - 8);
+          pdf.text("Pixel Studio", pageW - margin, pageH - 8, { align: "right" });
+
+          pdf.save(`ramp-${state.type}-technical-sheet-${selectedLengthUnit()}.pdf`);
+          showToast(state.lang === "fa" ? "PDF فنی دانلود شد" : "Technical PDF downloaded");
+        } catch (error) {
+          console.error(error);
+          showToast(state.lang === "fa" ? "خطا در ساخت PDF" : "PDF export failed");
+        }
+      }
+
+'''
+          s = s[:start] + new_func + s[end:]
+          s = re.sub(r'(<div class="footer-pill" id="versionBadge">)v[^<]+(</div>)', r'\1v2.10.8\2', s, count=1)
+          p.write_text(s, encoding='utf-8')
+          PY
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
           path: '.'
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
