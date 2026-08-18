@@ -1,0 +1,42 @@
+name: PDF export patch v2
+on:
+  push:
+    paths:
+      - '.github/workflows/pdf-export-button-v2.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch index
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          s=s.replace('id="svgBtn"','id="pdfBtn"',1)
+          s=s.replace('<span>SVG</span>','<span>PDF</span>',1)
+          if 'html2canvas.min.js' not in s:
+              needle='  <script>\n    (() => {'
+              deps='  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>\n  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>\n'
+              s=s.replace(needle,deps+needle,1)
+          if 'async function downloadPDF()' not in s:
+              marker='      function downloadDXF() {'
+              fn='''      async function downloadPDF() {\n        try {\n          const target = $(".drawing-area");\n          if (!target || !window.html2canvas || !window.jspdf || !window.jspdf.jsPDF) throw new Error("PDF libraries unavailable");\n          const canvas = await window.html2canvas(target, { scale: Math.min(3, Math.max(2, window.devicePixelRatio || 2)), useCORS: true, backgroundColor: getComputedStyle(target).backgroundColor || "#ffffff", logging: false });\n          const jsPDF = window.jspdf.jsPDF;\n          const pdf = new jsPDF({ orientation: "landscape", unit: "mm", format: "a4", compress: true });\n          const pageW = pdf.internal.pageSize.getWidth(), pageH = pdf.internal.pageSize.getHeight(), margin = 10;\n          const maxW = pageW - margin * 2, maxH = pageH - margin * 2, ratio = canvas.width / canvas.height;\n          let drawW = maxW, drawH = drawW / ratio;\n          if (drawH > maxH) { drawH = maxH; drawW = drawH * ratio; }\n          pdf.addImage(canvas.toDataURL("image/png", 1), "PNG", (pageW-drawW)/2, (pageH-drawH)/2, drawW, drawH, undefined, "FAST");\n          pdf.save(`ramp-${state.type}-${state.view}-${selectedLengthUnit()}.pdf`);\n          showToast(t("downloaded"));\n        } catch (error) { console.error(error); showToast(state.lang === "fa" ? "خطا در ساخت PDF" : "PDF export failed"); }\n      }\n\n'''
+              s=s.replace(marker,fn+marker,1)
+          s=s.replace('$("#svgBtn").addEventListener("click", downloadSVG);','$("#pdfBtn").addEventListener("click", downloadPDF);',1)
+          s=re.sub(r'(<div class="footer-pill" id="versionBadge">)v[^<]+(</div>)',r'\1v2.10.7\2',s,count=1)
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Commit
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          if ! git diff --quiet -- index.html; then
+            git add index.html
+            git commit -m "Replace SVG export with PDF"
+            git push
+          fi
