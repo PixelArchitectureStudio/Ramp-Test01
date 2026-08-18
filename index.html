@@ -769,6 +769,14 @@
       .card { border-radius: 18px; }
       .form-card { padding: 15px; }
       .field-row { grid-template-columns: 1fr; gap: 0; }
+      .car-slope-row {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 8px;
+      }
+      .car-slope-row .field { min-width: 0; }
+      .car-slope-row label { font-size: 11px; white-space: nowrap; }
+      .car-slope-row input,
+      .car-slope-row select { min-width: 0; width: 100%; }
       .measurement-input { grid-template-columns: minmax(0, 1fr) 84px; }
       .card-head { align-items: flex-start; flex-direction: column; padding: 16px; }
       .drawing-area { min-height: 350px; padding: 10px; }
@@ -874,10 +882,10 @@
               </select>
             </div>
           </div>
-          <div class="field-row">
+          <div class="field-row car-slope-row">
             <div class="field">
               <label for="carSlope" data-i18n="mainSlope">شیب اصلی</label>
-              <div class="input-wrap"><input id="carSlope" type="number" min="0.1" step="0.1" value="15"><span class="unit">%</span></div>
+              <div class="input-wrap"><input id="carSlope" type="number" min="1" step="1" value="15"><span class="unit">%</span></div>
             </div>
             <div class="field">
               <label for="carTransition" data-i18n="transitionSlope">شیب ابتدا و انتها</label>
@@ -970,7 +978,7 @@
 
     <footer class="footer">
       <div class="footer-left">
-        <div class="footer-pill" id="versionBadge">v2.10.3</div>
+        <div class="footer-pill" id="versionBadge">v2.10.6</div>
         <button class="footer-btn" id="downloadBtn">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><path d="m7.5 10.5 4.5 4.5 4.5-4.5"/><path d="M4 20h16"/></svg>
           <span data-i18n="downloadApp">دانلود</span>
