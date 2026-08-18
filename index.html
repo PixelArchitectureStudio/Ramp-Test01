@@ -855,9 +855,9 @@
         <div class="drawing-toolbar">
           <div class="drawing-note" data-i18n="schematicNote">ترسیم شماتیک است و جایگزین نقشه اجرایی نیست.</div>
           <div class="mini-actions">
-            <button class="small-btn" id="svgBtn">
+            <button class="small-btn" id="pdfBtn">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
-              <span>SVG</span>
+              <span>PDF</span>
             </button>
             <button class="small-btn" id="dxfBtn">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3h11l5 5v13H4z"/><path d="M14 3v6h6"/><path d="M7 16h10"/></svg>
@@ -978,7 +978,7 @@
 
     <footer class="footer">
       <div class="footer-left">
-        <div class="footer-pill" id="versionBadge">v2.10.6</div>
+        <div class="footer-pill" id="versionBadge">v2.10.7</div>
         <button class="footer-btn" id="downloadBtn">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><path d="m7.5 10.5 4.5 4.5 4.5-4.5"/><path d="M4 20h16"/></svg>
           <span data-i18n="downloadApp">دانلود</span>
@@ -1008,6 +1008,8 @@
 
   <div class="toast" id="toast"></div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script>
     (() => {
       "use strict";
@@ -1897,6 +1899,23 @@
         showToast(t("svgDownloaded"));
       }
 
+      async function downloadPDF() {
+        try {
+          const target = $(".drawing-area");
+          if (!target || !window.html2canvas || !window.jspdf || !window.jspdf.jsPDF) throw new Error("PDF libraries unavailable");
+          const canvas = await window.html2canvas(target, { scale: Math.min(3, Math.max(2, window.devicePixelRatio || 2)), useCORS: true, backgroundColor: getComputedStyle(target).backgroundColor || "#ffffff", logging: false });
+          const jsPDF = window.jspdf.jsPDF;
+          const pdf = new jsPDF({ orientation: "landscape", unit: "mm", format: "a4", compress: true });
+          const pageW = pdf.internal.pageSize.getWidth(), pageH = pdf.internal.pageSize.getHeight(), margin = 10;
+          const maxW = pageW - margin * 2, maxH = pageH - margin * 2, ratio = canvas.width / canvas.height;
+          let drawW = maxW, drawH = drawW / ratio;
+          if (drawH > maxH) { drawH = maxH; drawW = drawH * ratio; }
+          pdf.addImage(canvas.toDataURL("image/png", 1), "PNG", (pageW-drawW)/2, (pageH-drawH)/2, drawW, drawH, undefined, "FAST");
+          pdf.save(`ramp-${state.type}-${state.view}-${selectedLengthUnit()}.pdf`);
+          showToast(t("downloaded"));
+        } catch (error) { console.error(error); showToast(state.lang === "fa" ? "خطا در ساخت PDF" : "PDF export failed"); }
+      }
+
       function downloadDXF() {
         const geom = buildRampGeometry(state.result || invalidResult());
         const dxfScale = lengthScaleFactor();
@@ -1986,7 +2005,7 @@ EOF
       const copyBtn = $("#copyBtn");
       if (copyBtn) copyBtn.addEventListener("click", async () => { try { await navigator.clipboard.writeText(resultText()); showToast(t("copied")); } catch { const ta=document.createElement("textarea"); ta.value=resultText(); document.body.appendChild(ta); ta.select(); document.execCommand("copy"); ta.remove(); showToast(t("copied")); } });
       $("#downloadBtn").addEventListener("click", downloadCurrentHTML);
-      $("#svgBtn").addEventListener("click", downloadSVG);
+      $("#pdfBtn").addEventListener("click", downloadPDF);
       $("#dxfBtn").addEventListener("click", downloadDXF);
       window.addEventListener("resize", () => updateTypeIndicator(state.type, true));
 
