@@ -2,8 +2,6 @@ name: Technical PDF sheet export
 
 on:
   push:
-    paths:
-      - '.github/workflows/technical-pdf-export.yml'
   workflow_dispatch:
 
 permissions:
@@ -25,9 +23,10 @@ jobs:
 
           p = Path('index.html')
           s = p.read_text(encoding='utf-8')
+          start = s.index('      async function downloadPDF() {')
+          end = s.index('      function downloadDXF()', start)
 
-          new_func = r'''
-      function svgMarkupToPngData(innerMarkup, width = 1800, height = 1000) {
+          new_func = r'''      function svgMarkupToPngData(innerMarkup, width = 1800, height = 1000) {
         return new Promise((resolve, reject) => {
           const replacements = {
             "var(--text)": "#191926",
@@ -84,13 +83,10 @@ jobs:
 
           const heightM = Number(r.params?.heightCm || 0) / 100;
           let summary = "";
-          if (state.type === "car") {
-            summary = `Car Ramp | Height ${heightM.toFixed(2)} m | Main slope ${Number(r.params?.slope || 0)}% | Entry/Exit ${Number(r.params?.transitionSlope || 0)}%`;
-          } else if (state.type === "disabled") {
-            summary = `Accessible Ramp | Height ${heightM.toFixed(2)} m | Slope ${Number(r.params?.slope || 0)}%`;
-          } else {
-            summary = `General Ramp | Height ${heightM.toFixed(2)} m | Slope ${Number(r.params?.slope || 0)}%`;
-          }
+          if (state.type === "car") summary = `Car Ramp | Height ${heightM.toFixed(2)} m | Main slope ${Number(r.params?.slope || 0)}% | Entry/Exit ${Number(r.params?.transitionSlope || 0)}%`;
+          else if (state.type === "disabled") summary = `Accessible Ramp | Height ${heightM.toFixed(2)} m | Slope ${Number(r.params?.slope || 0)}%`;
+          else summary = `General Ramp | Height ${heightM.toFixed(2)} m | Slope ${Number(r.params?.slope || 0)}%`;
+
           pdf.setFont("helvetica","normal");
           pdf.setFontSize(9.5);
           pdf.text(summary, pageW - margin, 16, { align: "right" });
@@ -118,14 +114,9 @@ jobs:
           showToast(state.lang === "fa" ? "خطا در ساخت PDF" : "PDF export failed");
         }
       }
-'''
 
-          pattern = re.compile(r'\n\s*async function downloadPDF\(\) \{.*?\n\s*\}\n\n\s*function downloadDXF\(\)', re.S)
-          m = pattern.search(s)
-          if not m:
-              raise SystemExit('downloadPDF function not found')
-          replacement = '\n' + new_func + '\n      function downloadDXF()'
-          s = s[:m.start()] + replacement + s[m.end():]
+'''
+          s = s[:start] + new_func + s[end:]
           s = re.sub(r'(<div class="footer-pill" id="versionBadge">)v[^<]+(</div>)', r'\1v2.10.8\2', s, count=1)
           p.write_text(s, encoding='utf-8')
           PY
