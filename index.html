@@ -1,42 +1,2570 @@
 <!doctype html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Ramp Calculator</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ramp — Version popover preview</title>
+<link rel="icon" type="image/png" href="data:image/png;base64,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">
+<link rel="apple-touch-icon" href="data:image/png;base64,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">
+<style>
+html,body{margin:0;width:100%;height:100%;background:#121629}
+#app{display:block;width:100%;height:100%;border:0;background:#121629}
+</style>
 </head>
 <body>
+<iframe id="app" title="Ramp Calculator"></iframe>
+
 <script>
-(async()=>{
+(async () => {
+  const SOURCES = [
+    "https://raw.githubusercontent.com/PixelArchitectureStudio/Ramp-Test01/1df57f3c4cb110952af5e643e51155d8a7793b84/index.html",
+    "https://cdn.jsdelivr.net/gh/PixelArchitectureStudio/Ramp-Test01@1df57f3c4cb110952af5e643e51155d8a7793b84/index.html"
+  ];
+  const frame = document.getElementById("app");
+
   try {
-    const testUrl = './ramp-export-test.html?v=20260827-1252';
-    const res = await fetch(testUrl, { cache: 'no-store' });
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const bootstrap = await res.text();
-    const match = bootstrap.match(/const b=\"([^\"]+)\"/);
-    if (!match) throw new Error('Latest test payload not found');
+    let source = "";
+    let lastError = null;
 
-    const compressed = Uint8Array.from(atob(match[1]), c => c.charCodeAt(0));
-    const latest = await new Response(
-      new Blob([compressed]).stream().pipeThrough(new DecompressionStream('gzip'))
-    ).text();
+    for (const url of SOURCES) {
+      try {
+        const response = await fetch(url, { cache: "no-store" });
+        if (!response.ok) throw new Error("HTTP " + response.status);
+        source = await response.text();
+        if (source.includes('id="rampDrawing"') && source.includes('id="downloadBtn"')) break;
+        source = "";
+      } catch (error) {
+        lastError = error;
+      }
+    }
 
-    const fixed = latest
-      .replace(
-        'https://raw.githubusercontent.com/PixelArchitectureStudio/Ramp-Test01/main/index.html',
-        'https://raw.githubusercontent.com/PixelArchitectureStudio/Ramp-Test01/1df57f3c4cb110952af5e643e51155d8a7793b84/index.html'
-      )
-      .replace(
-        'https://cdn.jsdelivr.net/gh/PixelArchitectureStudio/Ramp-Test01@main/index.html',
-        'https://cdn.jsdelivr.net/gh/PixelArchitectureStudio/Ramp-Test01@1df57f3c4cb110952af5e643e51155d8a7793b84/index.html'
+    if (!source) throw lastError || new Error("Ramp source could not be loaded.");
+
+    source = source.replace("</style>", ".measurement-input { grid-template-columns: minmax(0, 1fr) 68px; gap: 8px; }\n.height-unit-select { min-width: 0; padding-inline: 6px; }\n.form-section[data-form=\"disabled\"] > .field-row,\n.form-section[data-form=\"human\"] > .field-row { grid-template-columns: minmax(0, 1fr) 124px; gap: 10px; }\n.form-section[data-form=\"disabled\"] > .field-row > .field,\n.form-section[data-form=\"human\"] > .field-row > .field { min-width: 0; }\n\ninput[type=\"number\"] { padding-right: 66px; }\n.input-wrap.has-unit input[type=\"number\"] { padding-right: 88px; }\n.number-stepper { top: 6px; right: 6px; height: 36px; grid-template-columns: 28px 28px; }\n.number-step-btn { width: 28px; height: 36px; }\n.number-step-btn svg { width: 14px; height: 14px; }\n.unit { right: 68px; }\n\n#carSlope + .unit,\n#carTransition + .unit {\n  right: auto !important;\n  left: 0;\n  transition: left .08s linear;\n}\n\n.footer-left { position: relative; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }\n.version-popover-wrap, .download-menu-wrap { position: relative; display: inline-flex; align-items: center; }\n.footer-pill-btn {\n  border: 1px solid var(--line); background: var(--surface-solid); color: var(--text);\n  cursor: pointer; transition: background .14s ease, border-color .14s ease, color .14s ease;\n}\n.footer-pill-btn:hover, .footer-pill-btn:focus-visible {\n  outline: none; border-color: var(--accent); background: var(--accent-soft);\n}\n.footer-pill-btn[aria-expanded=\"true\"], #downloadBtn[aria-expanded=\"true\"] {\n  border-color: var(--accent); background: var(--accent-soft);\n}\n\n.version-popover, .download-popover {\n  position: absolute; left: 0; bottom: calc(100% + 10px); z-index: 80; direction: rtl;\n  opacity: 0; visibility: hidden; pointer-events: none;\n  transform: translateY(7px) scale(.985); transform-origin: left bottom;\n  transition: opacity .16s ease, transform .16s ease, visibility .16s ease;\n}\n.version-popover.open, .download-popover.open {\n  opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0) scale(1);\n}\n\n.version-popover {\n  width: 290px; padding: 10px; border: 1px solid var(--line); border-radius: 16px;\n  background: color-mix(in srgb, var(--surface-solid) 92%, #09143b 8%);\n  box-shadow: 0 18px 45px rgba(0,0,0,.24);\n}\n.version-popover-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 8px; }\n.version-popover-title { font-size: 14px; font-weight: 900; line-height: 1.6; }\n.version-popover-version { font-size: 12px; color: var(--accent); font-weight: 800; line-height: 1.6; }\n.version-popover-label { font-size: 12px; font-weight: 800; margin: 6px 0 4px; }\n.version-popover-desc { font-size: 12px; line-height: 1.9; color: var(--muted); margin: 0; }\n.version-popover-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }\n.version-popover-item { display: grid; grid-template-columns: 1fr; gap: 0; font-size: 12px; line-height: 1.9; }\n.version-popover-item strong { color: var(--text); font-weight: 820; }\n.version-popover-divider { height: 1px; margin: 9px 0; background: var(--line); }\n.version-instagram-btn {\n  width: 100%; min-height: 36px; border-radius: 999px; border: 1px solid var(--line);\n  display: inline-flex; align-items: center; justify-content: center; gap: 8px;\n  text-decoration: none; color: var(--text); background: var(--surface-2);\n  font-size: 12px; font-weight: 800; transition: border-color .14s ease, background .14s ease, color .14s ease;\n}\n.version-instagram-btn:hover, .version-instagram-btn:focus-visible {\n  outline: none; border-color: var(--accent); color: var(--accent); background: var(--accent-soft);\n}\n.version-instagram-btn svg { width: 14px; height: 14px; flex: 0 0 14px; }\n.version-authors { margin-top: 8px; text-align: center; font-size: 11.5px; color: var(--muted); font-weight: 760; }\n\n.download-popover {\n  width: 244px; padding: 8px; border: 1px solid var(--line); border-radius: 14px;\n  background: var(--surface-solid); box-shadow: 0 18px 45px rgba(0,0,0,.22);\n}\n.download-menu-item {\n  width: 100%; min-height: 40px; padding: 0 9px; border: 0; border-radius: 9px;\n  display: flex; align-items: center; justify-content: flex-start; gap: 10px;\n  background: transparent; color: var(--text); font: inherit; font-size: 12px; font-weight: 800;\n  text-align: right; white-space: nowrap; cursor: pointer;\n  transition: background .14s ease, color .14s ease, transform .14s ease;\n}\n.download-menu-item:hover, .download-menu-item:focus-visible {\n  background: var(--surface-2); color: var(--accent); outline: none;\n}\n.download-menu-item:active { transform: scale(.985); }\n.download-menu-item svg { width: 17px; height: 17px; flex: 0 0 17px; color: var(--muted); }\n.download-menu-item:hover svg, .download-menu-item:focus-visible svg { color: currentColor; }\n.download-menu-divider { height: 1px; margin: 5px 7px; background: var(--line); }\n\n@media (max-width: 620px) {\n  .form-section[data-form=\"disabled\"] > .field-row,\n  .form-section[data-form=\"human\"] > .field-row { grid-template-columns: 1fr; gap: 0; }\n  .measurement-input { grid-template-columns: minmax(0, 1fr) 68px; }\n  .version-popover { width: min(290px, calc(100vw - 26px)); }\n  .download-popover { width: min(244px, calc(100vw - 26px)); }\n}" + "\n</style>");
+
+    if (!source.includes("<select id=\"carTransition\">\n                <option value=\"10\">10%</option>\n                <option value=\"5\">5%</option>\n              </select>")) throw new Error("ساختار شیب ابتدا و انتها پیدا نشد.");
+    source = source.replace("<select id=\"carTransition\">\n                <option value=\"10\">10%</option>\n                <option value=\"5\">5%</option>\n              </select>", "<div class=\"input-wrap\">\n                <input id=\"carTransition\" type=\"number\" min=\"1\" step=\"1\" value=\"10\" inputmode=\"numeric\">\n                <span class=\"unit\">%</span>\n              </div>");
+
+    const carSectionEnd = `            </div>
+          </div>
+        </section>
+
+        <section class="form-section" data-form="disabled">`;
+
+    const carSectionWith3m = `            </div>
+          </div>
+
+          <div class="switch-row">
+            <div class="switch-label">
+              <strong data-i18n="afterRamp3m">3 متر فضای توقف</strong>
+            </div>
+            <label class="switch">
+              <input id="carAfterRamp3m" type="checkbox" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+        </section>
+
+        <section class="form-section" data-form="disabled">`;
+
+    if (!source.includes(carSectionEnd)) {
+      throw new Error("محل گزینه ۳ متر بعد از رمپ پیدا نشد.");
+    }
+    source = source.replace(carSectionEnd, carSectionWith3m);
+
+    if (!source.includes("<div class=\"footer-left\">\n        <div class=\"footer-pill\" id=\"versionBadge\">v2.10.7</div>\n        <button class=\"footer-btn\" id=\"downloadBtn\">\n          <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.9\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 3v11\"/><path d=\"m7.5 10.5 4.5 4.5 4.5-4.5\"/><path d=\"M4 20h16\"/></svg>\n          <span data-i18n=\"downloadApp\">دانلود</span>\n        </button>\n      </div>")) throw new Error("ساختار فوتر پیدا نشد.");
+    source = source.replace("<div class=\"footer-left\">\n        <div class=\"footer-pill\" id=\"versionBadge\">v2.10.7</div>\n        <button class=\"footer-btn\" id=\"downloadBtn\">\n          <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.9\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 3v11\"/><path d=\"m7.5 10.5 4.5 4.5 4.5-4.5\"/><path d=\"M4 20h16\"/></svg>\n          <span data-i18n=\"downloadApp\">دانلود</span>\n        </button>\n      </div>", "<div class=\"footer-left\">\n        <div class=\"version-popover-wrap\">\n          <button class=\"footer-pill footer-pill-btn\" id=\"versionBtn\" type=\"button\" aria-haspopup=\"dialog\" aria-expanded=\"false\">\n            <span id=\"versionBadge\">v2.10.7</span>\n          </button>\n\n          <div class=\"version-popover\" id=\"versionPopover\" role=\"dialog\" aria-modal=\"false\" aria-label=\"Version information\">\n            <div class=\"version-popover-head\">\n              <div>\n                <div class=\"version-popover-title\" id=\"versionPopoverTitle\">نرم‌افزار محاسبه رمپ</div>\n                <div class=\"version-popover-version\" id=\"versionPopoverVersion\">نسخه 2.10.7</div>\n              </div>\n            </div>\n\n            <div class=\"version-popover-label\" id=\"versionChangesLabel\">آخرین تغییرات</div>\n            <ul class=\"version-popover-list\">\n              <li class=\"version-popover-item\"><strong id=\"versionChange1\">بهبود نوارهای ورودی</strong><span id=\"versionChange1Desc\">نمایش عدد، واحد و کنترل‌های + و − مرتب‌تر شده است.</span></li>\n              <li class=\"version-popover-item\"><strong id=\"versionChange2\">ورود دستی شیب ابتدا و انتها</strong><span id=\"versionChange2Desc\">در رمپ خودرو، شیب ابتدا و انتها به‌صورت کامل دستی تنظیم می‌شود.</span></li>\n              <li class=\"version-popover-item\"><strong id=\"versionChange3\">خروجی فنی بهتر</strong><span id=\"versionChange3Desc\">پلان، نما و خروجی PDF با نمایش منظم‌تر آماده می‌شوند.</span></li>\n            </ul>\n\n            <div class=\"version-popover-divider\" aria-hidden=\"true\"></div>\n            <p class=\"version-popover-desc\" id=\"versionFollowText\">برای دریافت آخرین نسخه و به‌روزرسانی‌های این ابزار، پیج Pixel Studio را دنبال کنید.</p>\n\n            <div class=\"version-popover-divider\" aria-hidden=\"true\"></div>\n            <a class=\"version-instagram-btn\" href=\"https://instagram.com/pixel_architecture_studio\" target=\"_blank\" rel=\"noreferrer noopener\" id=\"versionInstagramBtn\">\n              <span>@pixel_architecture_studio</span>\n              <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"5\" ry=\"5\"/><circle cx=\"12\" cy=\"12\" r=\"4\"/><path d=\"M17.5 6.5h.01\"/></svg>\n            </a>\n            <div class=\"version-authors\" id=\"versionAuthors\">ساخته شده توسط علی و آرین</div>\n          </div>\n        </div>\n\n        <div class=\"download-menu-wrap\">\n          <button class=\"footer-btn\" id=\"downloadBtn\" type=\"button\" aria-haspopup=\"menu\" aria-expanded=\"false\">\n            <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.9\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 3v11\"/><path d=\"m7.5 10.5 4.5 4.5 4.5-4.5\"/><path d=\"M4 20h16\"/></svg>\n            <span data-i18n=\"downloadApp\">دانلود</span>\n          </button>\n\n          <div class=\"download-popover\" id=\"downloadPopover\" role=\"menu\" aria-label=\"Download options\">\n            <button class=\"download-menu-item\" type=\"button\" role=\"menuitem\" data-download-action=\"windows\">\n              <svg viewBox=\"0 0 24 24\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M3 3h8v8H3V3Zm10 0h8v8h-8V3ZM3 13h8v8H3v-8Zm10 0h8v8h-8v-8Z\"/></svg>\n              <span data-download-label=\"windows\">دانلود نسخه ویندوز</span>\n            </button>\n            <button class=\"download-menu-item\" type=\"button\" role=\"menuitem\" data-download-action=\"android\">\n              <svg viewBox=\"0 0 24 24\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M7.4 7.2 5.9 4.6l.8-.45 1.55 2.7A9.2 9.2 0 0 1 12 6.05c1.33 0 2.6.28 3.75.8l1.55-2.7.8.45-1.5 2.6A7.2 7.2 0 0 1 20 13H4a7.2 7.2 0 0 1 3.4-5.8ZM8 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm8 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2ZM4 14h16v5.3A2.7 2.7 0 0 1 17.3 22H6.7A2.7 2.7 0 0 1 4 19.3V14Z\"/></svg>\n              <span data-download-label=\"android\">دانلود نسخه اندروید</span>\n            </button>\n            <button class=\"download-menu-item\" type=\"button\" role=\"menuitem\" data-download-action=\"webapp\">\n              <svg viewBox=\"0 0 384 512\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5c0 26.2 4.8 53.2 14.1 77.3 12.6 35.7 58 123.1 105.6 121.6 24.9-.6 42.5-17.7 74.9-17.7 31.4 0 47.8 17.7 75.5 17.7 48-.7 89.1-80.8 101.1-116.6-64.3-30.3-56.5-89-56.5-87.1Zm-23.2-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3Z\"/></svg>\n              <span data-download-label=\"webapp\">نسخه وب اپ</span>\n            </button>\n            <div class=\"download-menu-divider\" aria-hidden=\"true\"></div>\n            <button class=\"download-menu-item\" type=\"button\" role=\"menuitem\" data-download-action=\"share\">\n              <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M14 5h5v5\"/><path d=\"M10 14 19 5\"/><path d=\"M19 13v6H5V5h6\"/></svg>\n              <span data-download-label=\"share\">اشتراک‌گذاری لینک</span>\n            </button>\n            <button class=\"download-menu-item\" type=\"button\" role=\"menuitem\" data-download-action=\"install\">\n              <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M9.8 9a2.4 2.4 0 1 1 3.3 2.22c-.72.32-1.1.76-1.1 1.53v.25\"/><path d=\"M12 17h.01\"/></svg>\n              <span data-download-label=\"install\">آموزش نصب نسخه وب اپ</span>\n            </button>\n          </div>\n        </div>\n      </div>");
+
+    const calculatePattern = /      function calculateCar\(heightCm, slope, transitionSlope\) \{[\s\S]*?\n      \}\n\n      function calculateDisabled/;
+    if (!calculatePattern.test(source)) throw new Error("تابع محاسبه رمپ خودرو پیدا نشد.");
+    source = source.replace(calculatePattern, "      function calculateCar(heightCm, slope, transitionSlope) {\n        if (!Number.isFinite(heightCm) || !Number.isFinite(slope) || !Number.isFinite(transitionSlope) || heightCm <= 0 || slope <= 0 || transitionSlope <= 0) {\n          return invalidResult();\n        }\n\n        const deduction = Math.max(1, 30 - transitionSlope);\n        const addedTransitions = 20 / transitionSlope;\n        if (heightCm <= deduction) return invalidResult();\n\n        const pure = (heightCm - deduction) / slope;\n        const rampLength = pure + addedTransitions;\n        const stopLength = $(\"#carAfterRamp3m\")?.checked ? 3 : 0;\n        const unauthorized = slope > 17;\n\n        return {\n          valid: true, blocked: false, unauthorized,\n          total: rampLength, pure, landings: 0, extra: addedTransitions,\n          stopLength, displayTotal: rampLength,\n          message: unauthorized ? t(\"warningCar\") : \"\",\n          params: {\n            heightCm,\n            slope,\n            transitionSlope,\n            transitionDeductionCm: deduction,\n            transitionLengthEach: addedTransitions / 2\n          }\n        };\n      }\n\n      function calculateDisabled");
+
+    const oldGeometry = `          const deductionM = (transitionSlope === 10 ? 20 : 25) / 100;
+          const transitionLenEach = (r.extra || (transitionSlope === 10 ? 2 : 4)) / 2;
+          const transitionRiseEach = deductionM / 2;`;
+    const newGeometry = `          const deductionM = Number(
+            r.params?.transitionDeductionCm ?? Math.max(1, 30 - transitionSlope)
+          ) / 100;
+          const transitionLenEach = Number(
+            r.params?.transitionLengthEach ?? ((r.extra || (20 / transitionSlope)) / 2)
+          );
+          const transitionRiseEach = deductionM / 2;`;
+    if (!source.includes(oldGeometry)) throw new Error("هندسه رمپ خودرو پیدا نشد.");
+    source = source.replace(oldGeometry, newGeometry);
+
+    const initMarker = "      initializeNumberSteppers();";
+    if (!source.includes(initMarker)) throw new Error("initializeNumberSteppers پیدا نشد.");
+    source = source.replace(initMarker, "function syncInlinePercent(inputSelector) {\n        const input = document.querySelector(inputSelector);\n        const unit = input?.parentElement?.querySelector(\".unit\");\n        if (!input || !unit) return;\n\n        const value = input.value || input.placeholder || \"\";\n        const cs = getComputedStyle(input);\n        const probe = document.createElement(\"span\");\n        probe.textContent = value;\n        probe.style.position = \"fixed\";\n        probe.style.left = \"-9999px\";\n        probe.style.top = \"-9999px\";\n        probe.style.visibility = \"hidden\";\n        probe.style.whiteSpace = \"pre\";\n        probe.style.fontFamily = cs.fontFamily;\n        probe.style.fontSize = cs.fontSize;\n        probe.style.fontWeight = cs.fontWeight;\n        probe.style.fontStyle = cs.fontStyle;\n        probe.style.letterSpacing = cs.letterSpacing;\n        document.body.appendChild(probe);\n        const textWidth = probe.getBoundingClientRect().width;\n        probe.remove();\n\n        const paddingLeft = parseFloat(cs.paddingLeft) || 0;\n        unit.style.right = \"auto\";\n        unit.style.left = `${Math.round(paddingLeft + textWidth + 2)}px`;\n      }\n\n      [\"#carSlope\", \"#carTransition\"].forEach(selector => {\n        const input = document.querySelector(selector);\n        input?.addEventListener(\"input\", () => syncInlinePercent(selector));\n        input?.addEventListener(\"change\", () => syncInlinePercent(selector));\n      });\n\n      window.addEventListener(\"resize\", () => {\n        syncInlinePercent(\"#carSlope\");\n        syncInlinePercent(\"#carTransition\");\n      });\n\n      document.fonts?.ready?.then(() => {\n        syncInlinePercent(\"#carSlope\");\n        syncInlinePercent(\"#carTransition\");\n      });\n\n      requestAnimationFrame(() => {\n        syncInlinePercent(\"#carSlope\");\n        syncInlinePercent(\"#carTransition\");\n      });" + "\n\n" + initMarker);
+
+    const eventsMarker = "      // Events";
+    if (!source.includes(eventsMarker)) throw new Error("بخش رویدادها پیدا نشد.");
+    source = source.replace(eventsMarker, "const downloadPopover = $(\"#downloadPopover\");\n      const downloadButton = $(\"#downloadBtn\");\n      const versionPopover = $(\"#versionPopover\");\n      const versionButton = $(\"#versionBtn\");\n\n      function setDownloadMenuLanguage() {\n        if (!downloadPopover) return;\n        const en = state.lang === \"en\";\n        const labels = {\n          windows: en ? \"Download Windows version\" : \"دانلود نسخه ویندوز\",\n          android: en ? \"Download Android version\" : \"دانلود نسخه اندروید\",\n          webapp: en ? \"Web app version\" : \"نسخه وب اپ\",\n          share: en ? \"Share link\" : \"اشتراک‌گذاری لینک\",\n          install: en ? \"Web app installation guide\" : \"آموزش نصب نسخه وب اپ\"\n        };\n        Object.entries(labels).forEach(([key, value]) => {\n          const el = downloadPopover.querySelector(`[data-download-label=\"${key}\"]`);\n          if (el) el.textContent = value;\n        });\n      }\n\n      function setVersionPopoverLanguage() {\n        const en = state.lang === \"en\";\n        const setText = (selector, value) => {\n          const el = $(selector);\n          if (el) el.textContent = value;\n        };\n        setText(\"#versionPopoverTitle\", en ? \"Ramp Calculation App\" : \"نرم‌افزار محاسبه رمپ\");\n        setText(\"#versionPopoverVersion\", en ? \"Version 2.10.7\" : \"نسخه 2.10.7\");\n        setText(\"#versionChangesLabel\", en ? \"Latest changes\" : \"آخرین تغییرات\");\n        setText(\"#versionChange1\", en ? \"Improved input bars\" : \"بهبود نوارهای ورودی\");\n        setText(\"#versionChange1Desc\", en ? \"Value, unit, and + / − controls are displayed more clearly.\" : \"نمایش عدد، واحد و کنترل‌های + و − مرتب‌تر شده است.\");\n        setText(\"#versionChange2\", en ? \"Manual entry & exit slope\" : \"ورود دستی شیب ابتدا و انتها\");\n        setText(\"#versionChange2Desc\", en ? \"For the car ramp, the entry and exit slope can now be set fully manually.\" : \"در رمپ خودرو، شیب ابتدا و انتها به‌صورت کامل دستی تنظیم می‌شود.\");\n        setText(\"#versionChange3\", en ? \"Cleaner technical output\" : \"خروجی فنی بهتر\");\n        setText(\"#versionChange3Desc\", en ? \"Plan, section, and PDF output are prepared with cleaner organization.\" : \"پلان، نما و خروجی PDF با نمایش منظم‌تر آماده می‌شوند.\");\n        setText(\"#versionFollowText\", en ? \"Follow Pixel Studio to receive the latest version and updates for this tool.\" : \"برای دریافت آخرین نسخه و به‌روزرسانی‌های این ابزار، پیج Pixel Studio را دنبال کنید.\");\n        setText(\"#versionAuthors\", en ? \"Created by Ali & Arian\" : \"ساخته شده توسط علی و آرین\");\n      }\n\n      function closeDownloadPopover() {\n        if (!downloadPopover || !downloadButton) return;\n        downloadPopover.classList.remove(\"open\");\n        downloadButton.setAttribute(\"aria-expanded\", \"false\");\n      }\n\n      function closeVersionPopover() {\n        if (!versionPopover || !versionButton) return;\n        versionPopover.classList.remove(\"open\");\n        versionButton.setAttribute(\"aria-expanded\", \"false\");\n      }\n\n      function toggleDownloadPopover(event) {\n        event?.preventDefault();\n        event?.stopPropagation();\n        if (!downloadPopover || !downloadButton) return;\n        setDownloadMenuLanguage();\n        closeVersionPopover();\n        const nextOpen = !downloadPopover.classList.contains(\"open\");\n        downloadPopover.classList.toggle(\"open\", nextOpen);\n        downloadButton.setAttribute(\"aria-expanded\", String(nextOpen));\n      }\n\n      function toggleVersionPopover(event) {\n        event?.preventDefault();\n        event?.stopPropagation();\n        if (!versionPopover || !versionButton) return;\n        setVersionPopoverLanguage();\n        closeDownloadPopover();\n        const nextOpen = !versionPopover.classList.contains(\"open\");\n        versionPopover.classList.toggle(\"open\", nextOpen);\n        versionButton.setAttribute(\"aria-expanded\", String(nextOpen));\n      }\n\n      async function shareAppLink() {\n        const url = location.href;\n        try {\n          if (navigator.share) {\n            await navigator.share({ title: document.title, url });\n          } else {\n            await navigator.clipboard.writeText(url);\n            showToast(state.lang === \"fa\" ? \"لینک کپی شد\" : \"Link copied\");\n          }\n        } catch (error) {\n          if (error?.name === \"AbortError\") return;\n          try {\n            await navigator.clipboard.writeText(url);\n            showToast(state.lang === \"fa\" ? \"لینک کپی شد\" : \"Link copied\");\n          } catch {}\n        }\n      }\n\n      downloadPopover?.addEventListener(\"click\", async event => {\n        const item = event.target.closest(\"[data-download-action]\");\n        if (!item) return;\n        const action = item.dataset.downloadAction;\n        closeDownloadPopover();\n\n        if (action === \"webapp\") { downloadCurrentHTML(); return; }\n        if (action === \"share\") { await shareAppLink(); return; }\n        if (action === \"install\") {\n          showToast(state.lang === \"fa\"\n            ? \"از منوی مرورگر Add to Home Screen / Install App را انتخاب کنید.\"\n            : \"Choose Add to Home Screen / Install App from your browser menu.\");\n          return;\n        }\n        if (action === \"windows\" || action === \"android\") {\n          showToast(state.lang === \"fa\" ? \"لینک این نسخه هنوز متصل نشده است.\" : \"This version is not linked yet.\");\n        }\n      });\n\n      document.addEventListener(\"click\", event => {\n        if (downloadPopover?.classList.contains(\"open\")) {\n          if (!downloadPopover.contains(event.target) && !downloadButton?.contains(event.target)) closeDownloadPopover();\n        }\n        if (versionPopover?.classList.contains(\"open\")) {\n          if (!versionPopover.contains(event.target) && !versionButton?.contains(event.target)) closeVersionPopover();\n        }\n      });" + "\n\n" + eventsMarker);
+
+    source = source.replace(
+      '      $("#downloadBtn").addEventListener("click", downloadCurrentHTML);',
+      '      $("#downloadBtn").addEventListener("click", toggleDownloadPopover);'
+    );
+
+    source = source.replace(
+      '      $("#pdfBtn").addEventListener("click", downloadPDF);\n      $("#dxfBtn").addEventListener("click", downloadDXF);',
+      '      $("#pdfBtn").addEventListener("click", downloadPDF);\n      $("#dxfBtn").addEventListener("click", downloadDXF);\n      $("#versionBtn")?.addEventListener("click", toggleVersionPopover);'
+    );
+
+    source = source.replace(
+      'document.addEventListener("keydown", e => { if (e.key === "Escape") closeRulesModal(); if (e.key === "Enter" && !rulesModal.classList.contains("open")) calculateCurrent(true); });',
+      'document.addEventListener("keydown", e => { if (e.key === "Escape") { closeRulesModal(); closeDownloadPopover(); closeVersionPopover(); } if (e.key === "Enter" && !rulesModal.classList.contains("open")) calculateCurrent(true); });'
+    );
+
+    source = source.replace(
+      '        updateNumberStepperLabels();\n        renderRules();',
+      '        updateNumberStepperLabels();\n        setDownloadMenuLanguage?.();\n        setVersionPopoverLanguage?.();\n        renderRules();'
+    );
+
+
+    // High-quality A4 PDF export: two JPEG-backed technical pages (section + plan)
+    const pdfFunctionPattern = /      async function downloadPDF\(\) \{[\s\S]*?\n      \}\n\n      function downloadDXF/;
+    if (!pdfFunctionPattern.test(source)) {
+      throw new Error("تابع خروجی PDF فعلی پیدا نشد.");
+    }
+    source = source.replace(pdfFunctionPattern, "      function buildTechnicalSheetSVG(view) {\n        const r = state.result || invalidResult();\n        const drawing = view === \"section\" ? drawSection(r) : drawPlan(r);\n\n        const viewTitle = view === \"section\" ? t(\"section\") : t(\"plan\");\n        const drawingTitle = t(`${state.type}Drawing`);\n        const totalLabel = r.valid && !r.blocked ? formatLength(r.total) : t(\"noResult\");\n        const slopeValue = Number(r.params?.slope || 0);\n        const transitionValue = Number(r.params?.transitionSlope || 0);\n\n        const slopeLine = state.type === \"car\"\n          ? `${t(\"mainSlope\")}: ${slopeValue}%   ·   ${t(\"transitionSlope\")}: ${transitionValue}%`\n          : `${t(\"slope\")}: ${slopeValue}%`;\n\n        const generatedDate = new Date().toISOString().slice(0, 10);\n\n        return `<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<svg xmlns=\"http://www.w3.org/2000/svg\"\n     width=\"1123\"\n     height=\"794\"\n     viewBox=\"0 0 1123 794\">\n  <style>\n    :root {\n      --text: #151b2b;\n      --muted: #6d7892;\n      --line-strong: #c9d3e3;\n      --accent: #79a1fd;\n      --surface-solid: #ffffff;\n      --surface-2: #f4f7fb;\n    }\n    text {\n      font-family: Vazirmatn, Tahoma, Arial, sans-serif;\n      fill: var(--text);\n    }\n    .sheet-title { font-size: 24px; font-weight: 900; }\n    .sheet-subtitle { font-size: 15px; font-weight: 800; }\n    .sheet-meta { font-size: 12px; font-weight: 700; fill: var(--muted); }\n    .sheet-small { font-size: 10px; font-weight: 700; fill: var(--muted); }\n  </style>\n\n  <rect x=\"0\" y=\"0\" width=\"1123\" height=\"794\" fill=\"#ffffff\"/>\n  <rect x=\"24\" y=\"24\" width=\"1075\" height=\"746\" rx=\"4\"\n        fill=\"none\" stroke=\"#c9d3e3\" stroke-width=\"1.4\"/>\n\n  <text x=\"62\" y=\"62\" class=\"sheet-title\">${escapeXML(t(\"appTitle\"))}</text>\n  <text x=\"1060\" y=\"58\" text-anchor=\"end\" class=\"sheet-subtitle\">${escapeXML(drawingTitle)} — ${escapeXML(viewTitle)}</text>\n  <text x=\"1060\" y=\"82\" text-anchor=\"end\" class=\"sheet-meta\">${escapeXML(slopeLine)}</text>\n\n  <line x1=\"62\" y1=\"103\" x2=\"1061\" y2=\"103\"\n        stroke=\"#c9d3e3\" stroke-width=\"1\"/>\n\n  <g transform=\"translate(81 132) scale(1.068)\">\n    ${drawing}\n  </g>\n\n  <line x1=\"62\" y1=\"724\" x2=\"1061\" y2=\"724\"\n        stroke=\"#c9d3e3\" stroke-width=\"1\"/>\n\n  <text x=\"62\" y=\"750\" class=\"sheet-small\">Pixel Studio</text>\n  <text x=\"561.5\" y=\"750\" text-anchor=\"middle\" class=\"sheet-meta\">${escapeXML(t(\"totalLength\"))}: ${escapeXML(totalLabel)}</text>\n  <text x=\"1061\" y=\"750\" text-anchor=\"end\" class=\"sheet-small\">${generatedDate}</text>\n</svg>`;\n      }\n\n      async function renderTechnicalSheetToJpeg(view) {\n        if (document.fonts?.ready) await document.fonts.ready;\n\n        const sheetSVG = buildTechnicalSheetSVG(view);\n        const svgBlob = new Blob(\n          [sheetSVG],\n          { type: \"image/svg+xml;charset=utf-8\" }\n        );\n\n        const url = URL.createObjectURL(svgBlob);\n\n        try {\n          const image = new Image();\n\n          await new Promise((resolve, reject) => {\n            image.onload = resolve;\n            image.onerror = () =>\n              reject(new Error(\"A4 SVG render failed\"));\n            image.src = url;\n          });\n\n          const canvas = document.createElement(\"canvas\");\n\n          // اندازه A4 افقی با کیفیت بالا\n          canvas.width = 2806;\n          canvas.height = 1984;\n\n          const ctx = canvas.getContext(\"2d\", { alpha: false });\n\n          ctx.fillStyle = \"#ffffff\";\n          ctx.fillRect(0, 0, canvas.width, canvas.height);\n          ctx.drawImage(image, 0, 0, canvas.width, canvas.height);\n\n          const jpegBlob = await new Promise((resolve, reject) => {\n            canvas.toBlob(\n              blob => blob\n                ? resolve(blob)\n                : reject(new Error(\"JPEG render failed\")),\n              \"image/jpeg\",\n              0.96\n            );\n          });\n\n          return {\n            bytes: new Uint8Array(await jpegBlob.arrayBuffer()),\n            width: canvas.width,\n            height: canvas.height\n          };\n        } finally {\n          URL.revokeObjectURL(url);\n        }\n      }\n\n      function buildA4Pdf(pages) {\n        const encoder = new TextEncoder();\n        const chunks = [];\n\n        const objectCount = 2 + pages.length * 3;\n        const offsets = new Array(objectCount + 1).fill(0);\n\n        let byteOffset = 0;\n\n        const pushBytes = bytes => {\n          chunks.push(bytes);\n          byteOffset += bytes.length;\n        };\n\n        const pushText = value => {\n          pushBytes(encoder.encode(value));\n        };\n\n        const object = (number, body) => {\n          offsets[number] = byteOffset;\n          pushText(`${number} 0 obj\n${body}\nendobj\n`);\n        };\n\n        pushText(\"%PDF-1.4\\n%TECH-A4\\n\");\n\n        object(1, \"<< /Type /Catalog /Pages 2 0 R >>\");\n\n        const pageObjects = pages.map(\n          (_, index) => 3 + index * 3\n        );\n\n        object(\n          2,\n          `<< /Type /Pages /Kids [${\n            pageObjects.map(number => `${number} 0 R`).join(\" \")\n          }] /Count ${pages.length} >>`\n        );\n\n        pages.forEach((page, index) => {\n          const pageObject = 3 + index * 3;\n          const imageObject = pageObject + 1;\n          const contentObject = pageObject + 2;\n          const imageName = `Im${index}`;\n\n          // اندازه استاندارد A4 افقی برحسب PDF Point\n          object(\n            pageObject,\n            `<< /Type /Page\n          /Parent 2 0 R\n          /MediaBox [0 0 841.89 595.28]\n          /Resources <<\n            /XObject <<\n              /${imageName} ${imageObject} 0 R\n            >>\n          >>\n          /Contents ${contentObject} 0 R\n       >>`\n          );\n\n          offsets[imageObject] = byteOffset;\n\n          pushText(\n            `${imageObject} 0 obj\n<<\n  /Type /XObject\n  /Subtype /Image\n  /Width ${page.width}\n  /Height ${page.height}\n  /ColorSpace /DeviceRGB\n  /BitsPerComponent 8\n  /Filter /DCTDecode\n  /Length ${page.bytes.length}\n>>\nstream\n`\n          );\n\n          pushBytes(page.bytes);\n          pushText(\"\\nendstream\\nendobj\\n\");\n\n          const content =\n            `q\n841.89 0 0 595.28 0 0 cm\n/${imageName} Do\nQ\n`;\n\n          object(\n            contentObject,\n            `<< /Length ${encoder.encode(content).length} >>\nstream\n${content}endstream`\n          );\n        });\n\n        const xrefOffset = byteOffset;\n\n        pushText(\n          `xref\n0 ${objectCount + 1}\n0000000000 65535 f \n`\n        );\n\n        for (let i = 1; i <= objectCount; i++) {\n          pushText(\n            `${String(offsets[i]).padStart(10, \"0\")} 00000 n \\n`\n          );\n        }\n\n        pushText(\n          `trailer\n<< /Size ${objectCount + 1} /Root 1 0 R >>\nstartxref\n${xrefOffset}\n%%EOF`\n        );\n\n        return new Blob(chunks, {\n          type: \"application/pdf\"\n        });\n      }\n\n      async function downloadPDF() {\n        const button = document.querySelector(\"#pdfBtn\");\n\n        if (button.disabled) return;\n\n        button.disabled = true;\n        button.setAttribute(\"aria-busy\", \"true\");\n\n        showToast(t(\"pdfPreparing\"));\n\n        try {\n          calculateCurrent(true);\n\n          const pages = [];\n\n          // صفحه اول: نما\n          // صفحه دوم: پلان\n          for (const view of [\"section\", \"plan\"]) {\n            pages.push(\n              await renderTechnicalSheetToJpeg(view)\n            );\n          }\n\n          const pdf = buildA4Pdf(pages);\n          const date = new Date()\n            .toISOString()\n            .slice(0, 10);\n\n          downloadBlob(\n            pdf,\n            \"application/pdf\",\n            `ramp-technical-A4-${state.type}-section-plan-${date}.pdf`\n          );\n\n          showToast(t(\"pdfDownloaded\"));\n        } catch (error) {\n          console.error(error);\n          showToast(t(\"pdfFailed\"));\n        } finally {\n          button.disabled = false;\n          button.removeAttribute(\"aria-busy\");\n        }\n      }\n\n      document\n        .querySelector(\"#pdfBtn\")\n        .addEventListener(\"click\", downloadPDF);\n\n      function downloadDXF");
+
+    const helperMarker = '      const $ = (s, root=document) => root.querySelector(s);';
+    if (!source.includes(helperMarker)) {
+      throw new Error("محل اضافه کردن متن‌های PDF پیدا نشد.");
+    }
+    source = source.replace(
+      helperMarker,
+      `      I18N.fa.pdfPreparing = "در حال آماده‌سازی PDF فنی…";
+      I18N.fa.pdfDownloaded = "PDF فنی A4 دانلود شد";
+      I18N.fa.pdfFailed = "خطا در ساخت PDF";
+      I18N.en.pdfPreparing = "Preparing technical PDF…";
+      I18N.en.pdfDownloaded = "Technical A4 PDF downloaded";
+      I18N.en.pdfFailed = "PDF export failed";
+
+${helperMarker}`
+    );
+
+    // The new PDF block attaches its own click listener.
+    source = source.replace(
+      '      $("#pdfBtn").addEventListener("click", downloadPDF);\n      $("#dxfBtn").addEventListener("click", downloadDXF);\n      $("#versionBtn")?.addEventListener("click", toggleVersionPopover);',
+      '      $("#dxfBtn").addEventListener("click", downloadDXF);\n      $("#versionBtn")?.addEventListener("click", toggleVersionPopover);'
+    );
+
+    if (!source.includes("      const $ = (s, root=document) => root.querySelector(s);")) {
+      throw new Error("محل متن‌های گزینه ۳ متر پیدا نشد.");
+    }
+    source = source.replace(
+      "      const $ = (s, root=document) => root.querySelector(s);",
+      "      I18N.fa.afterRamp3m = \"3 متر فضای توقف\";\n      I18N.fa.stopSpace = \"فضای توقف\";\n      I18N.en.afterRamp3m = \"3 m stopping space\";\n      I18N.en.stopSpace = \"Stopping space\";\n\n      const $ = (s, root=document) => root.querySelector(s);"
+    );
+
+    // The optional 3 m stopping space remains visible as a separate segment,
+    // but is excluded from the overall ramp length and its overall dimension.
+
+    source = source.replace(
+      '          if (r.stopLength) addSegment("stop", r.stopLength, 0, t("stop"), 0);',
+      '          if (r.stopLength) addSegment("stop", r.stopLength, 0, t("stopSpace"), 0);'
+    );
+
+    source = source.replace(
+      '        const totalLine = `${t("overallLength")}: ${formatLength(geom.totalX)}`;',
+      `        const overallDisplayLength = state.type === "car"
+          ? Math.max(0, geom.totalX - Number(r.stopLength || 0))
+          : geom.totalX;
+        const totalLine = \`\${t("overallLength")}: \${formatLength(overallDisplayLength)}\`;`
+    );
+
+    source = source.replace(
+      '          if (Number(r.stopLength || 0) > 0) parts.push(`${t("stop")}: ${formatLength(r.stopLength)}`);',
+      '          if (Number(r.stopLength || 0) > 0) parts.push(`${t("stopSpace")}: ${formatLength(r.stopLength)}`);'
+    );
+
+    // SECTION: keep the 3m space in the drawing scale, but end the overall
+    // dimension at the actual end of the ramp.
+    source = source.replace(
+      '        const totalX = Math.max(1, geom.totalX || 1);\n        const totalZ = Math.max(0.35, geom.totalRise || geom.heightM || 0.35);',
+      '        const totalX = Math.max(1, geom.totalX || 1);\n        const overallEndX = state.type === "car" ? Math.max(0, totalX - Number(r.stopLength || 0)) : totalX;\n        const totalZ = Math.max(0.35, geom.totalRise || geom.heightM || 0.35);'
+    );
+
+    source = source.replace(
+      '          <line x1="${toX(0)}" y1="${top - 26}" x2="${toX(totalX)}" y2="${top - 26}" stroke="${muted}" marker-start="url(#arr)" marker-end="url(#arr)"/>\n          <line x1="${toX(0)}" y1="${top - 12}" x2="${toX(0)}" y2="${toY(0)}" stroke="${muted}"/>\n          <line x1="${toX(totalX)}" y1="${top - 12}" x2="${toX(totalX)}" y2="${toY(geom.points[geom.points.length - 1].z)}" stroke="${muted}"/>\n          <text x="${(toX(0) + toX(totalX)) / 2}" y="${top - 34}" font-size="11.5" text-anchor="middle" font-weight="900">${escapeXML(lengthLines.totalLine)}</text>',
+      '          <line x1="${toX(0)}" y1="${top - 26}" x2="${toX(overallEndX)}" y2="${top - 26}" stroke="${muted}" marker-start="url(#arr)" marker-end="url(#arr)"/>\n          <line x1="${toX(0)}" y1="${top - 12}" x2="${toX(0)}" y2="${toY(0)}" stroke="${muted}"/>\n          <line x1="${toX(overallEndX)}" y1="${top - 12}" x2="${toX(overallEndX)}" y2="${toY(geom.totalRise)}" stroke="${muted}"/>\n          <text x="${(toX(0) + toX(overallEndX)) / 2}" y="${top - 34}" font-size="11.5" text-anchor="middle" font-weight="900">${escapeXML(lengthLines.totalLine)}</text>'
+    );
+
+    // PLAN: same behavior — full drawing includes the stop space,
+    // overall dimension stops before it.
+    source = source.replace(
+      '        const totalX = Math.max(1, geom.totalX || 1);\n        const widthM = Math.max(0.8, geom.widthM || 1.2);',
+      '        const totalX = Math.max(1, geom.totalX || 1);\n        const overallEndX = state.type === "car" ? Math.max(0, totalX - Number(r.stopLength || 0)) : totalX;\n        const widthM = Math.max(0.8, geom.widthM || 1.2);'
+    );
+
+    source = source.replace(
+      '        const toX = value => originX + value * scale;\n\n        let rects = "";',
+      '        const toX = value => originX + value * scale;\n        const overallEndPx = toX(overallEndX);\n\n        let rects = "";'
+    );
+
+    source = source.replace(
+      '          <line x1="${originX}" y1="${originY - 36}" x2="${originX + drawW}" y2="${originY - 36}" stroke="${muted}" marker-start="url(#dimArr)" marker-end="url(#dimArr)"/>\n          <line x1="${originX}" y1="${originY - 20}" x2="${originX}" y2="${originY}" stroke="${muted}"/>\n          <line x1="${originX + drawW}" y1="${originY - 20}" x2="${originX + drawW}" y2="${originY}" stroke="${muted}"/>\n          <text x="${originX + drawW / 2}" y="${originY - 46}" text-anchor="middle" font-size="11.5" font-weight="900">${escapeXML(lengthLines.totalLine)}</text>',
+      '          <line x1="${originX}" y1="${originY - 36}" x2="${overallEndPx}" y2="${originY - 36}" stroke="${muted}" marker-start="url(#dimArr)" marker-end="url(#dimArr)"/>\n          <line x1="${originX}" y1="${originY - 20}" x2="${originX}" y2="${originY}" stroke="${muted}"/>\n          <line x1="${overallEndPx}" y1="${originY - 20}" x2="${overallEndPx}" y2="${originY}" stroke="${muted}"/>\n          <text x="${(originX + overallEndPx) / 2}" y="${originY - 46}" text-anchor="middle" font-size="11.5" font-weight="900">${escapeXML(lengthLines.totalLine)}</text>'
+    );
+
+    source = source.replace(
+      '          $("#extraLength").textContent = `${formatLength(r.extra)}${r.stopLength ? ` + ${formatLength(r.stopLength)} ${t("stop")}` : ""}`;',
+      '          $("#extraLength").textContent = `${formatLength(r.extra)}${r.stopLength ? ` + ${formatLength(r.stopLength)} ${t("stopSpace")}` : ""}`;'
+    );
+
+    // Snipzy Liquid Glass Navigation effect adapted to the existing topbar.
+    // Important: keep the app's original sticky behavior.
+    const snipzyGlassCSS = `
+      /* Snipzy Liquid Glass — adapted only for the existing topbar */
+      .topbar.glass-nav {
+        --bg-color: rgba(255, 255, 255, 0.25);
+        --highlight: rgba(255, 255, 255, 0.75);
+        --glass-text: var(--text);
+
+        /* Preserve original ramp app behavior */
+        position: sticky !important;
+        top: 12px !important;
+        z-index: 20 !important;
+
+        overflow: hidden !important;
+        background: transparent !important;
+        isolation: isolate;
+      }
+
+      [data-theme="dark"] .topbar.glass-nav {
+        --bg-color: rgba(0, 0, 0, 0.25);
+        --highlight: rgba(255, 255, 255, 0.15);
+      }
+
+      .topbar.glass-nav > .glass-filter,
+      .topbar.glass-nav > .glass-overlay,
+      .topbar.glass-nav > .glass-specular {
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        pointer-events: none;
+      }
+
+      .topbar.glass-nav > .glass-filter {
+        z-index: 1;
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        filter: url(#glass-distortion) saturate(120%) brightness(1.15);
+      }
+
+      .topbar.glass-nav > .glass-overlay {
+        z-index: 2;
+        background: var(--bg-color);
+      }
+
+      .topbar.glass-nav > .glass-specular {
+        z-index: 3;
+        box-shadow: inset 1px 1px 1px var(--highlight);
+      }
+
+      .topbar.glass-nav > .brand,
+      .topbar.glass-nav > .top-actions {
+        position: relative;
+        z-index: 4;
+      }
+
+      /* Keep the original controls readable while the bar itself stays glass */
+      .topbar.glass-nav .icon-btn,
+      .topbar.glass-nav .lang-btn,
+      .topbar.glass-nav .rules-btn {
+        background: color-mix(in srgb, var(--surface-solid) 76%, transparent);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+      }
+
+      @media (max-width: 620px) {
+        .topbar.glass-nav {
+          top: 6px !important;
+        }
+      }
+
+      @supports not ((backdrop-filter: blur(4px)) or (-webkit-backdrop-filter: blur(4px))) {
+        .topbar.glass-nav > .glass-overlay {
+          background: color-mix(in srgb, var(--surface-solid) 88%, transparent);
+        }
+      }
+    `;
+
+    source = source.replace(
+      "</style>",
+      `${snipzyGlassCSS}</style>`
+    );
+
+    source = source.replace(
+      "<body>",
+      `<body>
+        <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden;pointer-events:none">
+          <defs>
+            <filter id="glass-distortion">
+              <feTurbulence
+                type="turbulence"
+                baseFrequency="0.008"
+                numOctaves="2"
+                result="noise" />
+              <feDisplacementMap
+                in="SourceGraphic"
+                in2="noise"
+                scale="77" />
+            </filter>
+          </defs>
+        </svg>`
+    );
+
+    source = source.replace(
+      '<header class="topbar">',
+      `<header class="topbar glass-nav">
+        <div class="glass-filter" aria-hidden="true"></div>
+        <div class="glass-overlay" aria-hidden="true"></div>
+        <div class="glass-specular" aria-hidden="true"></div>`
+    );
+
+    // Snipzy Liquid Glass for Rules modal — scroll-safe version.
+    const rulesGlassCSS = `
+      .modal.rules-glass {
+        --rules-glass-bg: rgba(255,255,255,.22);
+        --rules-glass-highlight: rgba(255,255,255,.72);
+
+        position: relative;
+        isolation: isolate;
+
+        /* Keep the modal geometry stable */
+        display: flex !important;
+        flex-direction: column !important;
+        max-height: 88vh !important;
+        overflow: hidden !important;
+
+        background: transparent !important;
+        border: 1px solid rgba(196,210,238,.30) !important;
+        box-shadow:
+          0 24px 70px rgba(7,12,30,.28),
+          inset 0 1px 0 rgba(255,255,255,.18) !important;
+
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+      }
+
+      [data-theme="dark"] .modal.rules-glass {
+        --rules-glass-bg: rgba(8,13,28,.36);
+        --rules-glass-highlight: rgba(255,255,255,.13);
+
+        border-color: rgba(121,151,214,.22) !important;
+        box-shadow:
+          0 24px 80px rgba(0,4,18,.48),
+          inset 0 1px 0 rgba(255,255,255,.08) !important;
+      }
+
+      .modal.rules-glass > .glass-filter,
+      .modal.rules-glass > .glass-overlay,
+      .modal.rules-glass > .glass-specular {
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        pointer-events: none;
+      }
+
+      .modal.rules-glass > .glass-filter {
+        z-index: 0;
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        filter: url(#glass-distortion) saturate(120%) brightness(1.15);
+      }
+
+      .modal.rules-glass > .glass-overlay {
+        z-index: 1;
+        background: var(--rules-glass-bg);
+      }
+
+      .modal.rules-glass > .glass-specular {
+        z-index: 2;
+        inset: 1px;
+        box-shadow:
+          inset 1px 1px 1px var(--rules-glass-highlight),
+          inset -1px -1px 0 rgba(255,255,255,.025);
+      }
+
+      /* Header stays visible and never becomes part of the scroll area */
+      .modal.rules-glass > .modal-head {
+        position: relative !important;
+        top: auto !important;
+        z-index: 5 !important;
+        flex: 0 0 auto !important;
+        background: color-mix(in srgb, var(--surface-solid) 34%, transparent) !important;
+        backdrop-filter: blur(14px) saturate(125%);
+        -webkit-backdrop-filter: blur(14px) saturate(125%);
+      }
+
+      /* Only the content scrolls */
+      .modal.rules-glass > .modal-content {
+        position: relative !important;
+        z-index: 4 !important;
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-gutter: stable;
+        background: transparent !important;
+      }
+
+      .modal.rules-glass .rule-card,
+      .modal.rules-glass .rules-document-content,
+      .modal.rules-glass .rules-card-heading {
+        background: color-mix(in srgb, var(--surface-solid) 52%, transparent) !important;
+        backdrop-filter: blur(8px) saturate(118%);
+        -webkit-backdrop-filter: blur(8px) saturate(118%);
+        border-color: color-mix(in srgb, var(--line) 70%, transparent) !important;
+      }
+
+      [data-theme="dark"] .modal.rules-glass .rule-card,
+      [data-theme="dark"] .modal.rules-glass .rules-document-content,
+      [data-theme="dark"] .modal.rules-glass .rules-card-heading {
+        background: color-mix(in srgb, var(--surface-solid) 46%, transparent) !important;
+      }
+
+      @media (max-width: 620px) {
+        .modal.rules-glass {
+          max-height: 95vh !important;
+        }
+      }
+
+      @supports not ((backdrop-filter: blur(4px)) or (-webkit-backdrop-filter: blur(4px))) {
+        .modal.rules-glass > .glass-overlay {
+          background: color-mix(in srgb, var(--surface-solid) 90%, transparent);
+        }
+      }
+    `;
+
+    source = source.replace(
+      "</style>",
+      `${rulesGlassCSS}</style>`
+    );
+
+    source = source.replace(
+      '<div class="modal">',
+      `<div class="modal rules-glass">
+        <div class="glass-filter" aria-hidden="true"></div>
+        <div class="glass-overlay" aria-hidden="true"></div>
+        <div class="glass-specular" aria-hidden="true"></div>`
+    );
+
+    // Snipzy "Apple Liquid Glass Card" adapted to the main cards inside Rules.
+    const snipzyLiquidCardCSS = `
+      .modal.rules-glass .snipzy-glass-card {
+        --bg-color: rgba(255, 255, 255, 0.25);
+        --highlight: rgba(255, 255, 255, 0.75);
+
+        position: relative !important;
+        overflow: hidden !important;
+        background: transparent !important;
+        border-color: transparent !important;
+
+        /* Keep the existing card dimensions/radius; use Snipzy's shadow */
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12) !important;
+        isolation: isolate;
+      }
+
+      [data-theme="dark"] .modal.rules-glass .snipzy-glass-card {
+        --bg-color: rgba(0, 0, 0, 0.25);
+        --highlight: rgba(255, 255, 255, 0.15);
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.22) !important;
+      }
+
+      .modal.rules-glass .snipzy-glass-card > .glass-filter,
+      .modal.rules-glass .snipzy-glass-card > .glass-overlay,
+      .modal.rules-glass .snipzy-glass-card > .glass-specular {
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        pointer-events: none;
+      }
+
+      .modal.rules-glass .snipzy-glass-card > .glass-filter {
+        z-index: 1;
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        filter: url(#glass-distortion) saturate(120%) brightness(1.15);
+      }
+
+      .modal.rules-glass .snipzy-glass-card > .glass-distortion-overlay {
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(circle at 20% 30%, rgba(255,255,255,0.05) 0%, transparent 80%),
+          radial-gradient(circle at 80% 70%, rgba(255,255,255,0.05) 0%, transparent 80%);
+        background-size: 300% 300%;
+        animation: rulesFloatDistort 10s infinite ease-in-out;
+        mix-blend-mode: overlay;
+        z-index: 2;
+        pointer-events: none;
+        border-radius: inherit;
+      }
+
+      @keyframes rulesFloatDistort {
+        0%   { background-position: 0% 0%; }
+        50%  { background-position: 100% 100%; }
+        100% { background-position: 0% 0%; }
+      }
+
+      .modal.rules-glass .snipzy-glass-card > .glass-overlay {
+        z-index: 2;
+        background: var(--bg-color);
+      }
+
+      .modal.rules-glass .snipzy-glass-card > .glass-specular {
+        z-index: 3;
+        box-shadow: inset 1px 1px 1px var(--highlight);
+      }
+
+      .modal.rules-glass .snipzy-glass-card > .glass-content {
+        position: relative !important;
+        z-index: 4 !important;
+        color: inherit;
+        width: 100%;
+        min-width: 0;
+      }
+
+      /* Remove the previous experimental solid/translucent fill from inner rules blocks. */
+      .modal.rules-glass .snipzy-glass-card.rule-card,
+      .modal.rules-glass .snipzy-glass-card.rules-document-content {
+        background: transparent !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+      }
+
+      /* Inner headings remain normal content, avoiding nested glass-on-glass artifacts. */
+      .modal.rules-glass .snipzy-glass-card .rules-card-heading {
+        position: relative !important;
+        z-index: 4 !important;
+        background: transparent !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        box-shadow: none !important;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .modal.rules-glass .snipzy-glass-card > .glass-distortion-overlay {
+          animation: none !important;
+        }
+      }
+    `;
+
+    source = source.replace(
+      "</style>",
+      `${snipzyLiquidCardCSS}</style>`
+    );
+
+    // Snipzy Liquid Glass Card for Download + Version popovers
+    // darker + more frosted glass variant
+    const snipzyExactCardPopoverCSS = `
+      .version-popover.glass-card,
+      .download-popover.glass-card {
+        --glass-tint: var(--accent, #79a1fd);
+        --glass-base: color-mix(in srgb, var(--surface-solid, #ffffff) 78%, #dfe9ff 22%);
+        --glass-mid: color-mix(in srgb, var(--surface-solid, #ffffff) 62%, var(--glass-tint) 14%);
+        --glass-low: color-mix(in srgb, var(--surface-solid, #ffffff) 48%, var(--glass-tint) 10%);
+        --glass-edge: color-mix(in srgb, var(--line, #c9d3e3) 72%, rgba(255,255,255,.48));
+        --glass-highlight: rgba(255,255,255,.74);
+        --glass-divider: color-mix(in srgb, var(--line, #c9d3e3) 78%, rgba(255,255,255,.24));
+        --text: var(--text, inherit);
+
+        position: absolute !important;
+        overflow: hidden !important;
+        background: transparent !important;
+        border: 1px solid var(--glass-edge) !important;
+        box-shadow:
+          0 18px 44px rgba(12, 20, 36, 0.16),
+          inset 0 1px 0 rgba(255,255,255,.28),
+          inset 0 -1px 0 rgba(255,255,255,.04) !important;
+        isolation: isolate;
+      }
+
+      [data-theme="dark"] .version-popover.glass-card,
+      [data-theme="dark"] .download-popover.glass-card {
+        --glass-base: color-mix(in srgb, var(--surface-solid, #101828) 84%, #0c1530 16%);
+        --glass-mid: color-mix(in srgb, var(--surface-solid, #101828) 72%, var(--glass-tint) 16%);
+        --glass-low: color-mix(in srgb, var(--surface-solid, #101828) 58%, var(--glass-tint) 12%);
+        --glass-edge: color-mix(in srgb, var(--line, rgba(255,255,255,.12)) 72%, rgba(255,255,255,.08));
+        --glass-highlight: rgba(255,255,255,.14);
+        --glass-divider: color-mix(in srgb, var(--line, rgba(255,255,255,.16)) 84%, rgba(255,255,255,.04));
+
+        box-shadow:
+          0 20px 48px rgba(0, 5, 16, 0.34),
+          inset 0 1px 0 rgba(255,255,255,.08),
+          inset 0 -1px 0 rgba(255,255,255,.02) !important;
+      }
+
+      .version-popover.glass-card > .glass-filter,
+      .version-popover.glass-card > .glass-distortion-overlay,
+      .version-popover.glass-card > .glass-overlay,
+      .version-popover.glass-card > .glass-specular,
+      .download-popover.glass-card > .glass-filter,
+      .download-popover.glass-card > .glass-distortion-overlay,
+      .download-popover.glass-card > .glass-overlay,
+      .download-popover.glass-card > .glass-specular {
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        pointer-events: none;
+      }
+
+      .version-popover.glass-card > .glass-filter,
+      .download-popover.glass-card > .glass-filter {
+        z-index: 1;
+        backdrop-filter: blur(34px) saturate(185%);
+        -webkit-backdrop-filter: blur(34px) saturate(185%);
+        filter: url(#glass-distortion) saturate(110%) brightness(1.04);
+        opacity: .92;
+        transform: scale(1.02);
+      }
+
+      .version-popover.glass-card > .glass-distortion-overlay,
+      .download-popover.glass-card > .glass-distortion-overlay {
+        z-index: 2;
+        background:
+          radial-gradient(circle at 18% 20%, rgba(255,255,255,.14) 0%, transparent 54%),
+          radial-gradient(circle at 82% 74%, color-mix(in srgb, var(--glass-tint) 14%, rgba(255,255,255,.04)) 0%, transparent 48%),
+          linear-gradient(135deg, rgba(255,255,255,.08) 0%, transparent 42%, rgba(255,255,255,.06) 100%);
+        background-size: 300% 300%;
+        animation: popoverFloatDistort 10s infinite ease-in-out;
+        mix-blend-mode: screen;
+      }
+
+      @keyframes popoverFloatDistort {
+        0% { background-position: 0% 0%; }
+        50% { background-position: 100% 100%; }
+        100% { background-position: 0% 0%; }
+      }
+
+      .version-popover.glass-card > .glass-overlay,
+      .download-popover.glass-card > .glass-overlay {
+        z-index: 2;
+        background:
+          linear-gradient(180deg,
+            color-mix(in srgb, var(--glass-base) 96%, rgba(255,255,255,.16)) 0%,
+            var(--glass-mid) 58%,
+            var(--glass-low) 100%);
+      }
+
+      .version-popover.glass-card > .glass-specular,
+      .download-popover.glass-card > .glass-specular {
+        z-index: 3;
+        box-shadow:
+          inset 0 1px 0 var(--glass-highlight),
+          inset 1px 1px 0 rgba(255,255,255,.14),
+          inset -1px -1px 0 rgba(255,255,255,.03);
+      }
+
+      .version-popover.glass-card > .glass-content,
+      .download-popover.glass-card > .glass-content {
+        position: relative;
+        z-index: 4;
+        color: var(--text);
+        width: 100%;
+        height: 100%;
+      }
+
+      .version-popover.glass-card { padding: 0 !important; }
+      .version-popover.glass-card > .glass-content {
+        padding: 12px;
+        display: block;
+      }
+
+      .download-popover.glass-card { padding: 0 !important; }
+      .download-popover.glass-card > .glass-content {
+        padding: 8px;
+        display: block;
+      }
+
+      .download-popover.glass-card .download-menu-item {
+        background: transparent !important;
+      }
+
+      .download-popover.glass-card .download-menu-item:hover,
+      .download-popover.glass-card .download-menu-item:focus-visible {
+        background: color-mix(in srgb, var(--glass-tint) 12%, rgba(255,255,255,.14)) !important;
+      }
+
+      [data-theme="dark"] .download-popover.glass-card .download-menu-item:hover,
+      [data-theme="dark"] .download-popover.glass-card .download-menu-item:focus-visible {
+        background: color-mix(in srgb, var(--glass-tint) 14%, rgba(255,255,255,.06)) !important;
+      }
+
+      .download-popover.glass-card .download-menu-divider,
+      .version-popover.glass-card .version-popover-divider {
+        background: var(--glass-divider) !important;
+      }
+
+      .version-popover.glass-card .version-instagram-btn {
+        background: color-mix(in srgb, var(--glass-tint) 12%, rgba(255,255,255,.12)) !important;
+        border-color: color-mix(in srgb, var(--glass-tint) 24%, rgba(255,255,255,.18)) !important;
+        backdrop-filter: blur(12px) saturate(145%);
+        -webkit-backdrop-filter: blur(12px) saturate(145%);
+      }
+
+      [data-theme="dark"] .version-popover.glass-card .version-instagram-btn {
+        background: color-mix(in srgb, var(--glass-tint) 16%, rgba(255,255,255,.05)) !important;
+        border-color: color-mix(in srgb, var(--glass-tint) 26%, rgba(255,255,255,.10)) !important;
+      }
+
+
+      .version-popover.glass-card,
+      .download-popover.glass-card,
+      .version-popover.glass-card .glass-content,
+      .download-popover.glass-card .glass-content,
+      .version-popover.glass-card .glass-content *,
+      .download-popover.glass-card .glass-content * {
+        color: #ffffff !important;
+      }
+
+      .version-popover.glass-card .version-popover-desc,
+      .version-popover.glass-card .version-authors,
+      .version-popover.glass-card .version-popover-item span {
+        color: rgba(255,255,255,.72) !important;
+      }
+
+      .version-popover.glass-card .version-popover-version {
+        color: #ffffff !important;
+      }
+
+      .version-popover.glass-card svg,
+      .download-popover.glass-card svg {
+        color: #ffffff !important;
+        stroke: currentColor;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .version-popover.glass-card > .glass-distortion-overlay,
+        .download-popover.glass-card > .glass-distortion-overlay {
+          animation: none !important;
+        }
+      }
+    `;
+    source = source.replace(
+      "</style>",
+      `${snipzyExactCardPopoverCSS}</style>`
+    );
+
+    // Motion-style success animation for PDF / DXF export buttons.
+    const exportSuccessMotionCSS = "\n      #pdfBtn.download-motion-mounted,\n      #dxfBtn.download-motion-mounted {\n        position: relative !important;\n        overflow: hidden !important;\n        justify-content: center;\n        isolation: isolate;\n      }\n\n      #pdfBtn .download-motion-original,\n      #dxfBtn .download-motion-original {\n        display: inline-flex;\n        align-items: center;\n        justify-content: center;\n        gap: inherit;\n        width: 100%;\n        transition:\n          opacity .22s ease,\n          filter .22s ease,\n          transform .28s cubic-bezier(.22,1,.36,1);\n        transform-origin: center;\n        will-change: opacity, filter, transform;\n      }\n\n      #pdfBtn .download-motion-success,\n      #dxfBtn .download-motion-success {\n        position: absolute;\n        inset: 0;\n        z-index: 5;\n        display: grid;\n        place-items: center;\n        opacity: 0;\n        filter: blur(7px);\n        transform: scale(.78);\n        transition:\n          opacity .20s ease,\n          filter .24s ease,\n          transform .34s cubic-bezier(.22,1,.36,1);\n        pointer-events: none;\n        color: currentColor;\n      }\n\n      #pdfBtn .download-motion-success svg,\n      #dxfBtn .download-motion-success svg {\n        width: 22px;\n        height: 22px;\n        overflow: visible;\n      }\n\n      #pdfBtn .download-motion-success path,\n      #dxfBtn .download-motion-success path {\n        fill: none;\n        stroke: currentColor;\n        stroke-width: 2.4;\n        stroke-linecap: round;\n        stroke-linejoin: round;\n        stroke-dasharray: 1;\n        stroke-dashoffset: 1;\n      }\n\n      #pdfBtn.download-motion-active .download-motion-original,\n      #dxfBtn.download-motion-active .download-motion-original {\n        opacity: 0;\n        filter: blur(7px);\n        transform: scale(.78);\n      }\n\n      #pdfBtn.download-motion-active .download-motion-success,\n      #dxfBtn.download-motion-active .download-motion-success {\n        opacity: 1;\n        filter: blur(0);\n        transform: scale(1);\n      }\n\n      #pdfBtn.download-motion-active .download-motion-success path,\n      #dxfBtn.download-motion-active .download-motion-success path {\n        animation: rampDownloadCheckDraw .46s cubic-bezier(.22,1,.36,1) .10s forwards;\n      }\n\n      @keyframes rampDownloadCheckDraw {\n        from { stroke-dashoffset: 1; }\n        to   { stroke-dashoffset: 0; }\n      }\n\n      @media (prefers-reduced-motion: reduce) {\n        #pdfBtn .download-motion-original,\n        #dxfBtn .download-motion-original,\n        #pdfBtn .download-motion-success,\n        #dxfBtn .download-motion-success {\n          transition: none !important;\n        }\n\n        #pdfBtn.download-motion-active .download-motion-success path,\n        #dxfBtn.download-motion-active .download-motion-success path {\n          animation-duration: .01ms !important;\n          animation-delay: 0ms !important;\n        }\n      }\n";
+    source = source.replace(
+      "</style>",
+      exportSuccessMotionCSS + "</style>"
+    );
+
+    const exportSuccessMotionHelper = "\n      function showDownloadSuccessAnimation(selector) {\n        const button = document.querySelector(selector);\n        if (!button || button.dataset.downloadMotion === \"1\") return;\n\n        button.dataset.downloadMotion = \"1\";\n\n        const rect = button.getBoundingClientRect();\n        const previous = {\n          width: button.style.width,\n          minWidth: button.style.minWidth,\n          position: button.style.position\n        };\n\n        // Lock the current size so swapping content never moves the toolbar.\n        if (rect.width > 0) {\n          button.style.width = `${rect.width}px`;\n          button.style.minWidth = `${rect.width}px`;\n        }\n\n        if (getComputedStyle(button).position === \"static\") {\n          button.style.position = \"relative\";\n        }\n\n        const original = document.createElement(\"span\");\n        original.className = \"download-motion-original\";\n\n        while (button.firstChild) {\n          original.appendChild(button.firstChild);\n        }\n\n        const success = document.createElement(\"span\");\n        success.className = \"download-motion-success\";\n        success.setAttribute(\"aria-hidden\", \"true\");\n        success.innerHTML = `\n          <svg viewBox=\"0 0 24 24\" aria-hidden=\"true\">\n            <path pathLength=\"1\" d=\"M5.5 12.5 10 17l8.5-10\"/>\n          </svg>\n        `;\n\n        button.append(original, success);\n        button.classList.add(\"download-motion-mounted\");\n\n        requestAnimationFrame(() => {\n          requestAnimationFrame(() => {\n            button.classList.add(\"download-motion-active\");\n          });\n        });\n\n        clearTimeout(button.__downloadMotionTimer);\n        button.__downloadMotionTimer = setTimeout(() => {\n          button.classList.remove(\"download-motion-active\");\n\n          setTimeout(() => {\n            if (!button.isConnected) return;\n\n            while (original.firstChild) {\n              button.insertBefore(original.firstChild, original);\n            }\n\n            original.remove();\n            success.remove();\n\n            button.classList.remove(\"download-motion-mounted\");\n            delete button.dataset.downloadMotion;\n\n            button.style.width = previous.width;\n            button.style.minWidth = previous.minWidth;\n            button.style.position = previous.position;\n          }, 280);\n        }, 1250);\n      }\n";
+    const exportMotionHelperMarker = '      const $ = (s, root=document) => root.querySelector(s);';
+
+    if (!source.includes(exportMotionHelperMarker)) {
+      throw new Error("محل اضافه کردن انیمیشن موفقیت دانلود پیدا نشد.");
+    }
+
+    source = source.replace(
+      exportMotionHelperMarker,
+      exportSuccessMotionHelper + "\n\n" + exportMotionHelperMarker
+    );
+
+    // PDF: trigger only after the PDF blob has been generated and downloadBlob completed.
+    if (!source.includes('          showToast(t("pdfDownloaded"));')) {
+      throw new Error("نقطه موفقیت دانلود PDF پیدا نشد.");
+    }
+    source = source.replace(
+      '          showToast(t("pdfDownloaded"));',
+      '          showToast(t("pdfDownloaded"));\n          showDownloadSuccessAnimation("#pdfBtn");'
+    );
+
+    // DXF: trigger only after DXF downloadBlob completed successfully.
+    if (!source.includes('        showToast(t("dxfDownloaded"));')) {
+      throw new Error("نقطه موفقیت دانلود DXF پیدا نشد.");
+    }
+    source = source.replace(
+      '        showToast(t("dxfDownloaded"));',
+      '        showToast(t("dxfDownloaded"));\n        showDownloadSuccessAnimation("#dxfBtn");'
+    );
+
+    // Clean rebuild of the Rules popup only, keeping all existing content intact.
+    const cleanRulesLiquidGlassCSS = `
+      .rules-clean-glass {
+        --rules-edge: color-mix(in srgb, var(--line, #c8d2e5) 74%, rgba(255,255,255,.30));
+        --rules-highlight: rgba(255,255,255,.64);
+        --rules-shadow: rgba(10, 18, 35, .18);
+        position: relative !important;
+        isolation: isolate;
+        overflow: hidden !important;
+        background: transparent !important;
+        border: 1px solid var(--rules-edge) !important;
+        box-shadow:
+          0 24px 56px var(--rules-shadow),
+          inset 0 1px 0 rgba(255,255,255,.24),
+          inset 0 -1px 0 rgba(255,255,255,.04) !important;
+      }
+
+      [data-theme="dark"] .rules-clean-glass {
+        --rules-edge: color-mix(in srgb, var(--line, rgba(255,255,255,.12)) 84%, rgba(255,255,255,.06));
+        --rules-highlight: rgba(255,255,255,.12);
+        --rules-shadow: rgba(0, 5, 16, .34);
+      }
+
+      .rules-clean-glass-panel {
+        --rules-panel-edge: color-mix(in srgb, var(--line, #c8d2e5) 78%, rgba(255,255,255,.22));
+        --rules-panel-highlight: rgba(255,255,255,.22);
+        position: relative !important;
+        isolation: isolate;
+        overflow: hidden !important;
+        background: transparent !important;
+        border: 1px solid var(--rules-panel-edge) !important;
+        box-shadow:
+          0 10px 26px rgba(14, 24, 42, .08),
+          inset 0 1px 0 rgba(255,255,255,.18),
+          inset 0 -1px 0 rgba(255,255,255,.03) !important;
+      }
+
+      [data-theme="dark"] .rules-clean-glass-panel {
+        --rules-panel-edge: color-mix(in srgb, var(--line, rgba(255,255,255,.12)) 86%, rgba(255,255,255,.05));
+        --rules-panel-highlight: rgba(255,255,255,.10);
+        box-shadow:
+          0 12px 28px rgba(0, 6, 18, .18),
+          inset 0 1px 0 rgba(255,255,255,.07),
+          inset 0 -1px 0 rgba(255,255,255,.015) !important;
+      }
+
+      .rules-clean-glass > .glass-filter,
+      .rules-clean-glass > .glass-overlay,
+      .rules-clean-glass > .glass-specular,
+      .rules-clean-glass-panel > .glass-filter,
+      .rules-clean-glass-panel > .glass-overlay,
+      .rules-clean-glass-panel > .glass-specular {
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        pointer-events: none;
+      }
+
+      .rules-clean-glass > .glass-filter {
+        z-index: 1;
+        backdrop-filter: blur(24px) saturate(170%);
+        -webkit-backdrop-filter: blur(24px) saturate(170%);
+        filter: url(#glass-distortion) saturate(108%) brightness(1.04);
+        opacity: .88;
+        transform: scale(1.02);
+      }
+
+      .rules-clean-glass-panel > .glass-filter {
+        z-index: 1;
+        backdrop-filter: blur(14px) saturate(145%);
+        -webkit-backdrop-filter: blur(14px) saturate(145%);
+        filter: url(#glass-distortion) saturate(104%) brightness(1.02);
+        opacity: .74;
+        transform: scale(1.02);
+      }
+
+      .rules-clean-glass > .glass-overlay {
+        z-index: 2;
+        background:
+          radial-gradient(circle at 14% 12%, rgba(255,255,255,.14), transparent 34%),
+          radial-gradient(circle at 84% 78%, color-mix(in srgb, var(--accent, #79a1fd) 16%, rgba(255,255,255,.03)), transparent 46%),
+          linear-gradient(180deg,
+            color-mix(in srgb, var(--surface-solid, #ffffff) 86%, rgba(255,255,255,.14)) 0%,
+            color-mix(in srgb, var(--surface-solid, #ffffff) 72%, var(--accent, #79a1fd) 8%) 58%,
+            color-mix(in srgb, var(--surface-solid, #ffffff) 60%, var(--accent, #79a1fd) 6%) 100%);
+      }
+
+      .rules-clean-glass-panel > .glass-overlay {
+        z-index: 2;
+        background:
+          radial-gradient(circle at 18% 16%, rgba(255,255,255,.10), transparent 28%),
+          linear-gradient(180deg,
+            color-mix(in srgb, var(--surface-solid, #ffffff) 82%, rgba(255,255,255,.10)) 0%,
+            color-mix(in srgb, var(--surface-solid, #ffffff) 68%, var(--accent, #79a1fd) 6%) 100%);
+      }
+
+      [data-theme="dark"] .rules-clean-glass > .glass-overlay {
+        background:
+          radial-gradient(circle at 14% 12%, rgba(255,255,255,.05), transparent 34%),
+          radial-gradient(circle at 84% 78%, color-mix(in srgb, var(--accent, #79a1fd) 18%, rgba(255,255,255,.02)), transparent 46%),
+          linear-gradient(180deg,
+            color-mix(in srgb, var(--surface-solid, #101828) 86%, #0d1730 14%) 0%,
+            color-mix(in srgb, var(--surface-solid, #101828) 74%, var(--accent, #79a1fd) 10%) 58%,
+            color-mix(in srgb, var(--surface-solid, #101828) 62%, var(--accent, #79a1fd) 8%) 100%);
+      }
+
+      [data-theme="dark"] .rules-clean-glass-panel > .glass-overlay {
+        background:
+          radial-gradient(circle at 18% 16%, rgba(255,255,255,.03), transparent 28%),
+          linear-gradient(180deg,
+            color-mix(in srgb, var(--surface-solid, #101828) 82%, #0d1730 18%) 0%,
+            color-mix(in srgb, var(--surface-solid, #101828) 70%, var(--accent, #79a1fd) 8%) 100%);
+      }
+
+      .rules-clean-glass > .glass-specular,
+      .rules-clean-glass-panel > .glass-specular {
+        z-index: 3;
+        box-shadow:
+          inset 0 1px 0 var(--rules-highlight, var(--rules-panel-highlight)),
+          inset 1px 1px 0 rgba(255,255,255,.12),
+          inset -1px -1px 0 rgba(255,255,255,.02);
+      }
+
+      .rules-clean-glass > .glass-content,
+      .rules-clean-glass-panel > .glass-content {
+        position: relative;
+        z-index: 4;
+        width: 100%;
+        min-width: 0;
+        height: 100%;
+      }
+
+      .modal.rules-clean-glass {
+        display: flex !important;
+        flex-direction: column !important;
+        max-height: 88vh !important;
+      }
+
+      .modal.rules-clean-glass > .glass-content {
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+      }
+
+      .modal.rules-clean-glass .modal-head {
+        flex: 0 0 auto !important;
+        position: relative !important;
+        z-index: 2;
+        background: transparent !important;
+        border-bottom: 1px solid color-mix(in srgb, var(--line, #c8d2e5) 74%, rgba(255,255,255,.12)) !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+      }
+
+      [data-theme="dark"] .modal.rules-clean-glass .modal-head {
+        border-bottom-color: color-mix(in srgb, var(--line, rgba(255,255,255,.12)) 84%, rgba(255,255,255,.05)) !important;
+      }
+
+      .modal.rules-clean-glass .modal-content {
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-gutter: stable;
+        background: transparent !important;
+      }
+
+      .modal.rules-clean-glass .rule-card,
+      .modal.rules-clean-glass .rules-document-content {
+        background: transparent !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+      }
+
+      .modal.rules-clean-glass .rules-card-heading {
+        background: transparent !important;
+        box-shadow: none !important;
+        border-bottom: 1px solid color-mix(in srgb, var(--line, #c8d2e5) 72%, rgba(255,255,255,.12)) !important;
+      }
+
+      [data-theme="dark"] .modal.rules-clean-glass .rules-card-heading {
+        border-bottom-color: color-mix(in srgb, var(--line, rgba(255,255,255,.12)) 84%, rgba(255,255,255,.05)) !important;
+      }
+
+      @media (max-width: 620px) {
+        .modal.rules-clean-glass { max-height: 95vh !important; }
+      }
+    `;
+
+    source = source.replace(
+      "</style>",
+      `${cleanRulesLiquidGlassCSS}</style>`
+    );
+
+    // Restore the divider between Web App and Share Link in the Download popover.
+    const downloadDividerCSS = `
+      #downloadPopover .download-menu-divider {
+        display: block !important;
+        width: calc(100% - 14px) !important;
+        height: 1px !important;
+        min-height: 1px !important;
+        margin: 6px 7px !important;
+        padding: 0 !important;
+        border: 0 !important;
+        background: rgba(255,255,255,.22) !important;
+        opacity: 1 !important;
+        flex: 0 0 1px !important;
+      }
+
+      [data-theme="dark"] #downloadPopover .download-menu-divider {
+        background: rgba(255,255,255,.14) !important;
+      }
+    `;
+
+    source = source.replace(
+      "</style>",
+      `${downloadDividerCSS}</style>`
+    );
+
+    // Open the Web App installation guide in a new tab.
+    const installGuideOldBlock = `        if (action === "install") {
+          showToast(state.lang === "fa"
+            ? "از منوی مرورگر Add to Home Screen / Install App را انتخاب کنید."
+            : "Choose Add to Home Screen / Install App from your browser menu.");
+          return;
+        }`;
+
+    const installGuideNewBlock = `        if (action === "install") {
+          const guideWindow = window.open("https://www.zoomit.ir/mobile-learning/20984-how-to-add-website-links/", "_blank", "noopener,noreferrer");
+          if (guideWindow) guideWindow.opener = null;
+          return;
+        }`;
+
+    if (!source.includes(installGuideOldBlock)) {
+      throw new Error("Install guide action was not found.");
+    }
+
+    source = source.replace(installGuideOldBlock, installGuideNewBlock);
+
+    // Match Download button hover/focus/open style with Version button.
+    const footerButtonMatchCSS = `
+      #downloadBtn.footer-btn {
+        border: 1px solid var(--line) !important;
+        background: var(--surface-solid) !important;
+        color: var(--text) !important;
+        cursor: pointer;
+        transition: background .14s ease, border-color .14s ease, color .14s ease !important;
+      }
+
+      #downloadBtn.footer-btn:hover,
+      #downloadBtn.footer-btn:focus-visible {
+        outline: none !important;
+        border-color: var(--accent) !important;
+        background: var(--accent-soft) !important;
+        color: var(--text) !important;
+      }
+
+      #downloadBtn.footer-btn[aria-expanded="true"] {
+        border-color: var(--accent) !important;
+        background: var(--accent-soft) !important;
+        color: var(--text) !important;
+      }
+    `;
+
+    source = source.replace(
+      "</style>",
+      `${footerButtonMatchCSS}</style>`
+    );
+
+    const restoreDownloadIconCSS = `
+      #downloadBtn.footer-btn svg {
+        display: block !important;
+        width: 17px !important;
+        height: 17px !important;
+        flex: 0 0 17px !important;
+        opacity: 1 !important;
+        color: currentColor !important;
+      }
+    `;
+    source = source.replace(
+      "</style>",
+      `${restoreDownloadIconCSS}</style>`
+    );
+
+    // Footer buttons behavior:
+    // hover => only fill/background highlights
+    // click/open => border also highlights
+    const footerButtonsHoverClickCSS = `
+      #versionBtn.footer-pill-btn,
+      #downloadBtn.footer-btn {
+        border-color: var(--line) !important;
+        background: var(--surface-solid) !important;
+        color: var(--text) !important;
+        transition: background .14s ease, border-color .14s ease, color .14s ease !important;
+      }
+
+      #versionBtn.footer-pill-btn:hover,
+      #downloadBtn.footer-btn:hover {
+        background: var(--accent-soft) !important;
+        border-color: var(--line) !important;
+        color: var(--text) !important;
+      }
+
+      #versionBtn.footer-pill-btn:focus-visible,
+      #downloadBtn.footer-btn:focus-visible {
+        outline: none !important;
+        background: var(--accent-soft) !important;
+        border-color: var(--line) !important;
+        color: var(--text) !important;
+      }
+
+      #versionBtn.footer-pill-btn:active,
+      #downloadBtn.footer-btn:active,
+      #versionBtn.footer-pill-btn[aria-expanded="true"],
+      #downloadBtn.footer-btn[aria-expanded="true"] {
+        background: var(--accent-soft) !important;
+        border-color: var(--accent) !important;
+        color: var(--text) !important;
+      }
+    `;
+
+    source = source.replace(
+      "</style>",
+      `${footerButtonsHoverClickCSS}</style>`
+    );
+
+    // Refine footer button border behavior:
+    // border is always visible, does not change on hover,
+    // and changes only when pressed/open.
+    const footerButtonsBorderBehaviorCSS = `
+      #versionBtn.footer-pill-btn,
+      #downloadBtn.footer-btn {
+        border: 1px solid color-mix(in srgb, var(--line-strong, var(--line)) 88%, var(--text) 12%) !important;
+        background: var(--surface-solid) !important;
+        color: var(--text) !important;
+      }
+
+      #versionBtn.footer-pill-btn:hover,
+      #downloadBtn.footer-btn:hover,
+      #versionBtn.footer-pill-btn:focus-visible,
+      #downloadBtn.footer-btn:focus-visible {
+        background: var(--accent-soft) !important;
+        border-color: color-mix(in srgb, var(--line-strong, var(--line)) 88%, var(--text) 12%) !important;
+        color: var(--text) !important;
+        outline: none !important;
+      }
+
+      #versionBtn.footer-pill-btn:active,
+      #downloadBtn.footer-btn:active,
+      #versionBtn.footer-pill-btn[aria-expanded="true"],
+      #downloadBtn.footer-btn[aria-expanded="true"] {
+        background: var(--accent-soft) !important;
+        border-color: var(--accent) !important;
+        color: var(--text) !important;
+      }
+    `;
+
+    source = source.replace(
+      "</style>",
+      `${footerButtonsBorderBehaviorCSS}</style>`
+    );
+
+    // CodeShack-inspired animated glow for Pixel Instagram button.
+    const instagramGlowCSS = `
+      #versionInstagramBtn {
+        position: relative !important;
+        isolation: isolate;
+        overflow: visible !important;
+        z-index: 1;
+      }
+
+      #versionInstagramBtn::before {
+        content: "";
+        position: absolute;
+        inset: -2px;
+        border-radius: inherit;
+        padding: 2px;
+        background:
+          linear-gradient(
+            90deg,
+            #3b82f6,
+            #8b5cf6,
+            #ec4899,
+            #3b82f6
+          );
+        background-size: 300% 300%;
+        opacity: 0;
+        filter: blur(0px);
+        transition:
+          opacity .22s ease,
+          filter .28s ease;
+        animation: pixelInstagramGlow 4s ease infinite;
+        pointer-events: none;
+        z-index: -1;
+
+        -webkit-mask:
+          linear-gradient(#fff 0 0) content-box,
+          linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+      }
+
+      #versionInstagramBtn::after {
+        content: "";
+        position: absolute;
+        inset: -5px;
+        border-radius: calc(999px + 5px);
+        background:
+          linear-gradient(
+            90deg,
+            #3b82f6,
+            #8b5cf6,
+            #ec4899,
+            #3b82f6
+          );
+        background-size: 300% 300%;
+        opacity: 0;
+        filter: blur(12px);
+        transition: opacity .26s ease;
+        animation: pixelInstagramGlow 4s ease infinite;
+        pointer-events: none;
+        z-index: -2;
+      }
+
+      #versionInstagramBtn:hover::before,
+      #versionInstagramBtn:focus-visible::before {
+        opacity: .92;
+        filter: blur(.2px);
+      }
+
+      #versionInstagramBtn:hover::after,
+      #versionInstagramBtn:focus-visible::after {
+        opacity: .48;
+      }
+
+      #versionInstagramBtn:hover,
+      #versionInstagramBtn:focus-visible {
+        border-color: transparent !important;
+        color: #ffffff !important;
+        background:
+          color-mix(in srgb, var(--surface-solid) 78%, #1e293b 22%) !important;
+        outline: none !important;
+      }
+
+      #versionInstagramBtn:hover svg,
+      #versionInstagramBtn:focus-visible svg {
+        color: #ffffff !important;
+        stroke: currentColor !important;
+      }
+
+      @keyframes pixelInstagramGlow {
+        0%   { background-position: 0% 50%; }
+        50%  { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        #versionInstagramBtn::before,
+        #versionInstagramBtn::after {
+          animation: none !important;
+        }
+      }
+    `;
+
+    source = source.replace(
+      "</style>",
+      `${instagramGlowCSS}</style>`
+    );
+
+    // Apply the same animated glow to the footer Instagram button.
+    const footerInstagramGlowCSS = `
+      a.footer-social[href*="instagram.com/pixel_architecture_studio"] {
+        position: relative !important;
+        isolation: isolate;
+        overflow: visible !important;
+        z-index: 1;
+      }
+
+      a.footer-social[href*="instagram.com/pixel_architecture_studio"]::before {
+        content: "";
+        position: absolute;
+        inset: -2px;
+        border-radius: inherit;
+        padding: 2px;
+        background:
+          linear-gradient(
+            90deg,
+            #3b82f6,
+            #8b5cf6,
+            #ec4899,
+            #3b82f6
+          );
+        background-size: 300% 300%;
+        opacity: 0;
+        filter: blur(0px);
+        transition:
+          opacity .22s ease,
+          filter .28s ease;
+        animation: pixelInstagramGlow 4s ease infinite;
+        pointer-events: none;
+        z-index: -1;
+
+        -webkit-mask:
+          linear-gradient(#fff 0 0) content-box,
+          linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+      }
+
+      a.footer-social[href*="instagram.com/pixel_architecture_studio"]::after {
+        content: "";
+        position: absolute;
+        inset: -5px;
+        border-radius: calc(999px + 5px);
+        background:
+          linear-gradient(
+            90deg,
+            #3b82f6,
+            #8b5cf6,
+            #ec4899,
+            #3b82f6
+          );
+        background-size: 300% 300%;
+        opacity: 0;
+        filter: blur(12px);
+        transition: opacity .26s ease;
+        animation: pixelInstagramGlow 4s ease infinite;
+        pointer-events: none;
+        z-index: -2;
+      }
+
+      a.footer-social[href*="instagram.com/pixel_architecture_studio"]:hover::before,
+      a.footer-social[href*="instagram.com/pixel_architecture_studio"]:focus-visible::before {
+        opacity: .92;
+        filter: blur(.2px);
+      }
+
+      a.footer-social[href*="instagram.com/pixel_architecture_studio"]:hover::after,
+      a.footer-social[href*="instagram.com/pixel_architecture_studio"]:focus-visible::after {
+        opacity: .48;
+      }
+
+      a.footer-social[href*="instagram.com/pixel_architecture_studio"]:hover,
+      a.footer-social[href*="instagram.com/pixel_architecture_studio"]:focus-visible {
+        border-color: transparent !important;
+        color: #ffffff !important;
+        background:
+          color-mix(in srgb, var(--surface-solid) 78%, #1e293b 22%) !important;
+        outline: none !important;
+      }
+
+      a.footer-social[href*="instagram.com/pixel_architecture_studio"]:hover svg,
+      a.footer-social[href*="instagram.com/pixel_architecture_studio"]:focus-visible svg {
+        color: #ffffff !important;
+        stroke: currentColor !important;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        a.footer-social[href*="instagram.com/pixel_architecture_studio"]::before,
+        a.footer-social[href*="instagram.com/pixel_architecture_studio"]::after {
+          animation: none !important;
+        }
+      }
+    `;
+
+    source = source.replace(
+      "</style>",
+      `${footerInstagramGlowCSS}</style>`
+    );
+
+    // Unified Export modal: connect its settings to the existing PDF/DXF engines.
+    source = source.replace(
+      '          // اندازه A4 افقی با کیفیت بالا\n          canvas.width = 2806;\n          canvas.height = 1984;',
+      '          // اندازه A4 افقی بر اساس کیفیت انتخاب‌شده در پنجره Export\n          const exportPdfQuality = document.querySelector("#exportPdfQuality")?.value || "high";\n          const exportPdfHighQuality = exportPdfQuality !== "standard";\n          canvas.width = exportPdfHighQuality ? 2806 : 1684;\n          canvas.height = exportPdfHighQuality ? 1984 : 1190;'
+    );
+
+    source = source.replace(
+      '              "image/jpeg",\n              0.96',
+      '              "image/jpeg",\n              exportPdfHighQuality ? 0.96 : 0.86'
+    );
+
+    source = source.replace(
+      '        const button = document.querySelector("#pdfBtn");',
+      '        const button = document.querySelector("#exportDownloadBtn") || document.querySelector("#pdfBtn");'
+    );
+
+    source = source.replace(
+      '          const pages = [];\n\n          // صفحه اول: نما\n          // صفحه دوم: پلان\n          for (const view of ["section", "plan"]) {',
+      '          const pages = [];\n          const exportPdfPages = document.querySelector("#exportPdfPages")?.value || "both";\n          const exportViews = exportPdfPages === "section"\n            ? ["section"]\n            : exportPdfPages === "plan"\n              ? ["plan"]\n              : ["section", "plan"];\n\n          for (const view of exportViews) {'
+    );
+
+    source = source.replace(
+      '`ramp-technical-A4-${state.type}-section-plan-${date}.pdf`',
+      '`ramp-technical-A4-${state.type}-${exportViews.join("-")}-${date}.pdf`'
+    );
+
+    const exportDxfStart = source.indexOf('      function downloadDXF() {');
+    const exportDxfEnd = source.indexOf('\n\n      // Number controls', exportDxfStart);
+    if (exportDxfStart !== -1 && exportDxfEnd !== -1) {
+      let exportDxfBlock = source.slice(exportDxfStart, exportDxfEnd);
+      exportDxfBlock = exportDxfBlock.replace(
+        '        const geom = buildRampGeometry(state.result || invalidResult());\n        const dxfScale = lengthScaleFactor();\n        const insUnits = state.heightUnit === "cm" ? 5 : 6;\n        const dxfValue = value => Number((Number(value) * dxfScale).toFixed(state.heightUnit === "cm" ? 3 : 6));',
+        '        const geom = buildRampGeometry(state.result || invalidResult());\n        const exportDxfView = document.querySelector("#exportDxfView")?.value || state.view;\n        const exportDxfUnit = document.querySelector("#exportDxfUnit")?.value || selectedLengthUnit();\n        const dxfScale = exportDxfUnit === "cm" ? 100 : 1;\n        const insUnits = exportDxfUnit === "cm" ? 5 : 6;\n        const dxfValue = value => Number((Number(value) * dxfScale).toFixed(exportDxfUnit === "cm" ? 3 : 6));'
       );
+      exportDxfBlock = exportDxfBlock.replace('        if (state.view === "section") {', '        if (exportDxfView === "section") {');
+      exportDxfBlock = exportDxfBlock.replace(
+        '`ramp-${state.type}-${state.view}-${selectedLengthUnit()}.dxf`',
+        '`ramp-${state.type}-${exportDxfView}-${exportDxfUnit}.dxf`'
+      );
+      source = source.slice(0, exportDxfStart) + exportDxfBlock + source.slice(exportDxfEnd);
+    }
 
-    document.open();
-    document.write(fixed);
-    document.close();
+    // The success animation now appears on the Download button inside the Export modal.
+    source = source.replace(
+      'showDownloadSuccessAnimation("#pdfBtn");',
+      'showDownloadSuccessAnimation("#exportDownloadBtn");'
+    );
+    source = source.replace(
+      'showDownloadSuccessAnimation("#dxfBtn");',
+      'showDownloadSuccessAnimation("#exportDownloadBtn");'
+    );
+
+    const unifiedExportCSS = `
+      #pdfBtn, #dxfBtn { display: none !important; }
+
+      #exportBtn {
+        min-width: 86px;
+        justify-content: center;
+      }
+
+      .export-modal-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 190;
+        display: grid;
+        place-items: center;
+        padding: 18px;
+        background: rgba(6, 10, 24, .34);
+        backdrop-filter: blur(7px);
+        -webkit-backdrop-filter: blur(7px);
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity .18s ease, visibility .18s ease;
+      }
+      .export-modal-backdrop.open {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+      }
+
+      .export-modal {
+        width: min(430px, calc(100vw - 28px));
+        position: relative;
+        overflow: hidden;
+        border-radius: 22px;
+        border: 1px solid color-mix(in srgb, var(--line) 76%, rgba(255,255,255,.34));
+        background: color-mix(in srgb, var(--surface-solid) 76%, transparent);
+        box-shadow: 0 28px 80px rgba(8, 14, 34, .30), inset 0 1px 0 rgba(255,255,255,.28);
+        backdrop-filter: blur(26px) saturate(160%);
+        -webkit-backdrop-filter: blur(26px) saturate(160%);
+        transform: translateY(10px) scale(.985);
+        transition: transform .20s cubic-bezier(.2,.8,.2,1);
+        direction: rtl;
+      }
+      .export-modal-backdrop.open .export-modal { transform: translateY(0) scale(1); }
+
+      .export-modal-head {
+        min-height: 62px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 14px 16px;
+        border-bottom: 1px solid var(--line);
+      }
+      .export-modal-title { font-size: 16px; font-weight: 900; }
+      .export-close-btn {
+        width: 34px; height: 34px; border-radius: 10px;
+        display: grid; place-items: center;
+        border: 1px solid var(--line);
+        background: var(--surface-solid);
+        color: var(--muted);
+        cursor: pointer;
+        transition: background .14s ease, color .14s ease, border-color .14s ease;
+      }
+      .export-close-btn:hover { background: var(--surface-2); color: var(--text); }
+      .export-close-btn svg { width: 16px; height: 16px; }
+
+      .export-modal-body { padding: 16px; }
+
+      .export-format-switch {
+        position: relative;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 5px;
+        padding: 5px;
+        margin-bottom: 16px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: color-mix(in srgb, var(--surface-2) 82%, transparent);
+      }
+      .export-format-btn {
+        min-height: 42px;
+        border: 0;
+        border-radius: 10px;
+        background: transparent;
+        color: var(--muted);
+        font-weight: 900;
+        cursor: pointer;
+        transition: background .16s ease, color .16s ease, box-shadow .16s ease;
+      }
+      .export-format-btn.active {
+        background: var(--surface-solid);
+        color: var(--text);
+        box-shadow: 0 4px 14px rgba(0,0,0,.09);
+      }
+
+      .export-settings-panel { display: none; }
+      .export-settings-panel.active { display: grid; gap: 12px; animation: exportPanelIn .18s ease; }
+      @keyframes exportPanelIn { from { opacity: .35; transform: translateY(3px); } }
+
+      .export-setting-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(145px, .82fr);
+        align-items: center;
+        gap: 14px;
+        min-height: 58px;
+        padding: 10px 12px;
+        border: 1px solid var(--line);
+        border-radius: 13px;
+        background: color-mix(in srgb, var(--surface-solid) 70%, transparent);
+      }
+      .export-setting-copy { min-width: 0; }
+      .export-setting-label { font-size: 12px; font-weight: 900; }
+      .export-setting-hint { margin-top: 3px; font-size: 10.5px; color: var(--muted); line-height: 1.65; }
+      .export-select {
+        width: 100%; height: 38px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: var(--surface-solid);
+        color: var(--text);
+        padding: 0 10px;
+        outline: none;
+        font-size: 11.5px;
+        font-weight: 800;
+        cursor: pointer;
+      }
+      .export-select:focus { border-color: var(--accent); }
+
+      .export-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 12px;
+      }
+      .export-meta-chip {
+        min-height: 28px;
+        padding: 0 9px;
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: color-mix(in srgb, var(--surface-solid) 64%, transparent);
+        color: var(--muted);
+        font-size: 10.5px;
+        font-weight: 800;
+      }
+
+      .export-modal-footer {
+        padding: 14px 16px 16px;
+        border-top: 1px solid var(--line);
+      }
+      #exportDownloadBtn {
+        width: 100%;
+        min-height: 46px;
+        position: relative;
+        border: 1px solid var(--accent);
+        border-radius: 13px;
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        color: #fff;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-weight: 900;
+        cursor: pointer;
+        box-shadow: 0 8px 24px color-mix(in srgb, var(--accent) 30%, transparent);
+        transition: transform .14s ease, filter .14s ease;
+      }
+      #exportDownloadBtn:hover { filter: brightness(1.04); }
+      #exportDownloadBtn:active { transform: scale(.992); }
+      #exportDownloadBtn:disabled { cursor: wait; opacity: .72; }
+      #exportDownloadBtn svg { width: 17px; height: 17px; flex: 0 0 17px; }
+
+      /* Preserve the existing Motion-style success animation on the new unified button. */
+      #exportDownloadBtn .download-motion-original,
+      #exportDownloadBtn .download-motion-success {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: opacity .26s ease, filter .32s ease, transform .34s cubic-bezier(.22,1,.36,1);
+      }
+      #exportDownloadBtn .download-motion-success {
+        opacity: 0;
+        filter: blur(7px);
+        transform: scale(.78);
+      }
+      #exportDownloadBtn .download-motion-success svg { width: 19px; height: 19px; }
+      #exportDownloadBtn .download-motion-success path {
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2.4;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-dasharray: 1;
+        stroke-dashoffset: 1;
+      }
+      #exportDownloadBtn.download-motion-active .download-motion-original {
+        opacity: 0;
+        filter: blur(7px);
+        transform: scale(.78);
+      }
+      #exportDownloadBtn.download-motion-active .download-motion-success {
+        opacity: 1;
+        filter: blur(0);
+        transform: scale(1);
+      }
+      #exportDownloadBtn.download-motion-active .download-motion-success path {
+        animation: rampDownloadCheckDraw .46s cubic-bezier(.22,1,.36,1) .10s forwards;
+      }
+
+      html[data-lang="en"] .export-modal { direction: ltr; }
+      html[data-lang="en"] .export-setting-row { text-align: left; }
+
+      @media (max-width: 520px) {
+        .export-modal { width: min(100%, 420px); border-radius: 19px; }
+        .export-setting-row { grid-template-columns: 1fr; gap: 8px; }
+      }
+    `;
+    source = source.replace('</style>', unifiedExportCSS + '</style>');
+
+    // Expose the existing technical JPEG renderer so the new JPG export option
+    // can reuse exactly the same A4 drawing pipeline as PDF.
+    source = source.replace(
+      '      async function renderTechnicalSheetToJpeg(view) {',
+      '      window.__rampRenderTechnicalSheetToJpeg = (...args) => renderTechnicalSheetToJpeg(...args);\n\n      async function renderTechnicalSheetToJpeg(view) {'
+    );
+
+    // Expose the existing Motion-style success animation for JPG downloads too.
+    source = source.replace(
+      '      function showDownloadSuccessAnimation(selector) {',
+      '      window.__rampShowDownloadSuccessAnimation = selector => showDownloadSuccessAnimation(selector);\n\n      function showDownloadSuccessAnimation(selector) {'
+    );
+
+    const exportDropdownCSS = `
+      /* Replace the old PDF/DXF swap control visually with a Format dropdown. */
+      .export-format-switch { display: none !important; }
+
+      .export-format-field {
+        position: relative;
+        margin-bottom: 16px;
+      }
+      .export-format-field-label {
+        margin-bottom: 7px;
+        font-size: 11.5px;
+        font-weight: 900;
+        color: var(--muted);
+      }
+      .export-format-picker {
+        width: 100%;
+        min-height: 46px;
+        padding: 0 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        border: 1px solid var(--line);
+        border-radius: 13px;
+        background: color-mix(in srgb, var(--surface-solid) 78%, transparent);
+        color: var(--text);
+        cursor: pointer;
+        font: inherit;
+        transition: background .14s ease, border-color .14s ease;
+      }
+      .export-format-picker:hover {
+        background: color-mix(in srgb, var(--surface-2) 88%, transparent);
+      }
+      .export-format-picker[aria-expanded="true"] {
+        border-color: var(--accent);
+      }
+      .export-format-picker-main {
+        min-width: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .export-format-badge {
+        min-width: 43px;
+        height: 27px;
+        padding: 0 8px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        background: var(--accent-soft);
+        color: var(--accent);
+        font-size: 10.5px;
+        font-weight: 950;
+        letter-spacing: .03em;
+      }
+      .export-format-picker-copy {
+        display: grid;
+        gap: 1px;
+        text-align: start;
+      }
+      .export-format-picker-title {
+        font-size: 12px;
+        font-weight: 900;
+        line-height: 1.4;
+      }
+      .export-format-picker-hint {
+        font-size: 10px;
+        color: var(--muted);
+        line-height: 1.4;
+      }
+      .export-format-chevron {
+        width: 17px;
+        height: 17px;
+        flex: 0 0 17px;
+        color: var(--muted);
+        transition: transform .16s ease;
+      }
+      .export-format-picker[aria-expanded="true"] .export-format-chevron {
+        transform: rotate(180deg);
+      }
+
+      .export-format-menu {
+        position: absolute;
+        inset-inline: 0;
+        top: calc(100% + 7px);
+        z-index: 12;
+        padding: 6px;
+        border: 1px solid var(--line);
+        border-radius: 13px;
+        background: color-mix(in srgb, var(--surface-solid) 90%, transparent);
+        box-shadow: 0 18px 45px rgba(0,0,0,.20);
+        backdrop-filter: blur(22px) saturate(150%);
+        -webkit-backdrop-filter: blur(22px) saturate(150%);
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transform: translateY(-4px) scale(.99);
+        transform-origin: top center;
+        transition: opacity .15s ease, transform .15s ease, visibility .15s ease;
+      }
+      .export-format-menu.open {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: translateY(0) scale(1);
+      }
+      .export-format-option {
+        width: 100%;
+        min-height: 46px;
+        padding: 0 9px;
+        border: 0;
+        border-radius: 9px;
+        background: transparent;
+        color: var(--text);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        cursor: pointer;
+        font: inherit;
+        text-align: start;
+        transition: background .13s ease;
+      }
+      .export-format-option:hover,
+      .export-format-option:focus-visible {
+        outline: none;
+        background: var(--surface-2);
+      }
+      .export-format-option-main {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .export-format-option-copy {
+        display: grid;
+        gap: 1px;
+      }
+      .export-format-option-title {
+        font-size: 12px;
+        font-weight: 900;
+      }
+      .export-format-option-hint {
+        font-size: 9.8px;
+        color: var(--muted);
+      }
+      .export-format-option-check {
+        width: 17px;
+        height: 17px;
+        opacity: 0;
+        color: var(--accent);
+      }
+      .export-format-option.selected .export-format-option-check { opacity: 1; }
+
+      [data-export-panel="jpg"] .export-meta-chip:first-child {
+        color: var(--accent);
+      }
+
+      html[data-lang="en"] .export-format-picker-copy,
+      html[data-lang="en"] .export-format-option,
+      html[data-lang="en"] .export-format-option-copy {
+        text-align: left;
+      }
+    `;
+    source = source.replace('</style>', `${exportDropdownCSS}</style>`);
+
+    // The unified Export modal is created by the existing load handler.
+    // Initialize the new Format dropdown immediately after that handler completes.
+    frame.addEventListener('load', () => {
+      setTimeout(() => {
+        try {
+          const doc = frame.contentDocument;
+          const modal = doc.querySelector('#exportModal');
+          if (!modal || doc.querySelector('#exportFormatPicker')) return;
+
+          const oldSwitch = modal.querySelector('.export-format-switch');
+          const body = modal.querySelector('.export-modal-body');
+          const downloadBtn = modal.querySelector('#exportDownloadBtn');
+          const downloadLabel = modal.querySelector('#exportDownloadLabel');
+          const pdfQuality = modal.querySelector('#exportPdfQuality');
+          if (!oldSwitch || !body || !downloadBtn || !downloadLabel) return;
+
+          const field = doc.createElement('div');
+          field.className = 'export-format-field';
+          field.innerHTML = `
+            <div class="export-format-field-label" id="exportFormatFieldLabel">فرمت</div>
+            <button class="export-format-picker" id="exportFormatPicker" type="button" aria-haspopup="listbox" aria-expanded="false">
+              <span class="export-format-picker-main">
+                <span class="export-format-badge" id="exportFormatBadge">PDF</span>
+                <span class="export-format-picker-copy">
+                  <span class="export-format-picker-title" id="exportFormatTitle">PDF</span>
+                  <span class="export-format-picker-hint" id="exportFormatHint">سند فنی A4</span>
+                </span>
+              </span>
+              <svg class="export-format-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 9 5 5 5-5"/></svg>
+            </button>
+
+            <div class="export-format-menu" id="exportFormatMenu" role="listbox" aria-label="Export format">
+              <button class="export-format-option selected" type="button" role="option" aria-selected="true" data-format-choice="pdf">
+                <span class="export-format-option-main">
+                  <span class="export-format-badge">PDF</span>
+                  <span class="export-format-option-copy">
+                    <span class="export-format-option-title">PDF</span>
+                    <span class="export-format-option-hint" data-format-hint="pdf">سند فنی A4</span>
+                  </span>
+                </span>
+                <svg class="export-format-option-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg>
+              </button>
+
+              <button class="export-format-option" type="button" role="option" aria-selected="false" data-format-choice="jpg">
+                <span class="export-format-option-main">
+                  <span class="export-format-badge">JPG</span>
+                  <span class="export-format-option-copy">
+                    <span class="export-format-option-title">JPG</span>
+                    <span class="export-format-option-hint" data-format-hint="jpg">تصویر فنی با کیفیت بالا</span>
+                  </span>
+                </span>
+                <svg class="export-format-option-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg>
+              </button>
+
+              <button class="export-format-option" type="button" role="option" aria-selected="false" data-format-choice="dxf">
+                <span class="export-format-option-main">
+                  <span class="export-format-badge">DXF</span>
+                  <span class="export-format-option-copy">
+                    <span class="export-format-option-title">DXF</span>
+                    <span class="export-format-option-hint" data-format-hint="dxf">هندسه برداری AutoCAD</span>
+                  </span>
+                </span>
+                <svg class="export-format-option-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg>
+              </button>
+            </div>`;
+
+          body.insertBefore(field, oldSwitch);
+
+          const jpgPanel = doc.createElement('div');
+          jpgPanel.className = 'export-settings-panel';
+          jpgPanel.dataset.exportPanel = 'jpg';
+          jpgPanel.innerHTML = `
+            <div class="export-setting-row">
+              <div class="export-setting-copy">
+                <div class="export-setting-label" id="exportJpgViewLabel">نما</div>
+                <div class="export-setting-hint" id="exportJpgViewHint">انتخاب پلان یا نمای رمپ برای تصویر</div>
+              </div>
+              <select class="export-select" id="exportJpgView">
+                <option value="section">نما</option>
+                <option value="plan">پلان</option>
+              </select>
+            </div>
+
+            <div class="export-setting-row">
+              <div class="export-setting-copy">
+                <div class="export-setting-label" id="exportJpgQualityLabel">کیفیت</div>
+                <div class="export-setting-hint" id="exportJpgQualityHint">رزولوشن تصویر خروجی</div>
+              </div>
+              <select class="export-select" id="exportJpgQuality">
+                <option value="high">کیفیت بالا</option>
+                <option value="standard">استاندارد</option>
+              </select>
+            </div>
+
+            <div class="export-meta">
+              <span class="export-meta-chip">JPG</span>
+              <span class="export-meta-chip">A4</span>
+              <span class="export-meta-chip" id="exportJpgMeta">High Resolution</span>
+            </div>`;
+          body.appendChild(jpgPanel);
+
+          const picker = field.querySelector('#exportFormatPicker');
+          const menu = field.querySelector('#exportFormatMenu');
+          const badge = field.querySelector('#exportFormatBadge');
+          const title = field.querySelector('#exportFormatTitle');
+          const hint = field.querySelector('#exportFormatHint');
+          const choices = [...field.querySelectorAll('[data-format-choice]')];
+          const jpgView = jpgPanel.querySelector('#exportJpgView');
+          const jpgQuality = jpgPanel.querySelector('#exportJpgQuality');
+          let selectedFormat = 'pdf';
+
+          const isEnglish = () => doc.documentElement.dataset.lang === 'en';
+          const copy = {
+            fa: {
+              format: 'فرمت',
+              pdfHint: 'سند فنی A4',
+              jpgHint: 'تصویر فنی با کیفیت بالا',
+              dxfHint: 'هندسه برداری AutoCAD',
+              jpgViewLabel: 'نما',
+              jpgViewHint: 'انتخاب پلان یا نمای رمپ برای تصویر',
+              jpgQualityLabel: 'کیفیت',
+              jpgQualityHint: 'رزولوشن تصویر خروجی',
+              section: 'نما',
+              plan: 'پلان',
+              high: 'کیفیت بالا',
+              standard: 'استاندارد',
+              downloadJpg: 'دانلود JPG'
+            },
+            en: {
+              format: 'Format',
+              pdfHint: 'Technical A4 document',
+              jpgHint: 'High-quality technical image',
+              dxfHint: 'AutoCAD vector geometry',
+              jpgViewLabel: 'View',
+              jpgViewHint: 'Choose section or plan for the image',
+              jpgQualityLabel: 'Quality',
+              jpgQualityHint: 'Output image resolution',
+              section: 'Section',
+              plan: 'Plan',
+              high: 'High quality',
+              standard: 'Standard',
+              downloadJpg: 'Download JPG'
+            }
+          };
+
+          const closeMenu = () => {
+            menu.classList.remove('open');
+            picker.setAttribute('aria-expanded', 'false');
+          };
+          const openMenu = () => {
+            menu.classList.add('open');
+            picker.setAttribute('aria-expanded', 'true');
+          };
+
+          picker.addEventListener('click', event => {
+            event.stopPropagation();
+            menu.classList.contains('open') ? closeMenu() : openMenu();
+          });
+          menu.addEventListener('click', event => event.stopPropagation());
+          doc.addEventListener('click', closeMenu);
+
+          const syncJpgDefaultView = () => {
+            const activeView = doc.querySelector('.view-tab.active')?.dataset.view;
+            if (activeView === 'section' || activeView === 'plan') jpgView.value = activeView;
+          };
+
+          const applyFormat = format => {
+            selectedFormat = ['pdf','jpg','dxf'].includes(format) ? format : 'pdf';
+
+            choices.forEach(option => {
+              const active = option.dataset.formatChoice === selectedFormat;
+              option.classList.toggle('selected', active);
+              option.setAttribute('aria-selected', active ? 'true' : 'false');
+            });
+
+            badge.textContent = selectedFormat.toUpperCase();
+            title.textContent = selectedFormat.toUpperCase();
+
+            const c = isEnglish() ? copy.en : copy.fa;
+            hint.textContent = selectedFormat === 'pdf' ? c.pdfHint : selectedFormat === 'jpg' ? c.jpgHint : c.dxfHint;
+
+            if (selectedFormat === 'pdf' || selectedFormat === 'dxf') {
+              const hiddenButton = oldSwitch.querySelector(`[data-export-format="${selectedFormat}"]`);
+              hiddenButton?.click();
+            } else {
+              modal.querySelectorAll('.export-settings-panel').forEach(panel => panel.classList.remove('active'));
+              jpgPanel.classList.add('active');
+              syncJpgDefaultView();
+              downloadLabel.textContent = c.downloadJpg;
+            }
+
+            closeMenu();
+          };
+
+          choices.forEach(option => option.addEventListener('click', () => applyFormat(option.dataset.formatChoice)));
+
+          const updateLanguage = () => {
+            const c = isEnglish() ? copy.en : copy.fa;
+            doc.querySelector('#exportFormatFieldLabel').textContent = c.format;
+            field.querySelector('[data-format-hint="pdf"]').textContent = c.pdfHint;
+            field.querySelector('[data-format-hint="jpg"]').textContent = c.jpgHint;
+            field.querySelector('[data-format-hint="dxf"]').textContent = c.dxfHint;
+            hint.textContent = selectedFormat === 'pdf' ? c.pdfHint : selectedFormat === 'jpg' ? c.jpgHint : c.dxfHint;
+            doc.querySelector('#exportJpgViewLabel').textContent = c.jpgViewLabel;
+            doc.querySelector('#exportJpgViewHint').textContent = c.jpgViewHint;
+            doc.querySelector('#exportJpgQualityLabel').textContent = c.jpgQualityLabel;
+            doc.querySelector('#exportJpgQualityHint').textContent = c.jpgQualityHint;
+            jpgView.options[0].textContent = c.section;
+            jpgView.options[1].textContent = c.plan;
+            jpgQuality.options[0].textContent = c.high;
+            jpgQuality.options[1].textContent = c.standard;
+            if (selectedFormat === 'jpg') downloadLabel.textContent = c.downloadJpg;
+          };
+
+          // JPG gets its own download path; PDF and DXF continue through the existing engines.
+          downloadBtn.addEventListener('click', async event => {
+            if (selectedFormat !== 'jpg') return;
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            if (downloadBtn.disabled) return;
+
+            const renderer = frame.contentWindow.__rampRenderTechnicalSheetToJpeg;
+            if (typeof renderer !== 'function') return;
+
+            downloadBtn.disabled = true;
+            const previousPdfQuality = pdfQuality?.value;
+            try {
+              if (pdfQuality) pdfQuality.value = jpgQuality.value;
+              const page = await renderer(jpgView.value);
+              const blob = new Blob([page.bytes], { type: 'image/jpeg' });
+              const url = URL.createObjectURL(blob);
+              const a = doc.createElement('a');
+              const date = new Date().toISOString().slice(0, 10);
+              a.href = url;
+              a.download = `ramp-technical-A4-${jpgView.value}-${date}.jpg`;
+              doc.body.appendChild(a);
+              a.click();
+              a.remove();
+              setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+              const motion = frame.contentWindow.__rampShowDownloadSuccessAnimation;
+              if (typeof motion === 'function') motion('#exportDownloadBtn');
+            } catch (error) {
+              console.error(error);
+            } finally {
+              if (pdfQuality && previousPdfQuality != null) pdfQuality.value = previousPdfQuality;
+              downloadBtn.disabled = false;
+            }
+          }, true);
+
+          const langObserver = new MutationObserver(updateLanguage);
+          langObserver.observe(doc.documentElement, { attributes: true, attributeFilter: ['data-lang'] });
+
+          updateLanguage();
+          applyFormat('pdf');
+        } catch (error) {
+          console.error('Export format dropdown setup failed:', error);
+        }
+      }, 0);
+    }, { once: true });
+
+    frame.srcdoc = source;
+    frame.addEventListener("load", () => {
+      try {
+        const doc = frame.contentDocument;
+
+        // Build unified Export UI once.
+        if (!doc.getElementById("exportBtn")) {
+          const pdfBtn = doc.getElementById("pdfBtn");
+          const dxfBtn = doc.getElementById("dxfBtn");
+          const miniActions = pdfBtn?.closest(".mini-actions") || dxfBtn?.closest(".mini-actions");
+
+          if (pdfBtn && dxfBtn && miniActions) {
+            pdfBtn.style.display = "none";
+            dxfBtn.style.display = "none";
+
+            const exportBtn = doc.createElement("button");
+            exportBtn.className = "small-btn";
+            exportBtn.id = "exportBtn";
+            exportBtn.type = "button";
+            exportBtn.setAttribute("aria-haspopup", "dialog");
+            exportBtn.setAttribute("aria-expanded", "false");
+            exportBtn.innerHTML = `
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 3v11"/><path d="m7.5 10.5 4.5 4.5 4.5-4.5"/><path d="M4 20h16"/>
+              </svg>
+              <span>Export</span>`;
+            miniActions.insertBefore(exportBtn, pdfBtn);
+
+            const modal = doc.createElement("div");
+            modal.className = "export-modal-backdrop";
+            modal.id = "exportModal";
+            modal.setAttribute("aria-hidden", "true");
+            modal.innerHTML = `
+              <section class="export-modal" role="dialog" aria-modal="true" aria-labelledby="exportModalTitle">
+                <div class="export-modal-head">
+                  <div class="export-modal-title" id="exportModalTitle">خروجی فایل</div>
+                  <button class="export-close-btn" id="exportCloseBtn" type="button" aria-label="بستن">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+                  </button>
+                </div>
+
+                <div class="export-modal-body">
+                  <div class="export-format-switch" role="tablist" aria-label="Export format">
+                    <button class="export-format-btn active" type="button" role="tab" aria-selected="true" data-export-format="pdf">PDF</button>
+                    <button class="export-format-btn" type="button" role="tab" aria-selected="false" data-export-format="dxf">DXF</button>
+                  </div>
+
+                  <div class="export-settings-panel active" data-export-panel="pdf">
+                    <div class="export-setting-row">
+                      <div class="export-setting-copy">
+                        <div class="export-setting-label" data-export-i18n="pdfPagesLabel">صفحات</div>
+                        <div class="export-setting-hint" data-export-i18n="pdfPagesHint">انتخاب نماها برای فایل PDF</div>
+                      </div>
+                      <select class="export-select" id="exportPdfPages">
+                        <option value="both">نما + پلان</option>
+                        <option value="section">فقط نما</option>
+                        <option value="plan">فقط پلان</option>
+                      </select>
+                    </div>
+
+                    <div class="export-setting-row">
+                      <div class="export-setting-copy">
+                        <div class="export-setting-label" data-export-i18n="pdfQualityLabel">کیفیت</div>
+                        <div class="export-setting-hint" data-export-i18n="pdfQualityHint">رزولوشن خروجی فنی</div>
+                      </div>
+                      <select class="export-select" id="exportPdfQuality">
+                        <option value="high">کیفیت بالا</option>
+                        <option value="standard">استاندارد</option>
+                      </select>
+                    </div>
+
+                    <div class="export-meta">
+                      <span class="export-meta-chip">A4</span>
+                      <span class="export-meta-chip" data-export-i18n="landscape">افقی</span>
+                      <span class="export-meta-chip" data-export-i18n="technicalSheet">Technical Sheet</span>
+                    </div>
+                  </div>
+
+                  <div class="export-settings-panel" data-export-panel="dxf">
+                    <div class="export-setting-row">
+                      <div class="export-setting-copy">
+                        <div class="export-setting-label" data-export-i18n="dxfViewLabel">نما</div>
+                        <div class="export-setting-hint" data-export-i18n="dxfViewHint">انتخاب پلان یا نمای رمپ</div>
+                      </div>
+                      <select class="export-select" id="exportDxfView">
+                        <option value="section">نما</option>
+                        <option value="plan">پلان</option>
+                      </select>
+                    </div>
+
+                    <div class="export-setting-row">
+                      <div class="export-setting-copy">
+                        <div class="export-setting-label" data-export-i18n="dxfUnitLabel">واحد</div>
+                        <div class="export-setting-hint" data-export-i18n="dxfUnitHint">واحد هندسه در فایل DXF</div>
+                      </div>
+                      <select class="export-select" id="exportDxfUnit">
+                        <option value="m">متر (m)</option>
+                        <option value="cm">سانتی‌متر (cm)</option>
+                      </select>
+                    </div>
+
+                    <div class="export-meta">
+                      <span class="export-meta-chip">DXF</span>
+                      <span class="export-meta-chip">AutoCAD</span>
+                      <span class="export-meta-chip" data-export-i18n="vectorGeometry">Vector Geometry</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="export-modal-footer">
+                  <button id="exportDownloadBtn" type="button">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v11"/><path d="m7.5 10.5 4.5 4.5 4.5-4.5"/><path d="M4 20h16"/></svg>
+                    <span id="exportDownloadLabel">دانلود PDF</span>
+                  </button>
+                </div>
+              </section>`;
+            doc.body.appendChild(modal);
+
+            const closeBtn = modal.querySelector("#exportCloseBtn");
+            const downloadBtn = modal.querySelector("#exportDownloadBtn");
+            const downloadLabel = modal.querySelector("#exportDownloadLabel");
+            const formatButtons = [...modal.querySelectorAll("[data-export-format]")];
+            const panels = [...modal.querySelectorAll("[data-export-panel]")];
+            const pdfPages = modal.querySelector("#exportPdfPages");
+            const pdfQuality = modal.querySelector("#exportPdfQuality");
+            const dxfView = modal.querySelector("#exportDxfView");
+            const dxfUnit = modal.querySelector("#exportDxfUnit");
+            let activeFormat = "pdf";
+
+            const textFA = {
+              title: "خروجی فایل",
+              close: "بستن",
+              pdfPagesLabel: "صفحات",
+              pdfPagesHint: "انتخاب نماها برای فایل PDF",
+              pdfQualityLabel: "کیفیت",
+              pdfQualityHint: "رزولوشن خروجی فنی",
+              dxfViewLabel: "نما",
+              dxfViewHint: "انتخاب پلان یا نمای رمپ",
+              dxfUnitLabel: "واحد",
+              dxfUnitHint: "واحد هندسه در فایل DXF",
+              landscape: "افقی",
+              technicalSheet: "نقشه فنی",
+              vectorGeometry: "هندسه برداری",
+              downloadPdf: "دانلود PDF",
+              downloadDxf: "دانلود DXF"
+            };
+            const textEN = {
+              title: "Export File",
+              close: "Close",
+              pdfPagesLabel: "Pages",
+              pdfPagesHint: "Choose views for the PDF file",
+              pdfQualityLabel: "Quality",
+              pdfQualityHint: "Technical export resolution",
+              dxfViewLabel: "View",
+              dxfViewHint: "Choose plan or section",
+              dxfUnitLabel: "Unit",
+              dxfUnitHint: "Geometry unit in the DXF file",
+              landscape: "Landscape",
+              technicalSheet: "Technical Sheet",
+              vectorGeometry: "Vector Geometry",
+              downloadPdf: "Download PDF",
+              downloadDxf: "Download DXF"
+            };
+
+            const updateExportLanguage = () => {
+              const en = doc.documentElement.dataset.lang === "en";
+              const tx = en ? textEN : textFA;
+              modal.querySelector("#exportModalTitle").textContent = tx.title;
+              closeBtn.setAttribute("aria-label", tx.close);
+              modal.querySelectorAll("[data-export-i18n]").forEach(el => {
+                const key = el.dataset.exportI18n;
+                if (tx[key]) el.textContent = tx[key];
+              });
+
+              const pageOptions = [...pdfPages.options];
+              pageOptions[0].textContent = en ? "Section + Plan" : "نما + پلان";
+              pageOptions[1].textContent = en ? "Section only" : "فقط نما";
+              pageOptions[2].textContent = en ? "Plan only" : "فقط پلان";
+              pdfQuality.options[0].textContent = en ? "High quality" : "کیفیت بالا";
+              pdfQuality.options[1].textContent = en ? "Standard" : "استاندارد";
+              dxfView.options[0].textContent = en ? "Section" : "نما";
+              dxfView.options[1].textContent = en ? "Plan" : "پلان";
+              dxfUnit.options[0].textContent = en ? "Meter (m)" : "متر (m)";
+              dxfUnit.options[1].textContent = en ? "Centimeter (cm)" : "سانتی‌متر (cm)";
+              downloadLabel.textContent = activeFormat === "pdf" ? tx.downloadPdf : tx.downloadDxf;
+            };
+
+            const setFormat = format => {
+              activeFormat = format === "dxf" ? "dxf" : "pdf";
+              formatButtons.forEach(btn => {
+                const active = btn.dataset.exportFormat === activeFormat;
+                btn.classList.toggle("active", active);
+                btn.setAttribute("aria-selected", active ? "true" : "false");
+              });
+              panels.forEach(panel => panel.classList.toggle("active", panel.dataset.exportPanel === activeFormat));
+              updateExportLanguage();
+            };
+
+            const syncDxfDefaults = () => {
+              const activeView = doc.querySelector(".view-tab.active")?.dataset.view;
+              if (activeView === "plan" || activeView === "section") dxfView.value = activeView;
+
+              const visibleUnitSelect = [...doc.querySelectorAll(".height-unit-select")]
+                .find(el => el.offsetParent !== null) || doc.querySelector(".height-unit-select");
+              if (visibleUnitSelect && (visibleUnitSelect.value === "m" || visibleUnitSelect.value === "cm")) {
+                dxfUnit.value = visibleUnitSelect.value;
+              }
+            };
+
+            const openExport = () => {
+              syncDxfDefaults();
+              modal.classList.add("open");
+              modal.setAttribute("aria-hidden", "false");
+              exportBtn.setAttribute("aria-expanded", "true");
+              requestAnimationFrame(() => closeBtn.focus({ preventScroll: true }));
+            };
+            const closeExport = () => {
+              modal.classList.remove("open");
+              modal.setAttribute("aria-hidden", "true");
+              exportBtn.setAttribute("aria-expanded", "false");
+              exportBtn.focus({ preventScroll: true });
+            };
+
+            exportBtn.addEventListener("click", openExport);
+            closeBtn.addEventListener("click", closeExport);
+            modal.addEventListener("click", event => { if (event.target === modal) closeExport(); });
+            formatButtons.forEach(btn => btn.addEventListener("click", () => setFormat(btn.dataset.exportFormat)));
+
+            downloadBtn.addEventListener("click", () => {
+              if (downloadBtn.disabled) return;
+              if (activeFormat === "pdf") pdfBtn.click();
+              else dxfBtn.click();
+            });
+
+            doc.addEventListener("keydown", event => {
+              if (event.key === "Escape" && modal.classList.contains("open")) closeExport();
+            });
+
+            const langObserver = new MutationObserver(updateExportLanguage);
+            langObserver.observe(doc.documentElement, { attributes: true, attributeFilter: ["data-lang"] });
+            setFormat("pdf");
+          }
+        }
+        if (!doc.querySelector("#versionPopover")) throw new Error("پنجره نسخه ساخته نشد.");
+        if (!doc.querySelector("#downloadPopover")) throw new Error("منوی دانلود ساخته نشد.");
+        if (!doc.querySelector('#carTransition[type="number"]')) throw new Error("ورودی دستی شیب ابتدا و انتها ساخته نشد.");
+        if (!doc.querySelector("#carAfterRamp3m")) throw new Error("گزینه ۳ متر بعد از رمپ ساخته نشد.");
+        if (!frame.contentWindow.renderTechnicalSheetToJpeg && !frame.contentWindow.buildA4Pdf) { /* functions are scoped inside the app IIFE */ }
+
+        if (!doc.getElementById("rampHeaderIconStyle")) {
+          const iconStyle = doc.createElement("style");
+          iconStyle.id = "rampHeaderIconStyle";
+          iconStyle.textContent = `
+            #rampHeaderIcon {
+              width: 100%;
+              height: 100%;
+              display: block;
+              object-fit: contain;
+              border-radius: 12px;
+            }
+            .ramp-header-icon-host {
+              overflow: hidden;
+              background: transparent !important;
+              box-shadow: none !important;
+              padding: 0 !important;
+            }
+          `;
+          doc.head.appendChild(iconStyle);
+        }
+
+        const titleEl = doc.querySelector('[data-i18n="appTitle"]')
+          || [...doc.querySelectorAll('h1,h2,h3,div,span')].find(el => /ابزار\s*محاسبه\s*رمپ|Ramp\s*Calculation/i.test((el.textContent || '').trim()));
+
+        if (titleEl) {
+          const textBlock = titleEl.parentElement;
+          const host = titleEl.closest('.brand')
+            || titleEl.closest('.app-brand')
+            || (textBlock && textBlock.parentElement ? textBlock.parentElement : titleEl.parentElement);
+
+          const brandIconHost = host
+            ? [...host.children].find(el => el !== textBlock && !(textBlock && el.contains(textBlock)))
+            : null;
+
+          if (brandIconHost) {
+            brandIconHost.classList.add('ramp-header-icon-host');
+            brandIconHost.innerHTML = '';
+
+            const img = doc.createElement('img');
+            img.id = 'rampHeaderIcon';
+            img.alt = 'Ramp icon';
+            img.src = "data:image/png;base64,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";
+            brandIconHost.appendChild(img);
+          }
+        }
+
+
+        // Snipzy Liquid Glass Card structure for the main Rules rectangles only.
+        // Do not glassify nested headings; that caused the previous visual artifacts.
+        const rulesCards = [
+          ...doc.querySelectorAll(".modal.rules-glass .rule-card"),
+          ...doc.querySelectorAll(".modal.rules-glass .rules-document-content")
+        ].filter((el, index, arr) =>
+          arr.indexOf(el) === index &&
+          !el.closest(".snipzy-glass-card")
+        );
+
+        rulesCards.forEach(card => {
+          if (card.classList.contains("snipzy-glass-card")) return;
+
+          card.classList.add("snipzy-glass-card");
+
+          // Move all original card content into a dedicated Snipzy glass-content layer.
+          const originalChildren = [...card.childNodes];
+
+          const glassFilter = doc.createElement("div");
+          glassFilter.className = "glass-filter";
+          glassFilter.setAttribute("aria-hidden", "true");
+
+          const distortionOverlay = doc.createElement("div");
+          distortionOverlay.className = "glass-distortion-overlay";
+          distortionOverlay.setAttribute("aria-hidden", "true");
+
+          const glassOverlay = doc.createElement("div");
+          glassOverlay.className = "glass-overlay";
+          glassOverlay.setAttribute("aria-hidden", "true");
+
+          const glassSpecular = doc.createElement("div");
+          glassSpecular.className = "glass-specular";
+          glassSpecular.setAttribute("aria-hidden", "true");
+
+          const glassContent = doc.createElement("div");
+          glassContent.className = "glass-content";
+          originalChildren.forEach(node => glassContent.appendChild(node));
+
+          card.append(
+            glassFilter,
+            distortionOverlay,
+            glassOverlay,
+            glassSpecular,
+            glassContent
+          );
+
+          // Snipzy mouse highlight effect.
+          card.addEventListener("mousemove", function(e) {
+            const rect = this.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const specular = this.querySelector(":scope > .glass-specular");
+            if (specular) {
+              specular.style.background = `radial-gradient(
+                circle at ${x}px ${y}px,
+                rgba(255,255,255,0.15) 0%,
+                rgba(255,255,255,0.05) 30%,
+                rgba(255,255,255,0) 60%
+              )`;
+            }
+          });
+
+          card.addEventListener("mouseleave", function() {
+            const specular = this.querySelector(":scope > .glass-specular");
+            if (specular) specular.style.background = "none";
+          });
+        });
+
+
+        // Snipzy Liquid Glass Card structure + softer frosted hover
+        [doc.querySelector("#downloadPopover"), doc.querySelector("#versionPopover")]
+          .filter(Boolean)
+          .forEach(card => {
+            if (card.classList.contains("glass-card")) return;
+
+            const originalNodes = [...card.childNodes];
+
+            const glassFilter = doc.createElement("div");
+            glassFilter.className = "glass-filter";
+            glassFilter.setAttribute("aria-hidden", "true");
+
+            const distortionOverlay = doc.createElement("div");
+            distortionOverlay.className = "glass-distortion-overlay";
+            distortionOverlay.setAttribute("aria-hidden", "true");
+
+            const glassOverlay = doc.createElement("div");
+            glassOverlay.className = "glass-overlay";
+            glassOverlay.setAttribute("aria-hidden", "true");
+
+            const glassSpecular = doc.createElement("div");
+            glassSpecular.className = "glass-specular";
+            glassSpecular.setAttribute("aria-hidden", "true");
+
+            const glassContent = doc.createElement("div");
+            glassContent.className = "glass-content";
+            originalNodes.forEach(node => glassContent.appendChild(node));
+
+            card.classList.add("glass-card");
+            card.append(glassFilter, distortionOverlay, glassOverlay, glassSpecular, glassContent);
+
+            card.addEventListener("mousemove", function(e) {
+              const rect = this.getBoundingClientRect();
+              const x = e.clientX - rect.left;
+              const y = e.clientY - rect.top;
+              const specular = this.querySelector(":scope > .glass-specular");
+              if (specular) {
+                specular.style.background = `radial-gradient(
+                  circle at ${x}px ${y}px,
+                  rgba(255,255,255,0.20) 0%,
+                  rgba(255,255,255,0.08) 26%,
+                  rgba(255,255,255,0.02) 44%,
+                  rgba(255,255,255,0) 64%
+                )`;
+              }
+            });
+
+            card.addEventListener("mouseleave", function() {
+              const specular = this.querySelector(":scope > .glass-specular");
+              if (specular) specular.style.background = "none";
+            });
+          });
+
+        // Clean rebuild of the Rules popup only.
+        function unwrapRulesGlass(el) {
+          if (!el) return;
+
+          const directContent = el.querySelector(':scope > .glass-content');
+          if (directContent) {
+            const nodes = [...directContent.childNodes];
+            directContent.remove();
+            nodes.forEach(node => el.appendChild(node));
+          }
+
+          el.querySelectorAll(':scope > .glass-filter, :scope > .glass-overlay, :scope > .glass-specular, :scope > .glass-distortion-overlay')
+            .forEach(layer => layer.remove());
+
+          el.classList.remove(
+            'rules-glass',
+            'rules-snipzy-glass',
+            'snipzy-glass-card',
+            'rules-clean-glass',
+            'rules-clean-glass-panel'
+          );
+        }
+
+        function applyRulesGlass(el, className) {
+          if (!el) return;
+
+          unwrapRulesGlass(el);
+
+          const nodes = [...el.childNodes];
+
+          const glassFilter = doc.createElement('div');
+          glassFilter.className = 'glass-filter';
+          glassFilter.setAttribute('aria-hidden', 'true');
+
+          const glassOverlay = doc.createElement('div');
+          glassOverlay.className = 'glass-overlay';
+          glassOverlay.setAttribute('aria-hidden', 'true');
+
+          const glassSpecular = doc.createElement('div');
+          glassSpecular.className = 'glass-specular';
+          glassSpecular.setAttribute('aria-hidden', 'true');
+
+          const glassContent = doc.createElement('div');
+          glassContent.className = 'glass-content';
+          nodes.forEach(node => glassContent.appendChild(node));
+
+          el.classList.add(className);
+          el.append(glassFilter, glassOverlay, glassSpecular, glassContent);
+        }
+
+        const rulesModal = doc.querySelector('.modal');
+        if (rulesModal) {
+          applyRulesGlass(rulesModal, 'rules-clean-glass');
+
+          const rulesPanels = rulesModal.querySelectorAll('.rule-card, .rules-document-content');
+          rulesPanels.forEach(panel => applyRulesGlass(panel, 'rules-clean-glass-panel'));
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }, { once: true });
   } catch (error) {
     console.error(error);
-    document.body.innerHTML = '<div style="font-family:system-ui;padding:24px">Ramp app could not load. Please refresh the page.</div>';
+    document.body.innerHTML = `
+      <div style="min-height:100vh;display:grid;place-items:center;background:#121629;color:#eef4ff;
+                  font:700 13px/1.8 system-ui,-apple-system,Segoe UI,Tahoma,sans-serif;padding:24px;text-align:center">
+        <div>
+          <div style="margin-bottom:7px">Test version could not be opened.</div>
+          <div style="opacity:.55;font-weight:500">${String(error?.message || error)}</div>
+        </div>
+      </div>`;
   }
 })();
 </script>
