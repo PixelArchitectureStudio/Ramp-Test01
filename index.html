@@ -4,8 +4,41 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Ramp Calculator</title>
-  <meta http-equiv="refresh" content="0; url=./ramp-export-test.html">
-  <script>location.replace('./ramp-export-test.html');</script>
 </head>
-<body></body>
+<body>
+<script>
+(async()=>{
+  try {
+    const testUrl = './ramp-export-test.html?v=20260827-1252';
+    const res = await fetch(testUrl, { cache: 'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const bootstrap = await res.text();
+    const match = bootstrap.match(/const b=\"([^\"]+)\"/);
+    if (!match) throw new Error('Latest test payload not found');
+
+    const compressed = Uint8Array.from(atob(match[1]), c => c.charCodeAt(0));
+    const latest = await new Response(
+      new Blob([compressed]).stream().pipeThrough(new DecompressionStream('gzip'))
+    ).text();
+
+    const fixed = latest
+      .replace(
+        'https://raw.githubusercontent.com/PixelArchitectureStudio/Ramp-Test01/main/index.html',
+        'https://raw.githubusercontent.com/PixelArchitectureStudio/Ramp-Test01/1df57f3c4cb110952af5e643e51155d8a7793b84/index.html'
+      )
+      .replace(
+        'https://cdn.jsdelivr.net/gh/PixelArchitectureStudio/Ramp-Test01@main/index.html',
+        'https://cdn.jsdelivr.net/gh/PixelArchitectureStudio/Ramp-Test01@1df57f3c4cb110952af5e643e51155d8a7793b84/index.html'
+      );
+
+    document.open();
+    document.write(fixed);
+    document.close();
+  } catch (error) {
+    console.error(error);
+    document.body.innerHTML = '<div style="font-family:system-ui;padding:24px">Ramp app could not load. Please refresh the page.</div>';
+  }
+})();
+</script>
+</body>
 </html>
