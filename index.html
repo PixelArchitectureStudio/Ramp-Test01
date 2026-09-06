@@ -1,3 +1,4 @@
+/workspace/scratch/6a2773a3e990
 <!doctype html>
 <html lang="fa" dir="rtl">
 <head>
@@ -43,7 +44,6 @@ html,body{margin:0;width:100%;height:100%;background:#121629}
     source = source.replace("</style>", ".measurement-input { grid-template-columns: minmax(0, 1fr) 68px; gap: 8px; }\n.height-unit-select { min-width: 0; padding-inline: 6px; }\n.form-section[data-form=\"disabled\"] > .field-row,\n.form-section[data-form=\"human\"] > .field-row { grid-template-columns: minmax(0, 1fr) 124px; gap: 10px; }\n.form-section[data-form=\"disabled\"] > .field-row > .field,\n.form-section[data-form=\"human\"] > .field-row > .field { min-width: 0; }\n\ninput[type=\"number\"] { padding-right: 66px; }\n.input-wrap.has-unit input[type=\"number\"] { padding-right: 88px; }\n.number-stepper { top: 6px; right: 6px; height: 36px; grid-template-columns: 28px 28px; }\n.number-step-btn { width: 28px; height: 36px; }\n.number-step-btn svg { width: 14px; height: 14px; }\n.unit { right: 68px; }\n\n#carSlope + .unit,\n#carTransition + .unit {\n  right: auto !important;\n  left: 0;\n  transition: left .08s linear;\n}\n\n.footer-left { position: relative; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }\n.version-popover-wrap, .download-menu-wrap { position: relative; display: inline-flex; align-items: center; }\n.footer-pill-btn {\n  border: 1px solid var(--line); background: var(--surface-solid); color: var(--text);\n  cursor: pointer; transition: background .14s ease, border-color .14s ease, color .14s ease;\n}\n.footer-pill-btn:hover, .footer-pill-btn:focus-visible {\n  outline: none; border-color: var(--accent); background: var(--accent-soft);\n}\n.footer-pill-btn[aria-expanded=\"true\"], #downloadBtn[aria-expanded=\"true\"] {\n  border-color: var(--accent); background: var(--accent-soft);\n}\n\n.version-popover, .download-popover {\n  position: absolute; left: 0; bottom: calc(100% + 10px); z-index: 80; direction: rtl;\n  opacity: 0; visibility: hidden; pointer-events: none;\n  transform: translateY(7px) scale(.985); transform-origin: left bottom;\n  transition: opacity .16s ease, transform .16s ease, visibility .16s ease;\n}\n.version-popover.open, .download-popover.open {\n  opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0) scale(1);\n}\n\n.version-popover {\n  width: 290px; padding: 10px; border: 1px solid var(--line); border-radius: 16px;\n  background: color-mix(in srgb, var(--surface-solid) 92%, #09143b 8%);\n  box-shadow: 0 18px 45px rgba(0,0,0,.24);\n}\n.version-popover-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 8px; }\n.version-popover-title { font-size: 14px; font-weight: 900; line-height: 1.6; }\n.version-popover-version { font-size: 12px; color: var(--accent); font-weight: 800; line-height: 1.6; }\n.version-popover-label { font-size: 12px; font-weight: 800; margin: 6px 0 4px; }\n.version-popover-desc { font-size: 12px; line-height: 1.9; color: var(--muted); margin: 0; }\n.version-popover-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }\n.version-popover-item { display: grid; grid-template-columns: 1fr; gap: 0; font-size: 12px; line-height: 1.9; }\n.version-popover-item strong { color: var(--text); font-weight: 820; }\n.version-popover-divider { height: 1px; margin: 9px 0; background: var(--line); }\n.version-instagram-btn {\n  width: 100%; min-height: 36px; border-radius: 999px; border: 1px solid var(--line);\n  display: inline-flex; align-items: center; justify-content: center; gap: 8px;\n  text-decoration: none; color: var(--text); background: var(--surface-2);\n  font-size: 12px; font-weight: 800; transition: border-color .14s ease, background .14s ease, color .14s ease;\n}\n.version-instagram-btn:hover, .version-instagram-btn:focus-visible {\n  outline: none; border-color: var(--accent); color: var(--accent); background: var(--accent-soft);\n}\n.version-instagram-btn svg { width: 14px; height: 14px; flex: 0 0 14px; }\n.version-authors { margin-top: 8px; text-align: center; font-size: 11.5px; color: var(--muted); font-weight: 760; }\n\n.download-popover {\n  width: 244px; padding: 8px; border: 1px solid var(--line); border-radius: 14px;\n  background: var(--surface-solid); box-shadow: 0 18px 45px rgba(0,0,0,.22);\n}\n.download-menu-item {\n  width: 100%; min-height: 40px; padding: 0 9px; border: 0; border-radius: 9px;\n  display: flex; align-items: center; justify-content: flex-start; gap: 10px;\n  background: transparent; color: var(--text); font: inherit; font-size: 12px; font-weight: 800;\n  text-align: right; white-space: nowrap; cursor: pointer;\n  transition: background .14s ease, color .14s ease, transform .14s ease;\n}\n.download-menu-item:hover, .download-menu-item:focus-visible {\n  background: var(--surface-2); color: var(--accent); outline: none;\n}\n.download-menu-item:active { transform: scale(.985); }\n.download-menu-item svg { width: 17px; height: 17px; flex: 0 0 17px; color: var(--muted); }\n.download-menu-item:hover svg, .download-menu-item:focus-visible svg { color: currentColor; }\n.download-menu-divider { height: 1px; margin: 5px 7px; background: var(--line); }\n\n@media (max-width: 620px) {\n  .form-section[data-form=\"disabled\"] > .field-row,\n  .form-section[data-form=\"human\"] > .field-row { grid-template-columns: 1fr; gap: 0; }\n  .measurement-input { grid-template-columns: minmax(0, 1fr) 68px; }\n  .version-popover { width: min(290px, calc(100vw - 26px)); }\n  .download-popover { width: min(244px, calc(100vw - 26px)); }\n}" + "\n</style>");
 
     if (!source.includes("<select id=\"carTransition\">\n                <option value=\"10\">10%</option>\n                <option value=\"5\">5%</option>\n              </select>")) throw new Error("ساختار شیب ابتدا و انتها پیدا نشد.");
-    source = source.replace("<select id=\"carTransition\">\n                <option value=\"10\">10%</option>\n                <option value=\"5\">5%</option>\n              </select>", "<div class=\"input-wrap\">\n                <input id=\"carTransition\" type=\"number\" min=\"1\" step=\"1\" value=\"10\" inputmode=\"numeric\">\n                <span class=\"unit\">%</span>\n              </div>");
 
     const carSectionEnd = `            </div>
           </div>
@@ -99,6 +99,12 @@ html,body{margin:0;width:100%;height:100%;background:#121629}
     const eventsMarker = "      // Events";
     if (!source.includes(eventsMarker)) throw new Error("بخش رویدادها پیدا نشد.");
     source = source.replace(eventsMarker, "const downloadPopover = $(\"#downloadPopover\");\n      const downloadButton = $(\"#downloadBtn\");\n      const versionPopover = $(\"#versionPopover\");\n      const versionButton = $(\"#versionBtn\");\n\n      function setDownloadMenuLanguage() {\n        if (!downloadPopover) return;\n        const en = state.lang === \"en\";\n        const labels = {\n          windows: en ? \"Download Windows version\" : \"دانلود نسخه ویندوز\",\n          android: en ? \"Download Android version\" : \"دانلود نسخه اندروید\",\n          webapp: en ? \"Web app version\" : \"نسخه وب اپ\",\n          share: en ? \"Share link\" : \"اشتراک‌گذاری لینک\",\n          install: en ? \"Web app installation guide\" : \"آموزش نصب نسخه وب اپ\"\n        };\n        Object.entries(labels).forEach(([key, value]) => {\n          const el = downloadPopover.querySelector(`[data-download-label=\"${key}\"]`);\n          if (el) el.textContent = value;\n        });\n      }\n\n      function setVersionPopoverLanguage() {\n        const en = state.lang === \"en\";\n        const setText = (selector, value) => {\n          const el = $(selector);\n          if (el) el.textContent = value;\n        };\n        setText(\"#versionPopoverTitle\", en ? \"Ramp Calculation App\" : \"نرم‌افزار محاسبه رمپ\");\n        setText(\"#versionPopoverVersion\", en ? \"Version 2.10.7\" : \"نسخه 2.10.7\");\n        setText(\"#versionChangesLabel\", en ? \"Latest changes\" : \"آخرین تغییرات\");\n        setText(\"#versionChange1\", en ? \"Improved input bars\" : \"بهبود نوارهای ورودی\");\n        setText(\"#versionChange1Desc\", en ? \"Value, unit, and + / − controls are displayed more clearly.\" : \"نمایش عدد، واحد و کنترل‌های + و − مرتب‌تر شده است.\");\n        setText(\"#versionChange2\", en ? \"Manual entry & exit slope\" : \"ورود دستی شیب ابتدا و انتها\");\n        setText(\"#versionChange2Desc\", en ? \"For the car ramp, the entry and exit slope can now be set fully manually.\" : \"در رمپ خودرو، شیب ابتدا و انتها به‌صورت کامل دستی تنظیم می‌شود.\");\n        setText(\"#versionChange3\", en ? \"Cleaner technical output\" : \"خروجی فنی بهتر\");\n        setText(\"#versionChange3Desc\", en ? \"Plan, section, and PDF output are prepared with cleaner organization.\" : \"پلان، نما و خروجی PDF با نمایش منظم‌تر آماده می‌شوند.\");\n        setText(\"#versionFollowText\", en ? \"Follow Pixel Studio to receive the latest version and updates for this tool.\" : \"برای دریافت آخرین نسخه و به‌روزرسانی‌های این ابزار، پیج Pixel Studio را دنبال کنید.\");\n        setText(\"#versionAuthors\", en ? \"Created by Ali & Arian\" : \"ساخته شده توسط علی و آرین\");\n      }\n\n      function closeDownloadPopover() {\n        if (!downloadPopover || !downloadButton) return;\n        downloadPopover.classList.remove(\"open\");\n        downloadButton.setAttribute(\"aria-expanded\", \"false\");\n      }\n\n      function closeVersionPopover() {\n        if (!versionPopover || !versionButton) return;\n        versionPopover.classList.remove(\"open\");\n        versionButton.setAttribute(\"aria-expanded\", \"false\");\n      }\n\n      function toggleDownloadPopover(event) {\n        event?.preventDefault();\n        event?.stopPropagation();\n        if (!downloadPopover || !downloadButton) return;\n        setDownloadMenuLanguage();\n        closeVersionPopover();\n        const nextOpen = !downloadPopover.classList.contains(\"open\");\n        downloadPopover.classList.toggle(\"open\", nextOpen);\n        downloadButton.setAttribute(\"aria-expanded\", String(nextOpen));\n      }\n\n      function toggleVersionPopover(event) {\n        event?.preventDefault();\n        event?.stopPropagation();\n        if (!versionPopover || !versionButton) return;\n        setVersionPopoverLanguage();\n        closeDownloadPopover();\n        const nextOpen = !versionPopover.classList.contains(\"open\");\n        versionPopover.classList.toggle(\"open\", nextOpen);\n        versionButton.setAttribute(\"aria-expanded\", String(nextOpen));\n      }\n\n      async function shareAppLink() {\n        const url = location.href;\n        try {\n          if (navigator.share) {\n            await navigator.share({ title: document.title, url });\n          } else {\n            await navigator.clipboard.writeText(url);\n            showToast(state.lang === \"fa\" ? \"لینک کپی شد\" : \"Link copied\");\n          }\n        } catch (error) {\n          if (error?.name === \"AbortError\") return;\n          try {\n            await navigator.clipboard.writeText(url);\n            showToast(state.lang === \"fa\" ? \"لینک کپی شد\" : \"Link copied\");\n          } catch {}\n        }\n      }\n\n      downloadPopover?.addEventListener(\"click\", async event => {\n        const item = event.target.closest(\"[data-download-action]\");\n        if (!item) return;\n        const action = item.dataset.downloadAction;\n        closeDownloadPopover();\n\n        if (action === \"webapp\") { downloadCurrentHTML(); return; }\n        if (action === \"share\") { await shareAppLink(); return; }\n        if (action === \"install\") {\n          showToast(state.lang === \"fa\"\n            ? \"از منوی مرورگر Add to Home Screen / Install App را انتخاب کنید.\"\n            : \"Choose Add to Home Screen / Install App from your browser menu.\");\n          return;\n        }\n        if (action === \"windows\" || action === \"android\") {\n          showToast(state.lang === \"fa\" ? \"لینک این نسخه هنوز متصل نشده است.\" : \"This version is not linked yet.\");\n        }\n      });\n\n      document.addEventListener(\"click\", event => {\n        if (downloadPopover?.classList.contains(\"open\")) {\n          if (!downloadPopover.contains(event.target) && !downloadButton?.contains(event.target)) closeDownloadPopover();\n        }\n        if (versionPopover?.classList.contains(\"open\")) {\n          if (!versionPopover.contains(event.target) && !versionButton?.contains(event.target)) closeVersionPopover();\n        }\n      });" + "\n\n" + eventsMarker);
+
+    source = source
+      .replaceAll("ورود دستی شیب ابتدا و انتها", "انتخاب شیب ابتدا و انتها")
+      .replaceAll("در رمپ خودرو، شیب ابتدا و انتها به‌صورت کامل دستی تنظیم می‌شود.", "در رمپ خودرو، شیب ابتدا و انتها فقط روی ۵٪ یا ۱۰٪ تنظیم می‌شود.")
+      .replaceAll("Manual entry & exit slope", "Entry & exit slope options")
+      .replaceAll("For the car ramp, the entry and exit slope can now be set fully manually.", "For the car ramp, the entry and exit slope is limited to 5% or 10%.");
 
     source = source.replace(
       '      $("#downloadBtn").addEventListener("click", downloadCurrentHTML);',
@@ -1418,6 +1424,25 @@ ${helperMarker}`
       #exportBtn {
         min-width: 86px;
         justify-content: center;
+        border-color: color-mix(in srgb, var(--line-strong, var(--line)) 88%, var(--text) 12%) !important;
+        background: var(--surface-solid) !important;
+        color: var(--text) !important;
+        transition: background .14s ease, border-color .14s ease, color .14s ease !important;
+      }
+
+      #exportBtn:hover,
+      #exportBtn:focus-visible {
+        outline: none !important;
+        background: var(--accent-soft) !important;
+        border-color: color-mix(in srgb, var(--line-strong, var(--line)) 88%, var(--text) 12%) !important;
+        color: var(--text) !important;
+      }
+
+      #exportBtn:active,
+      #exportBtn[aria-expanded="true"] {
+        background: var(--accent-soft) !important;
+        border-color: var(--accent) !important;
+        color: var(--text) !important;
       }
 
       .export-modal-backdrop {
@@ -1690,19 +1715,48 @@ ${helperMarker}`
         align-items: center;
         gap: 10px;
       }
-      .export-format-badge {
-        min-width: 43px;
-        height: 27px;
-        padding: 0 8px;
+      .export-format-icon {
+        width: 34px;
+        height: 34px;
+        flex: 0 0 34px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        border-radius: 8px;
-        background: var(--accent-soft);
-        color: var(--accent);
-        font-size: 10.5px;
-        font-weight: 950;
-        letter-spacing: .03em;
+        border: 1px solid color-mix(in srgb, var(--accent) 78%, #fff 22%);
+        border-radius: 10px;
+        background: var(--accent);
+        color: #fff;
+        box-shadow: 0 5px 14px color-mix(in srgb, var(--accent) 28%, transparent);
+        transition: transform .14s ease, background .14s ease, box-shadow .14s ease;
+      }
+      .export-format-icon svg {
+        width: 19px;
+        height: 19px;
+        display: block;
+      }
+      .export-format-picker:hover .export-format-icon,
+      .export-format-option:hover .export-format-icon,
+      .export-format-option:focus-visible .export-format-icon {
+        color: #fff;
+        background: color-mix(in srgb, var(--accent) 88%, #fff 12%);
+        transform: translateY(-1px);
+        box-shadow: 0 7px 18px color-mix(in srgb, var(--accent) 38%, transparent);
+      }
+      .export-format-option.selected .export-format-icon,
+      .export-format-picker[aria-expanded="true"] .export-format-icon {
+        color: #fff;
+        box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 28%, transparent), 0 7px 18px color-mix(in srgb, var(--accent) 36%, transparent);
+      }
+      .export-format-current-value {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0,0,0,0);
+        white-space: nowrap;
+        border: 0;
       }
       .export-format-picker-copy {
         display: grid;
@@ -1713,6 +1767,7 @@ ${helperMarker}`
         font-size: 12px;
         font-weight: 900;
         line-height: 1.4;
+        color: #fff;
       }
       .export-format-picker-hint {
         font-size: 10px;
@@ -1755,6 +1810,42 @@ ${helperMarker}`
         pointer-events: auto;
         transform: translateY(0) scale(1);
       }
+      /* Keep the format menu usable inside short desktop and mobile viewports. */
+      .export-modal { overflow: visible; }
+      .export-format-menu {
+        max-height: min(292px, calc(100dvh - 150px));
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        scrollbar-width: thin;
+        scrollbar-color: color-mix(in srgb, var(--accent) 72%, transparent) transparent;
+      }
+      .export-format-menu.flip-up {
+        top: auto;
+        bottom: calc(100% + 7px);
+        transform-origin: bottom center;
+      }
+      .export-format-menu.flip-up.open { transform: translateY(0) scale(1); }
+      .export-format-scroll-cue {
+        position: sticky;
+        bottom: 0;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        height: 28px;
+        margin: 0 -2px -2px;
+        color: #fff;
+        background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--surface-solid) 94%, transparent) 45%);
+        pointer-events: none;
+      }
+      .export-format-scroll-cue.visible { display: flex; }
+      .export-format-scroll-cue svg { width: 18px; height: 18px; animation: exportFormatCueDown 1.05s ease-in-out infinite; }
+      @keyframes exportFormatCueDown { 0%,100% { transform: translateY(-2px); opacity: .55; } 50% { transform: translateY(4px); opacity: 1; } }
+      @media (prefers-reduced-motion: reduce) { .export-format-scroll-cue svg { animation: none; } }
+      @media (max-height: 560px) {
+        .export-modal-backdrop { align-items: start; padding: 10px 0; overflow-y: auto; }
+        .export-modal { margin: 0 auto; }
+        .export-format-menu { max-height: min(240px, calc(100dvh - 120px)); }
+      }
       .export-format-option {
         width: 100%;
         min-height: 46px;
@@ -1789,6 +1880,7 @@ ${helperMarker}`
       .export-format-option-title {
         font-size: 12px;
         font-weight: 900;
+        color: #fff;
       }
       .export-format-option-hint {
         font-size: 9.8px;
@@ -1814,6 +1906,140 @@ ${helperMarker}`
     `;
     source = source.replace('</style>', `${exportDropdownCSS}</style>`);
 
+    function buildRampGlb(geometry, rampType, unit) {
+      if (!geometry?.points?.length || geometry.points.length < 2) {
+        throw new Error('Ramp geometry is not available');
+      }
+
+      const scale = unit === 'centimeter' ? 100 : 1;
+      const unitName = unit === 'centimeter' ? 'centimeter' : 'meter';
+      const halfWidth = (Number(geometry.widthM) || (rampType === 'car' ? 3.5 : 1.2)) * scale / 2;
+      const thickness = 0.15 * scale;
+      const points = geometry.points.map(point => ({
+        x: Number(point.x) * scale,
+        y: Number(point.z) * scale
+      }));
+      const positions = [];
+      const normals = [];
+
+      const addTriangle = (a, b, c) => {
+        const ab = [b[0] - a[0], b[1] - a[1], b[2] - a[2]];
+        const ac = [c[0] - a[0], c[1] - a[1], c[2] - a[2]];
+        let nx = ab[1] * ac[2] - ab[2] * ac[1];
+        let ny = ab[2] * ac[0] - ab[0] * ac[2];
+        let nz = ab[0] * ac[1] - ab[1] * ac[0];
+        const length = Math.hypot(nx, ny, nz) || 1;
+        nx /= length; ny /= length; nz /= length;
+        positions.push(...a, ...b, ...c);
+        normals.push(nx, ny, nz, nx, ny, nz, nx, ny, nz);
+      };
+      const addQuad = (a, b, c, d) => {
+        addTriangle(a, b, c);
+        addTriangle(a, c, d);
+      };
+
+      for (let i = 0; i < points.length - 1; i += 1) {
+        const a = points[i];
+        const b = points[i + 1];
+        const atL = [a.x, a.y, -halfWidth];
+        const atR = [a.x, a.y, halfWidth];
+        const abL = [a.x, a.y - thickness, -halfWidth];
+        const abR = [a.x, a.y - thickness, halfWidth];
+        const btL = [b.x, b.y, -halfWidth];
+        const btR = [b.x, b.y, halfWidth];
+        const bbL = [b.x, b.y - thickness, -halfWidth];
+        const bbR = [b.x, b.y - thickness, halfWidth];
+        addQuad(atL, atR, btR, btL);
+        addQuad(abR, abL, bbL, bbR);
+        addQuad(abL, atL, btL, bbL);
+        addQuad(atR, abR, bbR, btR);
+      }
+
+      const first = points[0];
+      const last = points[points.length - 1];
+      addQuad(
+        [first.x, first.y, halfWidth],
+        [first.x, first.y, -halfWidth],
+        [first.x, first.y - thickness, -halfWidth],
+        [first.x, first.y - thickness, halfWidth]
+      );
+      addQuad(
+        [last.x, last.y, -halfWidth],
+        [last.x, last.y, halfWidth],
+        [last.x, last.y - thickness, halfWidth],
+        [last.x, last.y - thickness, -halfWidth]
+      );
+
+      const positionArray = new Float32Array(positions);
+      const normalArray = new Float32Array(normals);
+      const positionBytes = new Uint8Array(positionArray.buffer);
+      const normalBytes = new Uint8Array(normalArray.buffer);
+      const binary = new Uint8Array(positionBytes.byteLength + normalBytes.byteLength);
+      binary.set(positionBytes, 0);
+      binary.set(normalBytes, positionBytes.byteLength);
+
+      const xs = positions.filter((_, index) => index % 3 === 0);
+      const ys = positions.filter((_, index) => index % 3 === 1);
+      const zs = positions.filter((_, index) => index % 3 === 2);
+      const gltf = {
+        asset: {
+          version: '2.0',
+          generator: 'Pixel Architecture Studio Ramp Calculator',
+          extras: { unit: unitName, metersPerUnit: unitName === 'meter' ? 1 : 0.01 }
+        },
+        scene: 0,
+        scenes: [{ nodes: [0] }],
+        nodes: [{ mesh: 0, name: 'Ramp', extras: { unit: unitName } }],
+        meshes: [{
+          name: 'Ramp 3D',
+          primitives: [{ attributes: { POSITION: 0, NORMAL: 1 }, material: 0, mode: 4 }]
+        }],
+        materials: [{
+          name: 'Ramp Concrete',
+          pbrMetallicRoughness: {
+            baseColorFactor: [0.42, 0.56, 0.92, 1],
+            metallicFactor: 0,
+            roughnessFactor: 0.72
+          },
+          doubleSided: false
+        }],
+        buffers: [{ byteLength: binary.byteLength }],
+        bufferViews: [
+          { buffer: 0, byteOffset: 0, byteLength: positionBytes.byteLength, target: 34962 },
+          { buffer: 0, byteOffset: positionBytes.byteLength, byteLength: normalBytes.byteLength, target: 34962 }
+        ],
+        accessors: [
+          {
+            bufferView: 0, componentType: 5126, count: positions.length / 3, type: 'VEC3',
+            min: [Math.min(...xs), Math.min(...ys), Math.min(...zs)],
+            max: [Math.max(...xs), Math.max(...ys), Math.max(...zs)]
+          },
+          { bufferView: 1, componentType: 5126, count: normals.length / 3, type: 'VEC3' }
+        ]
+      };
+
+      const encoder = new TextEncoder();
+      const jsonRaw = encoder.encode(JSON.stringify(gltf));
+      const jsonLength = Math.ceil(jsonRaw.byteLength / 4) * 4;
+      const binLength = Math.ceil(binary.byteLength / 4) * 4;
+      const totalLength = 12 + 8 + jsonLength + 8 + binLength;
+      const glb = new ArrayBuffer(totalLength);
+      const view = new DataView(glb);
+      const output = new Uint8Array(glb);
+      view.setUint32(0, 0x46546c67, true);
+      view.setUint32(4, 2, true);
+      view.setUint32(8, totalLength, true);
+      view.setUint32(12, jsonLength, true);
+      view.setUint32(16, 0x4e4f534a, true);
+      output.fill(0x20, 20, 20 + jsonLength);
+      output.set(jsonRaw, 20);
+      const binHeader = 20 + jsonLength;
+      view.setUint32(binHeader, binLength, true);
+      view.setUint32(binHeader + 4, 0x004e4942, true);
+      output.set(binary, binHeader + 8);
+      return new Blob([glb], { type: 'model/gltf-binary' });
+    }
+
     // The unified Export modal is created by the existing load handler.
     // Initialize the new Format dropdown immediately after that handler completes.
     frame.addEventListener('load', () => {
@@ -1836,10 +2062,13 @@ ${helperMarker}`
             <div class="export-format-field-label" id="exportFormatFieldLabel">فرمت</div>
             <button class="export-format-picker" id="exportFormatPicker" type="button" aria-haspopup="listbox" aria-expanded="false">
               <span class="export-format-picker-main">
-                <span class="export-format-badge" id="exportFormatBadge">PDF</span>
+                <span class="export-format-current-value" id="exportFormatBadge">PDF</span>
+                <span class="export-format-icon" id="exportFormatIcon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 2.75h7l4 4V21.25h-11z"/><path d="M13.5 2.75v4h4"/><path d="M9 12h6M9 15h6"/></svg>
+                </span>
                 <span class="export-format-picker-copy">
                   <span class="export-format-picker-title" id="exportFormatTitle">PDF</span>
-                  <span class="export-format-picker-hint" id="exportFormatHint">سند فنی A4</span>
+                  <span class="export-format-picker-hint" id="exportFormatHint">سند فنی قابل چاپ</span>
                 </span>
               </span>
               <svg class="export-format-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 9 5 5 5-5"/></svg>
@@ -1848,10 +2077,10 @@ ${helperMarker}`
             <div class="export-format-menu" id="exportFormatMenu" role="listbox" aria-label="Export format">
               <button class="export-format-option selected" type="button" role="option" aria-selected="true" data-format-choice="pdf">
                 <span class="export-format-option-main">
-                  <span class="export-format-badge">PDF</span>
+                  <span class="export-format-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 2.75h7l4 4V21.25h-11z"/><path d="M13.5 2.75v4h4"/><path d="M9 12h6M9 15h6"/></svg></span>
                   <span class="export-format-option-copy">
                     <span class="export-format-option-title">PDF</span>
-                    <span class="export-format-option-hint" data-format-hint="pdf">سند فنی A4</span>
+                    <span class="export-format-option-hint" data-format-hint="pdf">سند فنی قابل چاپ</span>
                   </span>
                 </span>
                 <svg class="export-format-option-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg>
@@ -1859,10 +2088,10 @@ ${helperMarker}`
 
               <button class="export-format-option" type="button" role="option" aria-selected="false" data-format-choice="jpg">
                 <span class="export-format-option-main">
-                  <span class="export-format-badge">JPG</span>
+                  <span class="export-format-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="8.25" cy="9" r="1.5"/><path d="m5.5 17 4.2-4.2 3 3 2.2-2.2 3.6 3.4"/></svg></span>
                   <span class="export-format-option-copy">
                     <span class="export-format-option-title">JPG</span>
-                    <span class="export-format-option-hint" data-format-hint="jpg">تصویر فنی با کیفیت بالا</span>
+                    <span class="export-format-option-hint" data-format-hint="jpg">تصویر فنی با کیفیت انتخابی</span>
                   </span>
                 </span>
                 <svg class="export-format-option-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg>
@@ -1870,14 +2099,26 @@ ${helperMarker}`
 
               <button class="export-format-option" type="button" role="option" aria-selected="false" data-format-choice="dxf">
                 <span class="export-format-option-main">
-                  <span class="export-format-badge">DXF</span>
+                  <span class="export-format-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="17.5" r="1.5"/><circle cx="12" cy="6.5" r="1.5"/><circle cx="19" cy="15" r="1.5"/><path d="m6.25 16.65 4.5-8.85M13.45 7.05l4.1 6.9M6.5 17.15l11-1.75"/></svg></span>
                   <span class="export-format-option-copy">
                     <span class="export-format-option-title">DXF</span>
-                    <span class="export-format-option-hint" data-format-hint="dxf">هندسه برداری AutoCAD</span>
+                    <span class="export-format-option-hint" data-format-hint="dxf">نقشه دوبعدی قابل ویرایش در نرم‌افزارهای ترسیمی</span>
                   </span>
                 </span>
                 <svg class="export-format-option-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg>
               </button>
+
+              <button class="export-format-option" type="button" role="option" aria-selected="false" data-format-choice="glb">
+                <span class="export-format-option-main">
+                  <span class="export-format-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2.8 8 4.5v9.4l-8 4.5-8-4.5V7.3z"/><path d="m4.25 7.45 7.75 4.4 7.75-4.4M12 11.85v9.05"/></svg></span>
+                  <span class="export-format-option-copy">
+                    <span class="export-format-option-title">GLB</span>
+                    <span class="export-format-option-hint" data-format-hint="glb">مدل سه‌بعدی قابل استفاده در نرم‌افزارهای سه‌بعدی</span>
+                  </span>
+                </span>
+                <svg class="export-format-option-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg>
+              </button>
+              <div class="export-format-scroll-cue" id="exportFormatScrollCue" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></div>
             </div>`;
 
           body.insertBefore(field, oldSwitch);
@@ -1889,11 +2130,12 @@ ${helperMarker}`
             <div class="export-setting-row">
               <div class="export-setting-copy">
                 <div class="export-setting-label" id="exportJpgViewLabel">نما</div>
-                <div class="export-setting-hint" id="exportJpgViewHint">انتخاب پلان یا نمای رمپ برای تصویر</div>
+                <div class="export-setting-hint" id="exportJpgViewHint">انتخاب پلان، نما یا هر دو برای تصویر</div>
               </div>
               <select class="export-select" id="exportJpgView">
                 <option value="section">نما</option>
                 <option value="plan">پلان</option>
+                <option value="both">پلان + نما</option>
               </select>
             </div>
 
@@ -1903,69 +2145,118 @@ ${helperMarker}`
                 <div class="export-setting-hint" id="exportJpgQualityHint">رزولوشن تصویر خروجی</div>
               </div>
               <select class="export-select" id="exportJpgQuality">
-                <option value="high">کیفیت بالا</option>
-                <option value="standard">استاندارد</option>
+                <option value="minimum">Minimum (72 DPI · کمترین حجم)</option>
+                <option value="low">Low (96 DPI · فایل سبک)</option>
+                <option value="medium">Medium (144 DPI · استفاده عمومی)</option>
+                <option value="high" selected>High (240 DPI · چاپ باکیفیت)</option>
+                <option value="maximum">Maximum (300 DPI · حداکثر جزئیات)</option>
               </select>
-            </div>
-
-            <div class="export-meta">
-              <span class="export-meta-chip">JPG</span>
-              <span class="export-meta-chip">A4</span>
-              <span class="export-meta-chip" id="exportJpgMeta">High Resolution</span>
             </div>`;
           body.appendChild(jpgPanel);
+
+          const glbPanel = doc.createElement('div');
+          glbPanel.className = 'export-settings-panel';
+          glbPanel.dataset.exportPanel = 'glb';
+          glbPanel.innerHTML = `
+            <div class="export-setting-row">
+              <div class="export-setting-copy">
+                <div class="export-setting-label" id="exportGlbUnitLabel">واحد مدل</div>
+                <div class="export-setting-hint" id="exportGlbUnitHint">مقیاس عددی هندسه در فایل سه‌بعدی</div>
+              </div>
+              <select class="export-select" id="exportGlbUnit">
+                <option value="meter" selected>متر (m)</option>
+                <option value="centimeter">سانتی‌متر (cm)</option>
+              </select>
+            </div>`;
+          body.appendChild(glbPanel);
 
           const picker = field.querySelector('#exportFormatPicker');
           const menu = field.querySelector('#exportFormatMenu');
           const badge = field.querySelector('#exportFormatBadge');
+          const icon = field.querySelector('#exportFormatIcon');
           const title = field.querySelector('#exportFormatTitle');
           const hint = field.querySelector('#exportFormatHint');
           const choices = [...field.querySelectorAll('[data-format-choice]')];
+          const scrollCue = field.querySelector('#exportFormatScrollCue');
           const jpgView = jpgPanel.querySelector('#exportJpgView');
           const jpgQuality = jpgPanel.querySelector('#exportJpgQuality');
+          const glbUnit = glbPanel.querySelector('#exportGlbUnit');
           let selectedFormat = 'pdf';
 
           const isEnglish = () => doc.documentElement.dataset.lang === 'en';
           const copy = {
             fa: {
               format: 'فرمت',
-              pdfHint: 'سند فنی A4',
-              jpgHint: 'تصویر فنی با کیفیت بالا',
-              dxfHint: 'هندسه برداری AutoCAD',
+              pdfHint: 'سند فنی قابل چاپ',
+              jpgHint: 'تصویر فنی با کیفیت انتخابی',
+              dxfHint: 'نقشه دوبعدی قابل ویرایش در نرم‌افزارهای ترسیمی',
+              glbHint: 'مدل سه‌بعدی قابل استفاده در نرم‌افزارهای سه‌بعدی',
               jpgViewLabel: 'نما',
-              jpgViewHint: 'انتخاب پلان یا نمای رمپ برای تصویر',
+              jpgViewHint: 'انتخاب پلان، نما یا هر دو برای تصویر',
               jpgQualityLabel: 'کیفیت',
               jpgQualityHint: 'رزولوشن تصویر خروجی',
               section: 'نما',
               plan: 'پلان',
-              high: 'کیفیت بالا',
-              standard: 'استاندارد',
-              downloadJpg: 'دانلود JPG'
+              both: 'پلان + نما',
+              minimum: 'Minimum (72 DPI · کمترین حجم)',
+              low: 'Low (96 DPI · فایل سبک)',
+              medium: 'Medium (144 DPI · استفاده عمومی)',
+              high: 'High (240 DPI · چاپ باکیفیت)',
+              maximum: 'Maximum (300 DPI · حداکثر جزئیات)',
+              downloadJpg: 'دانلود JPG',
+              downloadGlb: 'دانلود مدل سه‌بعدی GLB',
+              glbUnitLabel: 'واحد مدل',
+              glbUnitHint: 'مقیاس عددی هندسه در فایل سه‌بعدی',
+              meter: 'متر (m)',
+              centimeter: 'سانتی‌متر (cm)'
             },
             en: {
               format: 'Format',
-              pdfHint: 'Technical A4 document',
-              jpgHint: 'High-quality technical image',
-              dxfHint: 'AutoCAD vector geometry',
+              pdfHint: 'Print-ready technical document',
+              jpgHint: 'Technical image at the selected quality',
+              dxfHint: 'Editable 2D drawing for drafting software',
+              glbHint: '3D model for use in 3D software',
               jpgViewLabel: 'View',
-              jpgViewHint: 'Choose section or plan for the image',
+              jpgViewHint: 'Choose plan, section, or both for the image',
               jpgQualityLabel: 'Quality',
               jpgQualityHint: 'Output image resolution',
               section: 'Section',
               plan: 'Plan',
-              high: 'High quality',
-              standard: 'Standard',
-              downloadJpg: 'Download JPG'
+              both: 'Plan + Section',
+              minimum: 'Minimum (smallest file · 72 DPI)',
+              low: 'Low (lightweight · 96 DPI)',
+              medium: 'Medium (general use · 144 DPI)',
+              high: 'High (quality print · 240 DPI)',
+              maximum: 'Maximum (maximum detail · 300 DPI)',
+              downloadJpg: 'Download JPG',
+              downloadGlb: 'Download 3D GLB model',
+              glbUnitLabel: 'Model unit',
+              glbUnitHint: 'Numeric geometry scale stored in the 3D file',
+              meter: 'Meter (m)',
+              centimeter: 'Centimeter (cm)'
             }
           };
 
           const closeMenu = () => {
             menu.classList.remove('open');
+            menu.classList.remove('flip-up');
             picker.setAttribute('aria-expanded', 'false');
           };
+          const updateMenuScrollCue = () => {
+            if (!scrollCue) return;
+            const overflow = menu.scrollHeight > menu.clientHeight + 2;
+            const atBottom = menu.scrollTop + menu.clientHeight >= menu.scrollHeight - 2;
+            scrollCue.classList.toggle('visible', overflow && !atBottom);
+          };
+          menu.addEventListener('scroll', updateMenuScrollCue, { passive: true });
           const openMenu = () => {
+            const pickerRect = picker.getBoundingClientRect();
+            const availableBelow = window.innerHeight - pickerRect.bottom - 16;
+            const availableAbove = pickerRect.top - 16;
+            menu.classList.toggle('flip-up', availableBelow < 180 && availableAbove > availableBelow);
             menu.classList.add('open');
             picker.setAttribute('aria-expanded', 'true');
+            requestAnimationFrame(updateMenuScrollCue);
           };
 
           picker.addEventListener('click', event => {
@@ -1981,7 +2272,7 @@ ${helperMarker}`
           };
 
           const applyFormat = format => {
-            selectedFormat = ['pdf','jpg','dxf'].includes(format) ? format : 'pdf';
+            selectedFormat = ['pdf','jpg','dxf','glb'].includes(format) ? format : 'pdf';
 
             choices.forEach(option => {
               const active = option.dataset.formatChoice === selectedFormat;
@@ -1991,18 +2282,29 @@ ${helperMarker}`
 
             badge.textContent = selectedFormat.toUpperCase();
             title.textContent = selectedFormat.toUpperCase();
+            const selectedIcon = choices.find(option => option.dataset.formatChoice === selectedFormat)?.querySelector('.export-format-icon');
+            if (icon && selectedIcon) icon.innerHTML = selectedIcon.innerHTML;
 
             const c = isEnglish() ? copy.en : copy.fa;
-            hint.textContent = selectedFormat === 'pdf' ? c.pdfHint : selectedFormat === 'jpg' ? c.jpgHint : c.dxfHint;
+            hint.textContent = selectedFormat === 'pdf' ? c.pdfHint : selectedFormat === 'jpg' ? c.jpgHint : selectedFormat === 'dxf' ? c.dxfHint : c.glbHint;
+
+            // The original PDF/DXF switch only knows about its two initial panels.
+            // Clear every current panel first so dynamically added JPG/GLB panels
+            // cannot remain active when returning to PDF or DXF.
+            modal.querySelectorAll('.export-settings-panel').forEach(panel => panel.classList.remove('active'));
 
             if (selectedFormat === 'pdf' || selectedFormat === 'dxf') {
               const hiddenButton = oldSwitch.querySelector(`[data-export-format="${selectedFormat}"]`);
               hiddenButton?.click();
-            } else {
-              modal.querySelectorAll('.export-settings-panel').forEach(panel => panel.classList.remove('active'));
+            } else if (selectedFormat === 'jpg') {
               jpgPanel.classList.add('active');
               syncJpgDefaultView();
               downloadLabel.textContent = c.downloadJpg;
+              downloadBtn.disabled = false;
+            } else {
+              glbPanel.classList.add('active');
+              downloadLabel.textContent = c.downloadGlb;
+              downloadBtn.disabled = false;
             }
 
             closeMenu();
@@ -2016,24 +2318,61 @@ ${helperMarker}`
             field.querySelector('[data-format-hint="pdf"]').textContent = c.pdfHint;
             field.querySelector('[data-format-hint="jpg"]').textContent = c.jpgHint;
             field.querySelector('[data-format-hint="dxf"]').textContent = c.dxfHint;
-            hint.textContent = selectedFormat === 'pdf' ? c.pdfHint : selectedFormat === 'jpg' ? c.jpgHint : c.dxfHint;
+            field.querySelector('[data-format-hint="glb"]').textContent = c.glbHint;
+            hint.textContent = selectedFormat === 'pdf' ? c.pdfHint : selectedFormat === 'jpg' ? c.jpgHint : selectedFormat === 'dxf' ? c.dxfHint : c.glbHint;
             doc.querySelector('#exportJpgViewLabel').textContent = c.jpgViewLabel;
             doc.querySelector('#exportJpgViewHint').textContent = c.jpgViewHint;
             doc.querySelector('#exportJpgQualityLabel').textContent = c.jpgQualityLabel;
             doc.querySelector('#exportJpgQualityHint').textContent = c.jpgQualityHint;
             jpgView.options[0].textContent = c.section;
             jpgView.options[1].textContent = c.plan;
-            jpgQuality.options[0].textContent = c.high;
-            jpgQuality.options[1].textContent = c.standard;
+            jpgView.options[2].textContent = c.both;
+            jpgQuality.options[0].textContent = c.minimum;
+            jpgQuality.options[1].textContent = c.low;
+            jpgQuality.options[2].textContent = c.medium;
+            jpgQuality.options[3].textContent = c.high;
+            jpgQuality.options[4].textContent = c.maximum;
+            doc.querySelector('#exportGlbUnitLabel').textContent = c.glbUnitLabel;
+            doc.querySelector('#exportGlbUnitHint').textContent = c.glbUnitHint;
+            glbUnit.options[0].textContent = c.meter;
+            glbUnit.options[1].textContent = c.centimeter;
             if (selectedFormat === 'jpg') downloadLabel.textContent = c.downloadJpg;
+            if (selectedFormat === 'glb') downloadLabel.textContent = c.downloadGlb;
           };
 
-          // JPG gets its own download path; PDF and DXF continue through the existing engines.
+          // JPG and GLB get dedicated download paths; PDF and DXF use the existing engines.
           downloadBtn.addEventListener('click', async event => {
-            if (selectedFormat !== 'jpg') return;
+            if (selectedFormat !== 'jpg' && selectedFormat !== 'glb') return;
             event.preventDefault();
             event.stopImmediatePropagation();
             if (downloadBtn.disabled) return;
+
+            if (selectedFormat === 'glb') {
+              const api = frame.contentWindow.rampExportAPI;
+              if (!api || typeof api.geometry !== 'function') return;
+              try {
+                api.refresh?.();
+                if (!api.valid()) return;
+                downloadBtn.disabled = true;
+                const blob = buildRampGlb(api.geometry(), api.type(), glbUnit.value);
+                const url = URL.createObjectURL(blob);
+                const a = doc.createElement('a');
+                const date = new Date().toISOString().slice(0, 10);
+                a.href = url;
+                a.download = `ramp-3d-${api.type()}-${glbUnit.value}-${date}.glb`;
+                doc.body.appendChild(a);
+                a.click();
+                a.remove();
+                setTimeout(() => URL.revokeObjectURL(url), 1000);
+                const motion = frame.contentWindow.__rampShowDownloadSuccessAnimation;
+                if (typeof motion === 'function') motion('#exportDownloadBtn');
+              } catch (error) {
+                console.error('GLB export failed:', error);
+              } finally {
+                downloadBtn.disabled = false;
+              }
+              return;
+            }
 
             const renderer = frame.contentWindow.__rampRenderTechnicalSheetToJpeg;
             if (typeof renderer !== 'function') return;
@@ -2042,13 +2381,65 @@ ${helperMarker}`
             const previousPdfQuality = pdfQuality?.value;
             try {
               if (pdfQuality) pdfQuality.value = jpgQuality.value;
-              const page = await renderer(jpgView.value);
+              let page;
+              if (jpgView.value === 'both') {
+                const [sectionPage, planPage] = await Promise.all([
+                  renderer('section'),
+                  renderer('plan')
+                ]);
+                const loadPageImage = rendered => new Promise((resolve, reject) => {
+                  const imageBlob = new Blob([rendered.bytes], { type: 'image/jpeg' });
+                  const imageUrl = URL.createObjectURL(imageBlob);
+                  const image = new frame.contentWindow.Image();
+                  image.onload = () => {
+                    URL.revokeObjectURL(imageUrl);
+                    resolve(image);
+                  };
+                  image.onerror = () => {
+                    URL.revokeObjectURL(imageUrl);
+                    reject(new Error('Combined JPG image load failed'));
+                  };
+                  image.src = imageUrl;
+                });
+                const [sectionImage, planImage] = await Promise.all([
+                  loadPageImage(sectionPage),
+                  loadPageImage(planPage)
+                ]);
+                const combinedCanvas = doc.createElement('canvas');
+                combinedCanvas.width = sectionPage.width;
+                combinedCanvas.height = sectionPage.height;
+                const combinedCtx = combinedCanvas.getContext('2d', { alpha: false });
+                combinedCtx.fillStyle = '#ffffff';
+                combinedCtx.fillRect(0, 0, combinedCanvas.width, combinedCanvas.height);
+                const gap = Math.max(16, Math.round(Math.min(combinedCanvas.width, combinedCanvas.height) * 0.012));
+                const padding = gap;
+                const slots = [
+                  { x: padding, y: padding, w: (combinedCanvas.width - padding * 2 - gap) / 2, h: combinedCanvas.height - padding * 2 },
+                  { x: padding + (combinedCanvas.width - padding * 2 + gap) / 2, y: padding, w: (combinedCanvas.width - padding * 2 - gap) / 2, h: combinedCanvas.height - padding * 2 }
+                ];
+                [sectionImage, planImage].forEach((image, index) => {
+                  const slot = slots[index];
+                  const scale = Math.min(slot.w / image.width, slot.h / image.height);
+                  const width = image.width * scale;
+                  const height = image.height * scale;
+                  combinedCtx.drawImage(image, slot.x + (slot.w - width) / 2, slot.y + (slot.h - height) / 2, width, height);
+                });
+                const jpgQualityValue = jpgQuality.value === 'maximum' ? 0.98 : jpgQuality.value === 'high' ? 0.94 : jpgQuality.value === 'medium' ? 0.88 : jpgQuality.value === 'low' ? 0.8 : 0.72;
+                const combinedBlob = await new Promise((resolve, reject) => combinedCanvas.toBlob(
+                  blob => blob ? resolve(blob) : reject(new Error('Combined JPG render failed')),
+                  'image/jpeg',
+                  jpgQualityValue
+                ));
+                page = { bytes: new Uint8Array(await combinedBlob.arrayBuffer()) };
+              } else {
+                page = await renderer(jpgView.value);
+              }
               const blob = new Blob([page.bytes], { type: 'image/jpeg' });
               const url = URL.createObjectURL(blob);
               const a = doc.createElement('a');
               const date = new Date().toISOString().slice(0, 10);
               a.href = url;
-              a.download = `ramp-technical-A4-${jpgView.value}-${date}.jpg`;
+              a.download = `ramp-technical-A-series-${jpgView.value}-${date}.jpg`;
               doc.body.appendChild(a);
               a.click();
               a.remove();
@@ -2073,6 +2464,91 @@ ${helperMarker}`
           console.error('Export format dropdown setup failed:', error);
         }
       }, 0);
+    }, { once: true });
+
+    source = source.replace('      function buildRampGeometry(r) {', `      window.rampExportAPI = {
+        valid: () => !!state.result?.valid && !state.result?.blocked,
+        refresh: () => calculateCurrent(true),
+        geometry: () => buildRampGeometry(state.result),
+        sheet: view => buildTechnicalSheetSVG(view),
+        jpeg: view => renderTechnicalSheetToJpeg(view),
+        pdf: pages => buildA4Pdf(pages),
+        dxf: () => downloadDXF(),
+        type: () => state.type
+      };
+      function buildRampGeometry(r) {`);
+    // Fixed ISO A-series aspect ratio for print-safe PDF and JPG output.
+    source = source.replace(
+      `          // اندازه A4 افقی بر اساس کیفیت انتخاب‌شده در پنجره Export
+          const exportPdfQuality = document.querySelector("#exportPdfQuality")?.value || "high";
+          const exportPdfHighQuality = exportPdfQuality !== "standard";
+          canvas.width = exportPdfHighQuality ? 2806 : 1684;
+          canvas.height = exportPdfHighQuality ? 1984 : 1190;`,
+      `          const activeExportFormat = (document.querySelector("#exportFormatBadge")?.textContent || "PDF").trim().toLowerCase();
+          const settingPrefix = activeExportFormat === "jpg" ? "Jpg" : "Pdf";
+          const quality = document.querySelector(\`#export\${settingPrefix}Quality\`)?.value || "high";
+          const dpi = { minimum: 72, low: 96, medium: 144, high: 240, maximum: 300 }[quality] || 240;
+          canvas.width = Math.round(297 / 25.4 * dpi);
+          canvas.height = Math.round(210 / 25.4 * dpi);`
+    );
+
+    source = source.replace(
+      `          ctx.drawImage(image, 0, 0, canvas.width, canvas.height);`,
+      `          const fitScale = Math.min(canvas.width / image.width, canvas.height / image.height);
+          const drawWidth = Math.round(image.width * fitScale);
+          const drawHeight = Math.round(image.height * fitScale);
+          const drawX = Math.round((canvas.width - drawWidth) / 2);
+          const drawY = Math.round((canvas.height - drawHeight) / 2);
+          ctx.drawImage(image, drawX, drawY, drawWidth, drawHeight);`
+    );
+
+    source = source.replace(
+      `              exportPdfHighQuality ? 0.96 : 0.86`,
+      `              quality === "maximum" ? 0.98 : quality === "high" ? 0.94 : quality === "medium" ? 0.88 : quality === "low" ? 0.8 : 0.72`
+    );
+
+    source = source
+      .replace('pushText("%PDF-1.4\\n%TECH-A4\\n");', 'pushText("%PDF-1.4\\n%TECH-ISO-A-SERIES\\n");')
+      .replace(
+        '`ramp-technical-A4-${state.type}-${exportViews.join("-")}-${date}.pdf`',
+        '`ramp-technical-A-series-${state.type}-${exportViews.join("-")}-${date}.pdf`'
+      );
+
+    // Keep quality labels stable and identical in preview and downloaded HTML.
+    frame.addEventListener('load', () => {
+      setTimeout(() => {
+        const doc = frame.contentDocument;
+        const modal = doc.querySelector('#exportModal');
+        if (!modal || modal.dataset.qualityOptionsReady === 'true') return;
+        modal.dataset.qualityOptionsReady = 'true';
+
+        const qualityMarkup = '<option value="minimum">Minimum (72 DPI · کمترین حجم)</option><option value="low">Low (96 DPI · فایل سبک)</option><option value="medium">Medium (144 DPI · استفاده عمومی)</option><option value="high" selected>High (240 DPI · چاپ باکیفیت)</option><option value="maximum">Maximum (300 DPI · حداکثر جزئیات)</option>';
+
+        ['Pdf', 'Jpg'].forEach(prefix => {
+          const panel = modal.querySelector(`[data-export-panel="${prefix.toLowerCase()}"]`);
+          const quality = modal.querySelector(`#export${prefix}Quality`);
+          if (!panel || !quality) return;
+          quality.innerHTML = qualityMarkup;
+          panel.querySelector('.export-meta')?.remove();
+        });
+
+        const updateQualityLanguage = () => {
+          const en = doc.documentElement.dataset.lang === 'en';
+          ['Pdf', 'Jpg'].forEach(prefix => {
+            const quality = modal.querySelector(`#export${prefix}Quality`);
+            if (quality) {
+              quality.options[0].textContent = en ? 'Minimum (smallest file · 72 DPI)' : 'Minimum (72 DPI · کمترین حجم)';
+              quality.options[1].textContent = en ? 'Low (lightweight · 96 DPI)' : 'Low (96 DPI · فایل سبک)';
+              quality.options[2].textContent = en ? 'Medium (general use · 144 DPI)' : 'Medium (144 DPI · استفاده عمومی)';
+              quality.options[3].textContent = en ? 'High (quality print · 240 DPI)' : 'High (240 DPI · چاپ باکیفیت)';
+              quality.options[4].textContent = en ? 'Maximum (maximum detail · 300 DPI)' : 'Maximum (300 DPI · حداکثر جزئیات)';
+            }
+          });
+        };
+
+        new MutationObserver(updateQualityLanguage).observe(doc.documentElement, { attributes: true, attributeFilter: ['data-lang'] });
+        updateQualityLanguage();
+      }, 20);
     }, { once: true });
 
     frame.srcdoc = source;
@@ -2141,15 +2617,12 @@ ${helperMarker}`
                         <div class="export-setting-hint" data-export-i18n="pdfQualityHint">رزولوشن خروجی فنی</div>
                       </div>
                       <select class="export-select" id="exportPdfQuality">
-                        <option value="high">کیفیت بالا</option>
-                        <option value="standard">استاندارد</option>
+                        <option value="minimum">Minimum (72 DPI · کمترین حجم)</option>
+                        <option value="low">Low (96 DPI · فایل سبک)</option>
+                        <option value="medium">Medium (144 DPI · استفاده عمومی)</option>
+                        <option value="high" selected>High (240 DPI · چاپ باکیفیت)</option>
+                        <option value="maximum">Maximum (300 DPI · حداکثر جزئیات)</option>
                       </select>
-                    </div>
-
-                    <div class="export-meta">
-                      <span class="export-meta-chip">A4</span>
-                      <span class="export-meta-chip" data-export-i18n="landscape">افقی</span>
-                      <span class="export-meta-chip" data-export-i18n="technicalSheet">Technical Sheet</span>
                     </div>
                   </div>
 
@@ -2253,8 +2726,11 @@ ${helperMarker}`
               pageOptions[0].textContent = en ? "Section + Plan" : "نما + پلان";
               pageOptions[1].textContent = en ? "Section only" : "فقط نما";
               pageOptions[2].textContent = en ? "Plan only" : "فقط پلان";
-              pdfQuality.options[0].textContent = en ? "High quality" : "کیفیت بالا";
-              pdfQuality.options[1].textContent = en ? "Standard" : "استاندارد";
+              pdfQuality.options[0].textContent = en ? "Minimum (smallest file · 72 DPI)" : "Minimum (72 DPI · کمترین حجم)";
+              pdfQuality.options[1].textContent = en ? "Low (lightweight · 96 DPI)" : "Low (96 DPI · فایل سبک)";
+              pdfQuality.options[2].textContent = en ? "Medium (general use · 144 DPI)" : "Medium (144 DPI · استفاده عمومی)";
+              pdfQuality.options[3].textContent = en ? "High (quality print · 240 DPI)" : "High (240 DPI · چاپ باکیفیت)";
+              pdfQuality.options[4].textContent = en ? "Maximum (maximum detail · 300 DPI)" : "Maximum (300 DPI · حداکثر جزئیات)";
               dxfView.options[0].textContent = en ? "Section" : "نما";
               dxfView.options[1].textContent = en ? "Plan" : "پلان";
               dxfUnit.options[0].textContent = en ? "Meter (m)" : "متر (m)";
@@ -2320,7 +2796,7 @@ ${helperMarker}`
         }
         if (!doc.querySelector("#versionPopover")) throw new Error("پنجره نسخه ساخته نشد.");
         if (!doc.querySelector("#downloadPopover")) throw new Error("منوی دانلود ساخته نشد.");
-        if (!doc.querySelector('#carTransition[type="number"]')) throw new Error("ورودی دستی شیب ابتدا و انتها ساخته نشد.");
+        if (!doc.querySelector('#carTransition') || doc.querySelectorAll('#carTransition option').length !== 2) throw new Error("گزینه‌های شیب ابتدا و انتها ساخته نشد.");
         if (!doc.querySelector("#carAfterRamp3m")) throw new Error("گزینه ۳ متر بعد از رمپ ساخته نشد.");
         if (!frame.contentWindow.renderTechnicalSheetToJpeg && !frame.contentWindow.buildA4Pdf) { /* functions are scoped inside the app IIFE */ }
 
