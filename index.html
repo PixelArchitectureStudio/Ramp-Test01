@@ -42,6 +42,17 @@ html,body{margin:0;width:100%;height:100%;background:#121629}
 
     source = source.replace("</style>", ".measurement-input { grid-template-columns: minmax(0, 1fr) 68px; gap: 8px; }\n.height-unit-select { min-width: 0; padding-inline: 6px; }\n.form-section[data-form=\"disabled\"] > .field-row,\n.form-section[data-form=\"human\"] > .field-row { grid-template-columns: minmax(0, 1fr) 124px; gap: 10px; }\n.form-section[data-form=\"disabled\"] > .field-row > .field,\n.form-section[data-form=\"human\"] > .field-row > .field { min-width: 0; }\n\ninput[type=\"number\"] { padding-right: 66px; }\n.input-wrap.has-unit input[type=\"number\"] { padding-right: 88px; }\n.number-stepper { top: 6px; right: 6px; height: 36px; grid-template-columns: 28px 28px; }\n.number-step-btn { width: 28px; height: 36px; }\n.number-step-btn svg { width: 14px; height: 14px; }\n.unit { right: 68px; }\n\n#carSlope + .unit,\n#carTransition + .unit {\n  right: auto !important;\n  left: 0;\n  transition: left .08s linear;\n}\n\n.footer-left { position: relative; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }\n.version-popover-wrap, .download-menu-wrap { position: relative; display: inline-flex; align-items: center; }\n.footer-pill-btn {\n  border: 1px solid var(--line); background: var(--surface-solid); color: var(--text);\n  cursor: pointer; transition: background .14s ease, border-color .14s ease, color .14s ease;\n}\n.footer-pill-btn:hover, .footer-pill-btn:focus-visible {\n  outline: none; border-color: var(--accent); background: var(--accent-soft);\n}\n.footer-pill-btn[aria-expanded=\"true\"], #downloadBtn[aria-expanded=\"true\"] {\n  border-color: var(--accent); background: var(--accent-soft);\n}\n\n.version-popover, .download-popover {\n  position: absolute; left: 0; bottom: calc(100% + 10px); z-index: 80; direction: rtl;\n  opacity: 0; visibility: hidden; pointer-events: none;\n  transform: translateY(7px) scale(.985); transform-origin: left bottom;\n  transition: opacity .16s ease, transform .16s ease, visibility .16s ease;\n}\n.version-popover.open, .download-popover.open {\n  opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0) scale(1);\n}\n\n.version-popover {\n  width: 290px; padding: 10px; border: 1px solid var(--line); border-radius: 16px;\n  background: color-mix(in srgb, var(--surface-solid) 92%, #09143b 8%);\n  box-shadow: 0 18px 45px rgba(0,0,0,.24);\n}\n.version-popover-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 8px; }\n.version-popover-title { font-size: 14px; font-weight: 900; line-height: 1.6; }\n.version-popover-version { font-size: 12px; color: var(--accent); font-weight: 800; line-height: 1.6; }\n.version-popover-label { font-size: 12px; font-weight: 800; margin: 6px 0 4px; }\n.version-popover-desc { font-size: 12px; line-height: 1.9; color: var(--muted); margin: 0; }\n.version-popover-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }\n.version-popover-item { display: grid; grid-template-columns: 1fr; gap: 0; font-size: 12px; line-height: 1.9; }\n.version-popover-item strong { color: var(--text); font-weight: 820; }\n.version-popover-divider { height: 1px; margin: 9px 0; background: var(--line); }\n.version-instagram-btn {\n  width: 100%; min-height: 36px; border-radius: 999px; border: 1px solid var(--line);\n  display: inline-flex; align-items: center; justify-content: center; gap: 8px;\n  text-decoration: none; color: var(--text); background: var(--surface-2);\n  font-size: 12px; font-weight: 800; transition: border-color .14s ease, background .14s ease, color .14s ease;\n}\n.version-instagram-btn:hover, .version-instagram-btn:focus-visible {\n  outline: none; border-color: var(--accent); color: var(--accent); background: var(--accent-soft);\n}\n.version-instagram-btn svg { width: 14px; height: 14px; flex: 0 0 14px; }\n.version-authors { margin-top: 8px; text-align: center; font-size: 11.5px; color: var(--muted); font-weight: 760; }\n\n.download-popover {\n  width: 244px; padding: 8px; border: 1px solid var(--line); border-radius: 14px;\n  background: var(--surface-solid); box-shadow: 0 18px 45px rgba(0,0,0,.22);\n}\n.download-menu-item {\n  width: 100%; min-height: 40px; padding: 0 9px; border: 0; border-radius: 9px;\n  display: flex; align-items: center; justify-content: flex-start; gap: 10px;\n  background: transparent; color: var(--text); font: inherit; font-size: 12px; font-weight: 800;\n  text-align: right; white-space: nowrap; cursor: pointer;\n  transition: background .14s ease, color .14s ease, transform .14s ease;\n}\n.download-menu-item:hover, .download-menu-item:focus-visible {\n  background: var(--surface-2); color: var(--accent); outline: none;\n}\n.download-menu-item:active { transform: scale(.985); }\n.download-menu-item svg { width: 17px; height: 17px; flex: 0 0 17px; color: var(--muted); }\n.download-menu-item:hover svg, .download-menu-item:focus-visible svg { color: currentColor; }\n.download-menu-divider { height: 1px; margin: 5px 7px; background: var(--line); }\n\n@media (max-width: 620px) {\n  .form-section[data-form=\"disabled\"] > .field-row,\n  .form-section[data-form=\"human\"] > .field-row { grid-template-columns: 1fr; gap: 0; }\n  .measurement-input { grid-template-columns: minmax(0, 1fr) 68px; }\n  .version-popover { width: min(290px, calc(100vw - 26px)); }\n  .download-popover { width: min(244px, calc(100vw - 26px)); }\n}" + "\n</style>");
 
+    source = source.replace("</style>", `
+      .history-switch-row { max-width: 430px; gap: 12px !important; }
+      .calculation-history-controls { display: inline-flex; align-items: center; gap: 6px; margin-inline-start: 0; margin-inline-end: auto; direction: ltr; }
+      .history-btn { min-width: 70px; height: 30px; padding: 0 8px; display: inline-flex; align-items: center; justify-content: center; gap: 5px; border: 1px solid var(--line); border-radius: 9px; background: var(--surface-2); color: var(--muted); cursor: pointer; font: inherit; font-size: 10px; font-weight: 850; transition: color .14s ease, background .14s ease, border-color .14s ease, opacity .14s ease, transform .14s ease; }
+      .history-btn:hover:not(:disabled), .history-btn:focus-visible:not(:disabled) { color: var(--accent); background: var(--accent-soft); border-color: var(--accent); outline: none; }
+      .history-btn:active:not(:disabled) { transform: scale(.94); }
+      .history-btn:disabled { opacity: .34; cursor: not-allowed; }
+      .history-btn svg { width: 15px; height: 15px; flex: 0 0 15px; }
+      @media (max-width: 620px) { .history-switch-row { max-width: none; } .calculation-history-controls { margin-inline-start: 0; } }
+    </style>`);
+
     if (!source.includes("<select id=\"carTransition\">\n                <option value=\"10\">10%</option>\n                <option value=\"5\">5%</option>\n              </select>")) throw new Error("ساختار شیب ابتدا و انتها پیدا نشد.");
 
     const carSectionEnd = `            </div>
@@ -53,7 +64,7 @@ html,body{margin:0;width:100%;height:100%;background:#121629}
     const carSectionWith3m = `            </div>
           </div>
 
-          <div class="switch-row">
+          <div class="switch-row history-switch-row">
             <div class="switch-label">
               <strong data-i18n="afterRamp3m">3 متر فضای توقف</strong>
             </div>
@@ -61,6 +72,16 @@ html,body{margin:0;width:100%;height:100%;background:#121629}
               <input id="carAfterRamp3m" type="checkbox" checked>
               <span class="slider"></span>
             </label>
+            <div class="calculation-history-controls" aria-label="Calculation history">
+              <button type="button" class="history-btn" id="undoCalculationBtn" aria-label="بازگشت به محاسبه قبل" title="بازگشت به محاسبه قبل">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h9a7 7 0 0 1 7 7v1"/></svg>
+                <span>Undo</span>
+              </button>
+              <button type="button" class="history-btn" id="redoCalculationBtn" aria-label="رفتن به محاسبه بعد" title="رفتن به محاسبه بعد">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 14 5-5-5-5"/><path d="M20 9h-9a7 7 0 0 0-7 7v1"/></svg>
+                <span>Redo</span>
+              </button>
+            </div>
           </div>
         </section>
 
@@ -105,6 +126,106 @@ html,body{margin:0;width:100%;height:100%;background:#121629}
       .replaceAll("Manual entry & exit slope", "Entry & exit slope options")
       .replaceAll("For the car ramp, the entry and exit slope can now be set fully manually.", "For the car ramp, the entry and exit slope is limited to 5% or 10%.");
 
+    // Keep both Instagram buttons consistent: icon first and no @ prefix.
+    source = source.replaceAll("@pixel_architecture_studio", "pixel_architecture_studio");
+    source = source.replace(
+      /(<a class="version-instagram-btn"[\s\S]*?>)\s*(<span>pixel_architecture_studio<\/span>)\s*(<svg[\s\S]*?<\/svg>)/,
+      "$1$3$2"
+    );
+
+    // Make calculations explicit: values are evaluated only after pressing Calculate.
+    source = source.replace(
+      `      $("#calculateBtn").addEventListener("click", () => calculateCurrent(true));
+      $$('input, select:not(.height-unit-select)').forEach(el => el.addEventListener("input", () => calculateCurrent(true)));
+      $$('input, select:not(.height-unit-select)').forEach(el => el.addEventListener("change", () => calculateCurrent(true)));`,
+      `      const calculationHistory = [];
+      let calculationHistoryIndex = -1;
+      const historyFields = ["#carHeight", "#carSlope", "#carTransition", "#carAfterRamp3m", "#disabledHeight", "#disabledSlope", "#disabledRegulations", "#disabledCompanion", "#humanHeight", "#humanSlope"];
+      const captureCalculationSnapshot = () => ({
+        type: state.type,
+        heightUnit: state.heightUnit,
+        view: state.view,
+        values: Object.fromEntries(historyFields.map(selector => {
+          const element = $(selector);
+          return [selector, element ? (element.type === "checkbox" ? element.checked : element.value) : null];
+        }))
+      });
+      const snapshotsEqual = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+      const applyCalculationSnapshot = snapshot => {
+        if (!snapshot) return;
+        if (snapshot.type && snapshot.type !== state.type) setType(snapshot.type, true);
+        snapshot.heightUnit && changeHeightUnit(snapshot.heightUnit, false);
+        historyFields.forEach(selector => {
+          const element = $(selector);
+          if (!element || !(selector in snapshot.values) || snapshot.values[selector] === null) return;
+          if (element.type === "checkbox") element.checked = Boolean(snapshot.values[selector]);
+          else element.value = snapshot.values[selector];
+        });
+        applyHeightUnitAttributes(state.heightUnit);
+        $$('.input-wrap input[type="number"]').forEach(updateNumberStepperState);
+        if (typeof syncInlinePercent === "function") {
+          syncInlinePercent("#carSlope");
+          syncInlinePercent("#carTransition");
+        }
+        if (snapshot.view) setView(snapshot.view);
+        calculateCurrent(true);
+      };
+      const syncCalculationHistoryButtons = () => {
+        const undo = $("#undoCalculationBtn");
+        const redo = $("#redoCalculationBtn");
+        if (undo) undo.disabled = calculationHistoryIndex <= 0;
+        if (redo) redo.disabled = calculationHistoryIndex < 0 || calculationHistoryIndex >= calculationHistory.length - 1;
+      };
+      const commitCalculation = () => {
+        const snapshot = captureCalculationSnapshot();
+        if (calculationHistoryIndex >= 0 && snapshotsEqual(calculationHistory[calculationHistoryIndex], snapshot)) {
+          calculateCurrent(true);
+          return;
+        }
+        calculationHistory.splice(calculationHistoryIndex + 1);
+        calculationHistory.push(snapshot);
+        calculationHistoryIndex = calculationHistory.length - 1;
+        calculateCurrent(true);
+        syncCalculationHistoryButtons();
+      };
+      $("#calculateBtn").addEventListener("click", commitCalculation);
+      $("#undoCalculationBtn")?.addEventListener("click", () => {
+        if (calculationHistoryIndex <= 0) return;
+        calculationHistoryIndex -= 1;
+        applyCalculationSnapshot(calculationHistory[calculationHistoryIndex]);
+        syncCalculationHistoryButtons();
+      });
+      $("#redoCalculationBtn")?.addEventListener("click", () => {
+        if (calculationHistoryIndex >= calculationHistory.length - 1) return;
+        calculationHistoryIndex += 1;
+        applyCalculationSnapshot(calculationHistory[calculationHistoryIndex]);
+        syncCalculationHistoryButtons();
+      });
+      calculationHistory.push(captureCalculationSnapshot());
+      calculationHistoryIndex = 0;
+      syncCalculationHistoryButtons();`
+    );
+
+    source = source.replace(
+      `        state.heightUnit = normalized;
+        localStorage.setItem("rampHeightUnit", normalized);
+        applyHeightUnitAttributes(normalized);
+        $$('.input-wrap input[type="number"]').forEach(updateNumberStepperState);
+        calculateCurrent(true);`,
+      `        state.heightUnit = normalized;
+        localStorage.setItem("rampHeightUnit", normalized);
+        applyHeightUnitAttributes(normalized);
+        $$('.input-wrap input[type="number"]').forEach(updateNumberStepperState);`
+    );
+
+    source = source.replace(
+      `        $("#drawingTitle").textContent = t(\`\${type}Drawing\`);
+        calculateCurrent(true);
+        if (changed && !immediate) restartSwitchAnimation();`,
+      `        $("#drawingTitle").textContent = t(\`\${type}Drawing\`);
+        if (changed && !immediate) restartSwitchAnimation();`
+    );
+
     source = source.replace(
       '      $("#downloadBtn").addEventListener("click", downloadCurrentHTML);',
       '      $("#downloadBtn").addEventListener("click", toggleDownloadPopover);'
@@ -117,7 +238,7 @@ html,body{margin:0;width:100%;height:100%;background:#121629}
 
     source = source.replace(
       'document.addEventListener("keydown", e => { if (e.key === "Escape") closeRulesModal(); if (e.key === "Enter" && !rulesModal.classList.contains("open")) calculateCurrent(true); });',
-      'document.addEventListener("keydown", e => { if (e.key === "Escape") { closeRulesModal(); closeDownloadPopover(); closeVersionPopover(); } if (e.key === "Enter" && !rulesModal.classList.contains("open")) calculateCurrent(true); });'
+      'document.addEventListener("keydown", e => { if (e.key === "Escape") { closeRulesModal(); closeDownloadPopover(); closeVersionPopover(); } });'
     );
 
     source = source.replace(
@@ -1164,6 +1285,7 @@ ${helperMarker}`
         isolation: isolate;
         overflow: visible !important;
         z-index: 1;
+        direction: ltr !important;
       }
 
       #versionInstagramBtn::before {
@@ -1271,6 +1393,13 @@ ${helperMarker}`
         isolation: isolate;
         overflow: visible !important;
         z-index: 1;
+        direction: ltr !important;
+        display: inline-flex !important;
+        flex-direction: row !important;
+      }
+
+      a.footer-social[href*="instagram.com/pixel_architecture_studio"] svg {
+        order: -1 !important;
       }
 
       a.footer-social[href*="instagram.com/pixel_architecture_studio"]::before {
@@ -1399,7 +1528,27 @@ ${helperMarker}`
         '        const geom = buildRampGeometry(state.result || invalidResult());\n        const dxfScale = lengthScaleFactor();\n        const insUnits = state.heightUnit === "cm" ? 5 : 6;\n        const dxfValue = value => Number((Number(value) * dxfScale).toFixed(state.heightUnit === "cm" ? 3 : 6));',
         '        const geom = buildRampGeometry(state.result || invalidResult());\n        const exportDxfView = document.querySelector("#exportDxfView")?.value || state.view;\n        const exportDxfUnit = document.querySelector("#exportDxfUnit")?.value || selectedLengthUnit();\n        const dxfScale = exportDxfUnit === "cm" ? 100 : 1;\n        const insUnits = exportDxfUnit === "cm" ? 5 : 6;\n        const dxfValue = value => Number((Number(value) * dxfScale).toFixed(exportDxfUnit === "cm" ? 3 : 6));'
       );
-      exportDxfBlock = exportDxfBlock.replace('        if (state.view === "section") {', '        if (exportDxfView === "section") {');
+      exportDxfBlock = exportDxfBlock.replace('        if (state.view === "section") {', '        if (exportDxfView === "section" || exportDxfView === "both") {');
+      exportDxfBlock = exportDxfBlock.replace(
+        `        } else {
+          const w = geom.widthM;
+          line(0,0,geom.totalX,0,"EDGE");
+          line(geom.totalX,0,geom.totalX,w,"EDGE");
+          line(geom.totalX,w,0,w,"EDGE");
+          line(0,w,0,0,"EDGE");
+          geom.points.forEach(p => line(p.x,0,p.x,w,"POINTS"));
+        }`,
+        `        }
+        if (exportDxfView === "plan" || exportDxfView === "both") {
+          const w = geom.widthM;
+          const offset = exportDxfView === "both" ? w + 2 : 0;
+          line(offset,0,offset + geom.totalX,0,"EDGE");
+          line(offset + geom.totalX,0,offset + geom.totalX,w,"EDGE");
+          line(offset + geom.totalX,w,offset,w,"EDGE");
+          line(offset,w,offset,0,"EDGE");
+          geom.points.forEach(p => line(offset + p.x,0,offset + p.x,w,"POINTS"));
+        }`
+      );
       exportDxfBlock = exportDxfBlock.replace(
         '`ramp-${state.type}-${state.view}-${selectedLengthUnit()}.dxf`',
         '`ramp-${state.type}-${exportDxfView}-${exportDxfUnit}.dxf`'
@@ -1563,6 +1712,64 @@ ${helperMarker}`
         cursor: pointer;
       }
       .export-select:focus { border-color: var(--accent); }
+      .export-check-control {
+        min-height: 38px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 8px;
+        padding: 0 10px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: color-mix(in srgb, var(--surface-solid) 72%, transparent);
+        color: var(--text);
+        font-size: 11px;
+        font-weight: 850;
+        cursor: pointer;
+      }
+      .export-check-control input { width: 16px; height: 16px; accent-color: var(--accent); }
+      .export-choice-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: flex-start;
+      }
+      .export-choice-control {
+        min-height: 38px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0 10px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: color-mix(in srgb, var(--surface-solid) 72%, transparent);
+        color: var(--text);
+        font-size: 11px;
+        font-weight: 850;
+        cursor: pointer;
+        transition: border-color .18s ease, background .18s ease, color .18s ease;
+      }
+      .export-choice-control:has(input:checked) {
+        border-color: var(--accent);
+        background: color-mix(in srgb, var(--accent-soft) 78%, var(--surface-solid));
+      }
+      .export-choice-control input { width: 16px; height: 16px; accent-color: var(--accent); }
+      .export-setting-row > .export-setting-row-inner { grid-column: 1 / -1; }
+      .export-setting-row-inner {
+        width: 100%;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(145px, .82fr);
+        align-items: center;
+        gap: 12px;
+        transition: opacity .18s ease;
+      }
+      .export-setting-row-inner.is-muted { opacity: .38; }
+      .export-setting-row-inner.is-muted input { cursor: not-allowed; }
+      .export-setting-row.is-muted { opacity: .38; }
+      .export-setting-row.is-muted input { cursor: not-allowed; }
+      @media (max-width: 520px) {
+        .export-setting-row-inner { grid-template-columns: 1fr; gap: 8px; }
+      }
 
       .export-meta {
         display: flex;
@@ -1885,6 +2092,25 @@ ${helperMarker}`
         font-size: 9.8px;
         color: var(--muted);
       }
+      /* Light mode needs dark readable labels; dark mode keeps the white treatment. */
+      html:not([data-theme="dark"]) .export-format-picker-title,
+      html:not([data-theme="dark"]) .export-format-option-title {
+        color: var(--text) !important;
+      }
+      html:not([data-theme="dark"]) .version-popover.glass-card .glass-content,
+      html:not([data-theme="dark"]) .version-popover.glass-card .glass-content *,
+      html:not([data-theme="dark"]) .download-popover.glass-card .glass-content,
+      html:not([data-theme="dark"]) .download-popover.glass-card .glass-content * {
+        color: var(--text) !important;
+      }
+      html:not([data-theme="dark"]) .version-popover.glass-card .version-popover-desc,
+      html:not([data-theme="dark"]) .version-popover.glass-card .version-authors,
+      html:not([data-theme="dark"]) .version-popover.glass-card .version-popover-item span {
+        color: var(--muted) !important;
+      }
+      html:not([data-theme="dark"]) .version-popover.glass-card .version-popover-version {
+        color: var(--accent) !important;
+      }
       .export-format-option-check {
         width: 17px;
         height: 17px;
@@ -2039,6 +2265,60 @@ ${helperMarker}`
       return new Blob([glb], { type: 'model/gltf-binary' });
     }
 
+    function buildRampDxf3D(geometry, rampType, unit, thicknessCm = 15, solid = true) {
+      if (!geometry?.points?.length || geometry.points.length < 2) {
+        throw new Error('Ramp geometry is not available');
+      }
+      const scale = unit === 'centimeter' ? 100 : 1;
+      const width = (Number(geometry.widthM) || (rampType === 'car' ? 3.5 : 1.2)) * scale;
+      const halfWidth = width / 2;
+      const thickness = Math.max(0.1, Number(thicknessCm) || 15) / 100 * scale;
+      const points = geometry.points.map(point => ({ x: Number(point.x) * scale, z: Number(point.z) * scale }));
+      const entities = [];
+      const value = number => Number(number.toFixed(6));
+      const face = (a, b, c, d, layer) => entities.push(`0\n3DFACE\n8\n${layer}\n10\n${value(a[0])}\n20\n${value(a[1])}\n30\n${value(a[2])}\n11\n${value(b[0])}\n21\n${value(b[1])}\n31\n${value(b[2])}\n12\n${value(c[0])}\n22\n${value(c[1])}\n32\n${value(c[2])}\n13\n${value(d[0])}\n23\n${value(d[1])}\n33\n${value(d[2])}`);
+      const quad = (a, b, c, d, layer) => {
+        face(a, b, c, c, layer);
+        face(a, c, d, d, layer);
+      };
+
+      for (let index = 0; index < points.length - 1; index += 1) {
+        const a = points[index];
+        const b = points[index + 1];
+        const topAL = [a.x, -halfWidth, a.z];
+        const topAR = [a.x, halfWidth, a.z];
+        const topBL = [b.x, -halfWidth, b.z];
+        const topBR = [b.x, halfWidth, b.z];
+        quad(topAL, topBL, topBR, topAR, 'RAMP_TOP');
+        if (solid) {
+          const botAL = [a.x, -halfWidth, a.z - thickness];
+          const botAR = [a.x, halfWidth, a.z - thickness];
+          const botBL = [b.x, -halfWidth, b.z - thickness];
+          const botBR = [b.x, halfWidth, b.z - thickness];
+          quad(botAR, botBR, botBL, botAL, 'RAMP_BOTTOM');
+          quad(botAL, botBL, topBL, topAL, 'RAMP_LEFT');
+          quad(topAR, topBR, botBR, botAR, 'RAMP_RIGHT');
+        }
+      }
+
+      if (solid) {
+        const first = points[0];
+        const last = points[points.length - 1];
+        quad(
+          [first.x, halfWidth, first.z], [first.x, -halfWidth, first.z],
+          [first.x, -halfWidth, first.z - thickness], [first.x, halfWidth, first.z - thickness], 'RAMP_END'
+        );
+        quad(
+          [last.x, -halfWidth, last.z], [last.x, halfWidth, last.z],
+          [last.x, halfWidth, last.z - thickness], [last.x, -halfWidth, last.z - thickness], 'RAMP_END'
+        );
+      }
+
+      const insUnits = unit === 'centimeter' ? 5 : 6;
+      const dxf = `0\nSECTION\n2\nHEADER\n9\n$INSUNITS\n70\n${insUnits}\n0\nENDSEC\n0\nSECTION\n2\nENTITIES\n${entities.join('\n')}\n0\nENDSEC\n0\nEOF\n`;
+      return new Blob([dxf], { type: 'application/dxf' });
+    }
+
     // The unified Export modal is created by the existing load handler.
     // Initialize the new Format dropdown immediately after that handler completes.
     frame.addEventListener('load', () => {
@@ -2107,16 +2387,17 @@ ${helperMarker}`
                 <svg class="export-format-option-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg>
               </button>
 
-              <button class="export-format-option" type="button" role="option" aria-selected="false" data-format-choice="glb">
+              <button class="export-format-option" type="button" role="option" aria-selected="false" data-format-choice="dxf3d">
                 <span class="export-format-option-main">
                   <span class="export-format-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2.8 8 4.5v9.4l-8 4.5-8-4.5V7.3z"/><path d="m4.25 7.45 7.75 4.4 7.75-4.4M12 11.85v9.05"/></svg></span>
                   <span class="export-format-option-copy">
-                    <span class="export-format-option-title">GLB</span>
-                    <span class="export-format-option-hint" data-format-hint="glb">مدل سه‌بعدی قابل استفاده در نرم‌افزارهای سه‌بعدی</span>
+                    <span class="export-format-option-title">DXF 3D</span>
+                    <span class="export-format-option-hint" data-format-hint="dxf3d">مدل سه‌بعدی قابل ویرایش در نرم‌افزارهای CAD</span>
                   </span>
                 </span>
                 <svg class="export-format-option-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg>
               </button>
+
               <div class="export-format-scroll-cue" id="exportFormatScrollCue" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></div>
             </div>`;
 
@@ -2128,12 +2409,12 @@ ${helperMarker}`
           jpgPanel.innerHTML = `
             <div class="export-setting-row">
               <div class="export-setting-copy">
-                <div class="export-setting-label" id="exportJpgViewLabel">نما</div>
-                <div class="export-setting-hint" id="exportJpgViewHint">انتخاب پلان، نما یا هر دو برای تصویر</div>
+                <div class="export-setting-label" id="exportJpgViewLabel">محتوای خروجی</div>
+                <div class="export-setting-hint" id="exportJpgViewHint">انتخاب ترسیم مورد نظر برای خروجی</div>
               </div>
               <select class="export-select" id="exportJpgView">
-                <option value="section">نما</option>
                 <option value="plan">پلان</option>
+                <option value="section">نما</option>
                 <option value="both">پلان + نما</option>
               </select>
             </div>
@@ -2153,21 +2434,38 @@ ${helperMarker}`
             </div>`;
           body.appendChild(jpgPanel);
 
-          const glbPanel = doc.createElement('div');
-          glbPanel.className = 'export-settings-panel';
-          glbPanel.dataset.exportPanel = 'glb';
-          glbPanel.innerHTML = `
+          const dxf3dPanel = doc.createElement('div');
+          dxf3dPanel.className = 'export-settings-panel';
+          dxf3dPanel.dataset.exportPanel = 'dxf3d';
+          dxf3dPanel.innerHTML = `
             <div class="export-setting-row">
               <div class="export-setting-copy">
-                <div class="export-setting-label" id="exportGlbUnitLabel">واحد مدل</div>
-                <div class="export-setting-hint" id="exportGlbUnitHint">مقیاس عددی هندسه در فایل سه‌بعدی</div>
+                <div class="export-setting-label" id="exportDxf3dUnitLabel">واحد مدل</div>
+                <div class="export-setting-hint" id="exportDxf3dUnitHint">واحد مدل در فایل DXF سه‌بعدی</div>
               </div>
-              <select class="export-select" id="exportGlbUnit">
-                <option value="meter" selected>متر (m)</option>
-                <option value="centimeter">سانتی‌متر (cm)</option>
+              <select class="export-select" id="exportDxf3dUnit">
+                <option value="meter">متر (m)</option>
+                <option value="centimeter" selected>سانتی‌متر (cm)</option>
               </select>
+            </div>
+            <div class="export-setting-row">
+              <div class="export-setting-copy">
+                <div class="export-setting-label" id="exportDxf3dGeometryLabel">نوع مدل</div>
+                <div class="export-setting-hint" id="exportDxf3dGeometryHint">نوع مدل سه‌بعدی را انتخاب کنید</div>
+              </div>
+              <select class="export-select" id="exportDxf3dGeometry">
+                <option value="solid" selected>مدل با ضخامت حجم</option>
+                <option value="surface">مدل بدون ضخامت حجم (فقط صفحه)</option>
+              </select>
+            </div>
+            <div id="exportDxf3dThicknessRow" class="export-setting-row">
+              <div class="export-setting-copy">
+                <div class="export-setting-label" id="exportDxf3dThicknessLabel">ضخامت رمپ</div>
+                <div class="export-setting-hint" id="exportDxf3dThicknessHint">ضخامت مدل بر حسب سانتی‌متر</div>
+              </div>
+              <input class="export-select" id="exportDxf3dThickness" type="number" min="0.001" step="0.01" value="40" inputmode="decimal">
             </div>`;
-          body.appendChild(glbPanel);
+          body.appendChild(dxf3dPanel);
 
           const picker = field.querySelector('#exportFormatPicker');
           const menu = field.querySelector('#exportFormatMenu');
@@ -2179,7 +2477,10 @@ ${helperMarker}`
           const scrollCue = field.querySelector('#exportFormatScrollCue');
           const jpgView = jpgPanel.querySelector('#exportJpgView');
           const jpgQuality = jpgPanel.querySelector('#exportJpgQuality');
-          const glbUnit = glbPanel.querySelector('#exportGlbUnit');
+          const dxf3dUnit = dxf3dPanel.querySelector('#exportDxf3dUnit');
+          const dxf3dThickness = dxf3dPanel.querySelector('#exportDxf3dThickness');
+          const dxf3dGeometry = dxf3dPanel.querySelector('#exportDxf3dGeometry');
+          const dxf3dThicknessRow = dxf3dPanel.querySelector('#exportDxf3dThicknessRow');
           let selectedFormat = 'pdf';
 
           const isEnglish = () => doc.documentElement.dataset.lang === 'en';
@@ -2189,13 +2490,13 @@ ${helperMarker}`
               pdfHint: 'سند فنی قابل چاپ',
               jpgHint: 'تصویر فنی با کیفیت انتخابی',
               dxfHint: 'نقشه دوبعدی قابل ویرایش در نرم‌افزارهای ترسیمی',
-              glbHint: 'مدل سه‌بعدی قابل استفاده در نرم‌افزارهای سه‌بعدی',
-              jpgViewLabel: 'نما',
-              jpgViewHint: 'انتخاب پلان، نما یا هر دو برای تصویر',
+              dxf3dHint: 'مدل سه‌بعدی قابل استفاده در نرم‌افزارهای سه‌بعدی',
+              viewLabel: 'محتوای خروجی',
+              viewHint: 'انتخاب ترسیم مورد نظر برای خروجی',
               jpgQualityLabel: 'کیفیت',
               jpgQualityHint: 'رزولوشن تصویر خروجی',
-              section: 'نما',
               plan: 'پلان',
+              section: 'نما',
               both: 'پلان + نما',
               minimum: 'Minimum (72 DPI · کمترین حجم)',
               low: 'Low (96 DPI · فایل سبک)',
@@ -2203,9 +2504,15 @@ ${helperMarker}`
               high: 'High (240 DPI · چاپ باکیفیت)',
               maximum: 'Maximum (300 DPI · حداکثر جزئیات)',
               downloadJpg: 'دانلود JPG',
-              downloadGlb: 'دانلود مدل سه‌بعدی GLB',
-              glbUnitLabel: 'واحد مدل',
-              glbUnitHint: 'مقیاس عددی هندسه در فایل سه‌بعدی',
+              dxf3dUnitLabel: 'واحد مدل',
+              dxf3dUnitHint: 'واحد مدل در فایل DXF سه‌بعدی',
+              dxf3dGeometryLabel: 'نوع مدل',
+              dxf3dGeometryHint: 'نوع مدل سه‌بعدی را انتخاب کنید',
+              dxf3dSolid: 'مدل با ضخامت حجم',
+              dxf3dSurface: 'مدل بدون ضخامت حجم (فقط صفحه)',
+              dxf3dThicknessLabel: 'ضخامت رمپ',
+              dxf3dThicknessHint: 'ضخامت مدل بر حسب سانتی‌متر',
+              downloadDxf3d: 'دانلود DXF 3D',
               meter: 'متر (m)',
               centimeter: 'سانتی‌متر (cm)'
             },
@@ -2214,13 +2521,13 @@ ${helperMarker}`
               pdfHint: 'Print-ready technical document',
               jpgHint: 'Technical image at the selected quality',
               dxfHint: 'Editable 2D drawing for drafting software',
-              glbHint: '3D model for use in 3D software',
-              jpgViewLabel: 'View',
-              jpgViewHint: 'Choose plan, section, or both for the image',
+              dxf3dHint: '3D model for use in 3D software',
+              viewLabel: 'Output content',
+              viewHint: 'Choose the drawings to include in the output',
               jpgQualityLabel: 'Quality',
               jpgQualityHint: 'Output image resolution',
-              section: 'Section',
               plan: 'Plan',
+              section: 'Section',
               both: 'Plan + Section',
               minimum: 'Minimum (smallest file · 72 DPI)',
               low: 'Low (lightweight · 96 DPI)',
@@ -2228,9 +2535,15 @@ ${helperMarker}`
               high: 'High (quality print · 240 DPI)',
               maximum: 'Maximum (maximum detail · 300 DPI)',
               downloadJpg: 'Download JPG',
-              downloadGlb: 'Download 3D GLB model',
-              glbUnitLabel: 'Model unit',
-              glbUnitHint: 'Numeric geometry scale stored in the 3D file',
+              dxf3dUnitLabel: 'Model unit',
+              dxf3dUnitHint: 'Geometry unit in the 3D DXF file',
+              dxf3dGeometryLabel: 'Geometry type',
+              dxf3dGeometryHint: 'Choose the DXF 3D model type',
+              dxf3dSolid: 'Solid with thickness',
+              dxf3dSurface: 'Surface only',
+              dxf3dThicknessLabel: 'Ramp thickness',
+              dxf3dThicknessHint: 'Model thickness in centimeters',
+              downloadDxf3d: 'Download DXF 3D',
               meter: 'Meter (m)',
               centimeter: 'Centimeter (cm)'
             }
@@ -2271,7 +2584,7 @@ ${helperMarker}`
           };
 
           const applyFormat = format => {
-            selectedFormat = ['pdf','jpg','dxf','glb'].includes(format) ? format : 'pdf';
+            selectedFormat = ['pdf','jpg','dxf','dxf3d'].includes(format) ? format : 'pdf';
 
             choices.forEach(option => {
               const active = option.dataset.formatChoice === selectedFormat;
@@ -2279,30 +2592,31 @@ ${helperMarker}`
               option.setAttribute('aria-selected', active ? 'true' : 'false');
             });
 
-            badge.textContent = selectedFormat.toUpperCase();
-            title.textContent = selectedFormat.toUpperCase();
+            const displayFormatName = selectedFormat === 'dxf3d' ? 'DXF 3D' : selectedFormat.toUpperCase();
+            badge.textContent = displayFormatName;
+            title.textContent = displayFormatName;
             const selectedIcon = choices.find(option => option.dataset.formatChoice === selectedFormat)?.querySelector('.export-format-icon');
             if (icon && selectedIcon) icon.innerHTML = selectedIcon.innerHTML;
 
             const c = isEnglish() ? copy.en : copy.fa;
-            hint.textContent = selectedFormat === 'pdf' ? c.pdfHint : selectedFormat === 'jpg' ? c.jpgHint : selectedFormat === 'dxf' ? c.dxfHint : c.glbHint;
+            hint.textContent = selectedFormat === 'pdf' ? c.pdfHint : selectedFormat === 'jpg' ? c.jpgHint : selectedFormat === 'dxf' ? c.dxfHint : c.dxf3dHint;
 
             // The original PDF/DXF switch only knows about its two initial panels.
-            // Clear every current panel first so dynamically added JPG/GLB panels
-            // cannot remain active when returning to PDF or DXF.
+            // Clear every current panel first so dynamically added JPG panels
+            // cannot remain active when returning to PDF, DXF, or DXF 3D.
             modal.querySelectorAll('.export-settings-panel').forEach(panel => panel.classList.remove('active'));
 
             if (selectedFormat === 'pdf' || selectedFormat === 'dxf') {
               const hiddenButton = oldSwitch.querySelector(`[data-export-format="${selectedFormat}"]`);
               hiddenButton?.click();
+            } else if (selectedFormat === 'dxf3d') {
+              dxf3dPanel.classList.add('active');
+              downloadLabel.textContent = c.downloadDxf3d;
+              downloadBtn.disabled = false;
             } else if (selectedFormat === 'jpg') {
               jpgPanel.classList.add('active');
               syncJpgDefaultView();
               downloadLabel.textContent = c.downloadJpg;
-              downloadBtn.disabled = false;
-            } else {
-              glbPanel.classList.add('active');
-              downloadLabel.textContent = c.downloadGlb;
               downloadBtn.disabled = false;
             }
 
@@ -2317,48 +2631,87 @@ ${helperMarker}`
             field.querySelector('[data-format-hint="pdf"]').textContent = c.pdfHint;
             field.querySelector('[data-format-hint="jpg"]').textContent = c.jpgHint;
             field.querySelector('[data-format-hint="dxf"]').textContent = c.dxfHint;
-            field.querySelector('[data-format-hint="glb"]').textContent = c.glbHint;
-            hint.textContent = selectedFormat === 'pdf' ? c.pdfHint : selectedFormat === 'jpg' ? c.jpgHint : selectedFormat === 'dxf' ? c.dxfHint : c.glbHint;
-            doc.querySelector('#exportJpgViewLabel').textContent = c.jpgViewLabel;
-            doc.querySelector('#exportJpgViewHint').textContent = c.jpgViewHint;
+            field.querySelector('[data-format-hint="dxf3d"]').textContent = c.dxf3dHint;
+            hint.textContent = selectedFormat === 'pdf' ? c.pdfHint : selectedFormat === 'jpg' ? c.jpgHint : selectedFormat === 'dxf' ? c.dxfHint : c.dxf3dHint;
+            doc.querySelector('#exportJpgViewLabel').textContent = c.viewLabel;
+            doc.querySelector('#exportJpgViewHint').textContent = c.viewHint;
             doc.querySelector('#exportJpgQualityLabel').textContent = c.jpgQualityLabel;
             doc.querySelector('#exportJpgQualityHint').textContent = c.jpgQualityHint;
-            jpgView.options[0].textContent = c.section;
-            jpgView.options[1].textContent = c.plan;
+            jpgView.options[0].textContent = c.plan;
+            jpgView.options[1].textContent = c.section;
             jpgView.options[2].textContent = c.both;
             jpgQuality.options[0].textContent = c.minimum;
             jpgQuality.options[1].textContent = c.low;
             jpgQuality.options[2].textContent = c.medium;
             jpgQuality.options[3].textContent = c.high;
             jpgQuality.options[4].textContent = c.maximum;
-            doc.querySelector('#exportGlbUnitLabel').textContent = c.glbUnitLabel;
-            doc.querySelector('#exportGlbUnitHint').textContent = c.glbUnitHint;
-            glbUnit.options[0].textContent = c.meter;
-            glbUnit.options[1].textContent = c.centimeter;
+            doc.querySelector('#exportDxf3dUnitLabel').textContent = c.dxf3dUnitLabel;
+            doc.querySelector('#exportDxf3dUnitHint').textContent = c.dxf3dUnitHint;
+            doc.querySelector('#exportDxf3dThicknessLabel').textContent = c.dxf3dThicknessLabel;
+            doc.querySelector('#exportDxf3dThicknessHint').textContent = c.dxf3dThicknessHint;
+            dxf3dUnit.options[0].textContent = c.meter;
+            dxf3dUnit.options[1].textContent = c.centimeter;
+            doc.querySelector('#exportDxf3dGeometryLabel').textContent = c.dxf3dGeometryLabel;
+            doc.querySelector('#exportDxf3dGeometryHint').textContent = c.dxf3dGeometryHint;
+            dxf3dGeometry.options[0].textContent = c.dxf3dSolid;
+            dxf3dGeometry.options[1].textContent = c.dxf3dSurface;
             if (selectedFormat === 'jpg') downloadLabel.textContent = c.downloadJpg;
-            if (selectedFormat === 'glb') downloadLabel.textContent = c.downloadGlb;
+            if (selectedFormat === 'dxf3d') downloadLabel.textContent = c.downloadDxf3d;
+            if (typeof syncDxf3dThickness === 'function') syncDxf3dThickness();
           };
 
-          // JPG and GLB get dedicated download paths; PDF and DXF use the existing engines.
+          const syncDxf3dThickness = () => {
+            const hasThickness = dxf3dGeometry.value === 'solid';
+            dxf3dThickness.disabled = !hasThickness;
+            dxf3dThicknessRow.classList.toggle('is-muted', !hasThickness);
+            const unitIsMeter = dxf3dUnit.value === 'meter';
+            dxf3dThickness.title = isEnglish()
+              ? (unitIsMeter ? 'Thickness in meters' : 'Thickness in centimeters')
+              : (unitIsMeter ? 'ضخامت بر حسب متر' : 'ضخامت بر حسب سانتی‌متر');
+            if (dxf3dThicknessHint) {
+              dxf3dThicknessHint.textContent = isEnglish()
+                ? (unitIsMeter ? 'Model thickness in meters' : 'Model thickness in centimeters')
+                : (unitIsMeter ? 'ضخامت مدل بر حسب متر' : 'ضخامت مدل بر حسب سانتی‌متر');
+            }
+          };
+          const dxf3dThicknessHint = dxf3dPanel.querySelector('#exportDxf3dThicknessHint');
+          let dxf3dPreviousUnit = dxf3dUnit.value;
+          dxf3dUnit.addEventListener('change', () => {
+            const numericValue = Number(dxf3dThickness.value);
+            const thicknessCm = dxf3dPreviousUnit === 'meter' ? numericValue * 100 : numericValue;
+            dxf3dThickness.value = dxf3dUnit.value === 'meter'
+              ? (thicknessCm / 100).toFixed(3).replace(/\.000$/, '')
+              : Number(thicknessCm.toFixed(3));
+            dxf3dPreviousUnit = dxf3dUnit.value;
+            syncDxf3dThickness();
+          });
+          dxf3dGeometry.addEventListener('change', () => {
+            syncDxf3dThickness();
+            updateLanguage();
+          });
+          syncDxf3dThickness();
+
+          // JPG and DXF 3D get dedicated download paths; PDF and DXF use the existing engines.
           downloadBtn.addEventListener('click', async event => {
-            if (selectedFormat !== 'jpg' && selectedFormat !== 'glb') return;
+            if (selectedFormat !== 'jpg' && selectedFormat !== 'dxf3d') return;
             event.preventDefault();
             event.stopImmediatePropagation();
             if (downloadBtn.disabled) return;
 
-            if (selectedFormat === 'glb') {
+            if (selectedFormat === 'dxf3d') {
               const api = frame.contentWindow.rampExportAPI;
               if (!api || typeof api.geometry !== 'function') return;
               try {
                 api.refresh?.();
                 if (!api.valid()) return;
                 downloadBtn.disabled = true;
-                const blob = buildRampGlb(api.geometry(), api.type(), glbUnit.value);
+                const solid = dxf3dGeometry.value === 'solid';
+                const blob = buildRampDxf3D(api.geometry(), api.type(), dxf3dUnit.value, dxf3dThickness.value, solid);
                 const url = URL.createObjectURL(blob);
                 const a = doc.createElement('a');
                 const date = new Date().toISOString().slice(0, 10);
                 a.href = url;
-                a.download = `ramp-3d-${api.type()}-${glbUnit.value}-${date}.glb`;
+                a.download = `ramp-3d-${api.type()}-${solid ? 'solid' : 'surface'}-${dxf3dUnit.value}-${date}.dxf`;
                 doc.body.appendChild(a);
                 a.click();
                 a.remove();
@@ -2366,7 +2719,7 @@ ${helperMarker}`
                 const motion = frame.contentWindow.__rampShowDownloadSuccessAnimation;
                 if (typeof motion === 'function') motion('#exportDownloadBtn');
               } catch (error) {
-                console.error('GLB export failed:', error);
+                console.error('DXF 3D export failed:', error);
               } finally {
                 downloadBtn.disabled = false;
               }
@@ -2555,6 +2908,91 @@ ${helperMarker}`
       try {
         const doc = frame.contentDocument;
 
+        // Small scroll affordance for long pages, responsive to viewport height.
+        if (!doc.getElementById('pageScrollCue')) {
+          const scrollCueStyle = doc.createElement('style');
+          scrollCueStyle.id = 'pageScrollCueStyle';
+          scrollCueStyle.textContent = `
+            #pageScrollCue {
+              position: fixed;
+              left: 50%;
+              bottom: max(13px, env(safe-area-inset-bottom));
+              z-index: 140;
+              width: 30px;
+              height: 30px;
+              display: grid;
+              place-items: center;
+              border: 1px solid color-mix(in srgb, var(--line) 82%, var(--text) 18%);
+              border-radius: 999px;
+              background: color-mix(in srgb, var(--surface-solid) 76%, transparent);
+              color: var(--muted);
+              box-shadow: 0 8px 22px rgba(8, 15, 35, .14);
+              -webkit-backdrop-filter: blur(12px) saturate(145%);
+              backdrop-filter: blur(12px) saturate(145%);
+              transform: translateX(-50%);
+              opacity: 1;
+              pointer-events: auto;
+              cursor: pointer;
+              transition: opacity .24s ease, transform .24s ease;
+            }
+            #pageScrollCue svg {
+              width: 16px;
+              height: 16px;
+              animation: pageScrollCueBounce 1.15s ease-in-out infinite;
+            }
+            #pageScrollCue.is-hidden {
+              opacity: 0;
+              transform: translate(-50%, 8px);
+            }
+            @keyframes pageScrollCueBounce {
+              0%, 100% { transform: translateY(-2px); }
+              50% { transform: translateY(4px); }
+            }
+            @media (prefers-reduced-motion: reduce) {
+              #pageScrollCue svg { animation: none; }
+            }
+          `;
+          doc.head.appendChild(scrollCueStyle);
+
+          const scrollCue = doc.createElement('div');
+          scrollCue.id = 'pageScrollCue';
+          scrollCue.setAttribute('role', 'button');
+          scrollCue.setAttribute('tabindex', '0');
+          scrollCue.setAttribute('aria-label', 'رفتن به انتهای صفحه');
+          scrollCue.setAttribute('aria-hidden', 'true');
+          scrollCue.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>';
+          doc.body.appendChild(scrollCue);
+
+          let pageScrollCueDismissed = false;
+          const updatePageScrollCue = () => {
+            const scrollingElement = doc.scrollingElement || doc.documentElement;
+            const viewportHeight = doc.defaultView?.innerHeight || doc.documentElement.clientHeight;
+            const hasMoreContent = scrollingElement.scrollHeight > viewportHeight + 24;
+            const atBottom = scrollingElement.scrollTop + viewportHeight >= scrollingElement.scrollHeight - 24;
+            const modalOpen = Boolean(doc.querySelector('#exportModal.open, .modal.open'));
+            if (scrollingElement.scrollTop > 18) pageScrollCueDismissed = true;
+            scrollCue.classList.toggle('is-hidden', pageScrollCueDismissed || !hasMoreContent || atBottom || modalOpen);
+          };
+          doc.addEventListener('scroll', updatePageScrollCue, { passive: true });
+          doc.defaultView?.addEventListener('resize', updatePageScrollCue);
+          new MutationObserver(updatePageScrollCue).observe(doc.body, { subtree: true, attributes: true, attributeFilter: ['class'] });
+          const scrollToPageEnd = () => {
+            pageScrollCueDismissed = true;
+            scrollCue.classList.add('is-hidden');
+            const scrollingElement = doc.scrollingElement || doc.documentElement;
+            scrollingElement.scrollTo({ top: scrollingElement.scrollHeight, behavior: 'smooth' });
+          };
+          scrollCue.addEventListener('click', scrollToPageEnd);
+          scrollCue.addEventListener('keydown', event => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              scrollToPageEnd();
+            }
+          });
+          updatePageScrollCue();
+          requestAnimationFrame(updatePageScrollCue);
+        }
+
         // Build unified Export UI once.
         if (!doc.getElementById("exportBtn")) {
           const pdfBtn = doc.getElementById("pdfBtn");
@@ -2600,13 +3038,13 @@ ${helperMarker}`
                   <div class="export-settings-panel active" data-export-panel="pdf">
                     <div class="export-setting-row">
                       <div class="export-setting-copy">
-                        <div class="export-setting-label" data-export-i18n="pdfPagesLabel">صفحات</div>
-                        <div class="export-setting-hint" data-export-i18n="pdfPagesHint">انتخاب نماها برای فایل PDF</div>
+                        <div class="export-setting-label" data-export-i18n="pdfPagesLabel">محتوای خروجی</div>
+                        <div class="export-setting-hint" data-export-i18n="pdfPagesHint">انتخاب ترسیم مورد نظر برای خروجی</div>
                       </div>
                       <select class="export-select" id="exportPdfPages">
-                        <option value="both">نما + پلان</option>
-                        <option value="section">فقط نما</option>
-                        <option value="plan">فقط پلان</option>
+                        <option value="plan">پلان</option>
+                        <option value="section">نما</option>
+                        <option value="both">پلان + نما</option>
                       </select>
                     </div>
 
@@ -2628,12 +3066,13 @@ ${helperMarker}`
                   <div class="export-settings-panel" data-export-panel="dxf">
                     <div class="export-setting-row">
                       <div class="export-setting-copy">
-                        <div class="export-setting-label" data-export-i18n="dxfViewLabel">نما</div>
-                        <div class="export-setting-hint" data-export-i18n="dxfViewHint">انتخاب پلان یا نمای رمپ</div>
+                        <div class="export-setting-label" data-export-i18n="dxfViewLabel">محتوای خروجی</div>
+                        <div class="export-setting-hint" data-export-i18n="dxfViewHint">انتخاب ترسیم مورد نظر برای خروجی</div>
                       </div>
                       <select class="export-select" id="exportDxfView">
-                        <option value="section">نما</option>
                         <option value="plan">پلان</option>
+                        <option value="section">نما</option>
+                        <option value="both">پلان + نما</option>
                       </select>
                     </div>
 
@@ -2648,11 +3087,6 @@ ${helperMarker}`
                       </select>
                     </div>
 
-                    <div class="export-meta">
-                      <span class="export-meta-chip">DXF</span>
-                      <span class="export-meta-chip">AutoCAD</span>
-                      <span class="export-meta-chip" data-export-i18n="vectorGeometry">Vector Geometry</span>
-                    </div>
                   </div>
                 </div>
 
@@ -2679,12 +3113,12 @@ ${helperMarker}`
             const textFA = {
               title: "خروجی فایل",
               close: "بستن",
-              pdfPagesLabel: "صفحات",
-              pdfPagesHint: "انتخاب نماها برای فایل PDF",
+              pdfPagesLabel: "محتوای خروجی",
+              pdfPagesHint: "انتخاب ترسیم مورد نظر برای خروجی",
               pdfQualityLabel: "کیفیت",
               pdfQualityHint: "رزولوشن خروجی فنی",
-              dxfViewLabel: "نما",
-              dxfViewHint: "انتخاب پلان یا نمای رمپ",
+              dxfViewLabel: "محتوای خروجی",
+              dxfViewHint: "انتخاب ترسیم مورد نظر برای خروجی",
               dxfUnitLabel: "واحد",
               dxfUnitHint: "واحد هندسه در فایل DXF",
               landscape: "افقی",
@@ -2696,12 +3130,12 @@ ${helperMarker}`
             const textEN = {
               title: "Export File",
               close: "Close",
-              pdfPagesLabel: "Pages",
-              pdfPagesHint: "Choose views for the PDF file",
+              pdfPagesLabel: "Output content",
+              pdfPagesHint: "Choose the drawings to include in the output",
               pdfQualityLabel: "Quality",
               pdfQualityHint: "Technical export resolution",
-              dxfViewLabel: "View",
-              dxfViewHint: "Choose plan or section",
+              dxfViewLabel: "Output content",
+              dxfViewHint: "Choose the drawings to include in the output",
               dxfUnitLabel: "Unit",
               dxfUnitHint: "Geometry unit in the DXF file",
               landscape: "Landscape",
@@ -2722,16 +3156,17 @@ ${helperMarker}`
               });
 
               const pageOptions = [...pdfPages.options];
-              pageOptions[0].textContent = en ? "Section + Plan" : "نما + پلان";
-              pageOptions[1].textContent = en ? "Section only" : "فقط نما";
-              pageOptions[2].textContent = en ? "Plan only" : "فقط پلان";
+              pageOptions[0].textContent = en ? "Plan" : "پلان";
+              pageOptions[1].textContent = en ? "Section" : "نما";
+              pageOptions[2].textContent = en ? "Plan + Section" : "پلان + نما";
               pdfQuality.options[0].textContent = en ? "Minimum (smallest file · 72 DPI)" : "Minimum (72 DPI · کمترین حجم)";
               pdfQuality.options[1].textContent = en ? "Low (lightweight · 96 DPI)" : "Low (96 DPI · فایل سبک)";
               pdfQuality.options[2].textContent = en ? "Medium (general use · 144 DPI)" : "Medium (144 DPI · استفاده عمومی)";
               pdfQuality.options[3].textContent = en ? "High (quality print · 240 DPI)" : "High (240 DPI · چاپ باکیفیت)";
               pdfQuality.options[4].textContent = en ? "Maximum (maximum detail · 300 DPI)" : "Maximum (300 DPI · حداکثر جزئیات)";
-              dxfView.options[0].textContent = en ? "Section" : "نما";
-              dxfView.options[1].textContent = en ? "Plan" : "پلان";
+              dxfView.options[0].textContent = en ? "Plan" : "پلان";
+              dxfView.options[1].textContent = en ? "Section" : "نما";
+              dxfView.options[2].textContent = en ? "Plan + Section" : "پلان + نما";
               dxfUnit.options[0].textContent = en ? "Meter (m)" : "متر (m)";
               dxfUnit.options[1].textContent = en ? "Centimeter (cm)" : "سانتی‌متر (cm)";
               downloadLabel.textContent = activeFormat === "pdf" ? tx.downloadPdf : tx.downloadDxf;
@@ -2797,6 +3232,74 @@ ${helperMarker}`
         if (!doc.querySelector("#downloadPopover")) throw new Error("منوی دانلود ساخته نشد.");
         if (!doc.querySelector('#carTransition') || doc.querySelectorAll('#carTransition option').length !== 2) throw new Error("گزینه‌های شیب ابتدا و انتها ساخته نشد.");
         if (!doc.querySelector("#carAfterRamp3m")) throw new Error("گزینه ۳ متر بعد از رمپ ساخته نشد.");
+        if (!doc.documentElement.dataset.historyUiReady) {
+          doc.documentElement.dataset.historyUiReady = "true";
+          const historyFields = ["#carHeight", "#carSlope", "#carTransition", "#carAfterRamp3m", "#disabledHeight", "#disabledSlope", "#disabledRegulations", "#disabledCompanion", "#humanHeight", "#humanSlope"];
+          const captureHistoryState = () => ({
+            type: doc.querySelector(".type-tab.active")?.dataset.type || "car",
+            view: doc.querySelector(".view-tab.active")?.dataset.view || "section",
+            units: Object.fromEntries([...doc.querySelectorAll(".height-unit-select")].map(el => [el.id, el.value])),
+            values: Object.fromEntries(historyFields.map(selector => {
+              const el = doc.querySelector(selector);
+              return [selector, el ? (el.type === "checkbox" ? el.checked : el.value) : null];
+            }))
+          });
+          const historyEqual = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+          const history = [captureHistoryState()];
+          let historyIndex = 0;
+          const undo = doc.querySelector("#undoCalculationBtn");
+          const redo = doc.querySelector("#redoCalculationBtn");
+          const calculate = doc.querySelector("#calculateBtn");
+          const syncHistoryButtons = () => {
+            if (undo) undo.disabled = historyIndex <= 0;
+            if (redo) redo.disabled = historyIndex >= history.length - 1;
+          };
+          const applyHistoryState = snapshot => {
+            if (!snapshot) return;
+            doc.querySelector(`.type-tab[data-type="${snapshot.type}"]`)?.click();
+            Object.entries(snapshot.units || {}).forEach(([id, value]) => {
+              const el = doc.getElementById(id);
+              if (el && el.value !== value) {
+                el.value = value;
+                el.dispatchEvent(new Event("change", { bubbles: true }));
+              }
+            });
+            historyFields.forEach(selector => {
+              const el = doc.querySelector(selector);
+              const value = snapshot.values?.[selector];
+              if (!el || value === null || value === undefined) return;
+              if (el.type === "checkbox") el.checked = Boolean(value);
+              else el.value = value;
+            });
+            doc.querySelector(`.view-tab[data-view="${snapshot.view}"]`)?.click();
+            frame.contentWindow.rampExportAPI?.refresh();
+            syncHistoryButtons();
+          };
+          calculate?.addEventListener("click", () => {
+            const next = captureHistoryState();
+            if (!historyEqual(history[historyIndex], next)) {
+              history.splice(historyIndex + 1);
+              history.push(next);
+              historyIndex = history.length - 1;
+            }
+            syncHistoryButtons();
+          });
+          undo?.addEventListener("click", event => {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            if (historyIndex <= 0) return;
+            historyIndex -= 1;
+            applyHistoryState(history[historyIndex]);
+          }, true);
+          redo?.addEventListener("click", event => {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            if (historyIndex >= history.length - 1) return;
+            historyIndex += 1;
+            applyHistoryState(history[historyIndex]);
+          }, true);
+          syncHistoryButtons();
+        }
         if (!frame.contentWindow.renderTechnicalSheetToJpeg && !frame.contentWindow.buildA4Pdf) { /* functions are scoped inside the app IIFE */ }
 
         if (!doc.getElementById("rampHeaderIconStyle")) {
