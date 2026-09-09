@@ -43,13 +43,40 @@ html,body{margin:0;width:100%;height:100%;background:#121629}
     source = source.replace("</style>", ".measurement-input { grid-template-columns: minmax(0, 1fr) 68px; gap: 8px; }\n.height-unit-select { min-width: 0; padding-inline: 6px; }\n.form-section[data-form=\"disabled\"] > .field-row,\n.form-section[data-form=\"human\"] > .field-row { grid-template-columns: minmax(0, 1fr) 124px; gap: 10px; }\n.form-section[data-form=\"disabled\"] > .field-row > .field,\n.form-section[data-form=\"human\"] > .field-row > .field { min-width: 0; }\n\ninput[type=\"number\"] { padding-right: 66px; }\n.input-wrap.has-unit input[type=\"number\"] { padding-right: 88px; }\n.number-stepper { top: 6px; right: 6px; height: 36px; grid-template-columns: 28px 28px; }\n.number-step-btn { width: 28px; height: 36px; }\n.number-step-btn svg { width: 14px; height: 14px; }\n.unit { right: 68px; }\n\n#carSlope + .unit,\n#carTransition + .unit {\n  right: auto !important;\n  left: 0;\n  transition: left .08s linear;\n}\n\n.footer-left { position: relative; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }\n.version-popover-wrap, .download-menu-wrap { position: relative; display: inline-flex; align-items: center; }\n.footer-pill-btn {\n  border: 1px solid var(--line); background: var(--surface-solid); color: var(--text);\n  cursor: pointer; transition: background .14s ease, border-color .14s ease, color .14s ease;\n}\n.footer-pill-btn:hover, .footer-pill-btn:focus-visible {\n  outline: none; border-color: var(--accent); background: var(--accent-soft);\n}\n.footer-pill-btn[aria-expanded=\"true\"], #downloadBtn[aria-expanded=\"true\"] {\n  border-color: var(--accent); background: var(--accent-soft);\n}\n\n.version-popover, .download-popover {\n  position: absolute; left: 0; bottom: calc(100% + 10px); z-index: 80; direction: rtl;\n  opacity: 0; visibility: hidden; pointer-events: none;\n  transform: translateY(7px) scale(.985); transform-origin: left bottom;\n  transition: opacity .16s ease, transform .16s ease, visibility .16s ease;\n}\n.version-popover.open, .download-popover.open {\n  opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0) scale(1);\n}\n\n.version-popover {\n  width: 290px; padding: 10px; border: 1px solid var(--line); border-radius: 16px;\n  background: color-mix(in srgb, var(--surface-solid) 92%, #09143b 8%);\n  box-shadow: 0 18px 45px rgba(0,0,0,.24);\n}\n.version-popover-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 8px; }\n.version-popover-title { font-size: 14px; font-weight: 900; line-height: 1.6; }\n.version-popover-version { font-size: 12px; color: var(--accent); font-weight: 800; line-height: 1.6; }\n.version-popover-label { font-size: 12px; font-weight: 800; margin: 6px 0 4px; }\n.version-popover-desc { font-size: 12px; line-height: 1.9; color: var(--muted); margin: 0; }\n.version-popover-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }\n.version-popover-item { display: grid; grid-template-columns: 1fr; gap: 0; font-size: 12px; line-height: 1.9; }\n.version-popover-item strong { color: var(--text); font-weight: 820; }\n.version-popover-divider { height: 1px; margin: 9px 0; background: var(--line); }\n.version-instagram-btn {\n  width: 100%; min-height: 36px; border-radius: 999px; border: 1px solid var(--line);\n  display: inline-flex; align-items: center; justify-content: center; gap: 8px;\n  text-decoration: none; color: var(--text); background: var(--surface-2);\n  font-size: 12px; font-weight: 800; transition: border-color .14s ease, background .14s ease, color .14s ease;\n}\n.version-instagram-btn:hover, .version-instagram-btn:focus-visible {\n  outline: none; border-color: var(--accent); color: var(--accent); background: var(--accent-soft);\n}\n.version-instagram-btn svg { width: 14px; height: 14px; flex: 0 0 14px; }\n.version-authors { margin-top: 8px; text-align: center; font-size: 11.5px; color: var(--muted); font-weight: 760; }\n\n.download-popover {\n  width: 244px; padding: 8px; border: 1px solid var(--line); border-radius: 14px;\n  background: var(--surface-solid); box-shadow: 0 18px 45px rgba(0,0,0,.22);\n}\n.download-menu-item {\n  width: 100%; min-height: 40px; padding: 0 9px; border: 0; border-radius: 9px;\n  display: flex; align-items: center; justify-content: flex-start; gap: 10px;\n  background: transparent; color: var(--text); font: inherit; font-size: 12px; font-weight: 800;\n  text-align: right; white-space: nowrap; cursor: pointer;\n  transition: background .14s ease, color .14s ease, transform .14s ease;\n}\n.download-menu-item:hover, .download-menu-item:focus-visible {\n  background: var(--surface-2); color: var(--accent); outline: none;\n}\n.download-menu-item:active { transform: scale(.985); }\n.download-menu-item svg { width: 17px; height: 17px; flex: 0 0 17px; color: var(--muted); }\n.download-menu-item:hover svg, .download-menu-item:focus-visible svg { color: currentColor; }\n.download-menu-divider { height: 1px; margin: 5px 7px; background: var(--line); }\n\n@media (max-width: 620px) {\n  .form-section[data-form=\"disabled\"] > .field-row,\n  .form-section[data-form=\"human\"] > .field-row { grid-template-columns: 1fr; gap: 0; }\n  .measurement-input { grid-template-columns: minmax(0, 1fr) 68px; }\n  .version-popover { width: min(290px, calc(100vw - 26px)); }\n  .download-popover { width: min(244px, calc(100vw - 26px)); }\n}" + "\n</style>");
 
     source = source.replace("</style>", `
-      .history-switch-row { max-width: 430px; gap: 12px !important; }
+      .history-switch-row { position: relative; max-width: 430px; gap: 12px !important; }
       .calculation-history-controls { display: inline-flex; align-items: center; gap: 6px; margin-inline-start: 0; margin-inline-end: auto; direction: ltr; }
       .history-btn { min-width: 70px; height: 30px; padding: 0 8px; display: inline-flex; align-items: center; justify-content: center; gap: 5px; border: 1px solid var(--line); border-radius: 9px; background: var(--surface-2); color: var(--muted); cursor: pointer; font: inherit; font-size: 10px; font-weight: 850; transition: color .14s ease, background .14s ease, border-color .14s ease, opacity .14s ease, transform .14s ease; }
       .history-btn:hover:not(:disabled), .history-btn:focus-visible:not(:disabled) { color: var(--accent); background: var(--accent-soft); border-color: var(--accent); outline: none; }
       .history-btn:active:not(:disabled) { transform: scale(.94); }
       .history-btn:disabled { opacity: .34; cursor: not-allowed; }
       .history-btn svg { width: 15px; height: 15px; flex: 0 0 15px; }
+      .history-open-btn { min-width: 78px; }
+      .calculation-history-popover {
+        position: absolute; left: 0; top: calc(100% + 8px); z-index: 160;
+        width: min(330px, calc(100vw - 28px)); max-height: min(360px, calc(100dvh - 140px));
+        overflow: auto; padding: 10px; border: 1px solid var(--line); border-radius: 14px;
+        background: color-mix(in srgb, var(--surface-solid) 94%, transparent);
+        box-shadow: 0 18px 45px rgba(0,0,0,.22); direction: rtl;
+        opacity: 0; visibility: hidden; pointer-events: none;
+        transform: translateY(-5px); transform-origin: left top;
+        transition: opacity .16s ease, transform .16s ease, visibility .16s ease;
+      }
+      .calculation-history-popover.open { opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0); }
+      .history-popover-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+      .history-popover-title { color: var(--text); font-size: 12px; font-weight: 900; }
+      .history-popover-close { width: 25px; height: 25px; padding: 0; border: 1px solid var(--line); border-radius: 7px; background: var(--surface-2); color: var(--muted); display: inline-grid; place-items: center; cursor: pointer; }
+      .history-popover-close:hover, .history-popover-close:focus-visible { color: var(--accent); border-color: var(--accent); outline: none; }
+      .history-popover-close svg { width: 13px; height: 13px; }
+      .history-popover-list { display: grid; gap: 5px; }
+      .history-popover-item { width: 100%; min-height: 44px; padding: 7px 9px; border: 1px solid transparent; border-radius: 9px; background: var(--surface-2); color: var(--text); display: flex; align-items: center; justify-content: space-between; gap: 10px; text-align: right; font: inherit; cursor: pointer; transition: background .14s ease, border-color .14s ease, transform .14s ease; }
+      .history-popover-item:hover, .history-popover-item:focus-visible { background: var(--accent-soft); border-color: var(--accent); outline: none; }
+      .history-popover-item:active { transform: scale(.985); }
+      .history-popover-item.is-current { border-color: color-mix(in srgb, var(--accent) 70%, transparent); }
+      .history-popover-item-main { min-width: 0; display: grid; gap: 2px; }
+      .history-popover-item-title { font-size: 11px; font-weight: 900; line-height: 1.4; }
+      .history-popover-item-detail { color: var(--muted); font-size: 10px; line-height: 1.5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .history-popover-item-index { flex: 0 0 auto; color: var(--muted); font-size: 10px; font-weight: 850; direction: ltr; }
+      .history-popover-empty { padding: 12px 8px; color: var(--muted); font-size: 11px; text-align: center; }
       @media (max-width: 620px) { .history-switch-row { max-width: none; } .calculation-history-controls { margin-inline-start: 0; } }
     </style>`);
 
@@ -81,6 +108,19 @@ html,body{margin:0;width:100%;height:100%;background:#121629}
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 14 5-5-5-5"/><path d="M20 9h-9a7 7 0 0 0-7 7v1"/></svg>
                 <span>Redo</span>
               </button>
+              <button type="button" class="history-btn history-open-btn" id="openCalculationHistoryBtn" aria-label="نمایش تاریخچه محاسبات" title="تاریخچه محاسبات" aria-expanded="false" aria-controls="calculationHistoryPopover">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v5l3.2 1.8"/><path d="M5.5 5.5 3.8 3.8"/></svg>
+                <span>History</span>
+              </button>
+            </div>
+            <div class="calculation-history-popover" id="calculationHistoryPopover" role="dialog" aria-modal="false" aria-hidden="true" aria-label="تاریخچه محاسبات">
+              <div class="history-popover-head">
+                <strong class="history-popover-title">تاریخچه محاسبات</strong>
+                <button type="button" class="history-popover-close" id="closeCalculationHistoryBtn" aria-label="بستن تاریخچه" title="بستن">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"/></svg>
+                </button>
+              </div>
+              <div class="history-popover-list" id="calculationHistoryList"></div>
             </div>
           </div>
         </section>
@@ -248,11 +288,29 @@ html,body{margin:0;width:100%;height:100%;background:#121629}
 
 
     // High-quality A4 PDF export: two JPEG-backed technical pages (section + plan)
+    source = source.replace(
+      '      function drawPlan(r) {',
+      '      function drawPlan(r, widthOverride = null) {'
+    );
+    source = source.replace(
+      '        const widthM = Math.max(0.8, geom.widthM || 1.2);',
+      '        const widthM = Math.max(0.8, Number(widthOverride) || geom.widthM || 1.2);'
+    );
+
     const pdfFunctionPattern = /      async function downloadPDF\(\) \{[\s\S]*?\n      \}\n\n      function downloadDXF/;
     if (!pdfFunctionPattern.test(source)) {
       throw new Error("تابع خروجی PDF فعلی پیدا نشد.");
     }
     source = source.replace(pdfFunctionPattern, "      function buildTechnicalSheetSVG(view) {\n        const r = state.result || invalidResult();\n        const drawing = view === \"section\" ? drawSection(r) : drawPlan(r);\n\n        const viewTitle = view === \"section\" ? t(\"section\") : t(\"plan\");\n        const drawingTitle = t(`${state.type}Drawing`);\n        const totalLabel = r.valid && !r.blocked ? formatLength(r.total) : t(\"noResult\");\n        const slopeValue = Number(r.params?.slope || 0);\n        const transitionValue = Number(r.params?.transitionSlope || 0);\n\n        const slopeLine = state.type === \"car\"\n          ? `${t(\"mainSlope\")}: ${slopeValue}%   ·   ${t(\"transitionSlope\")}: ${transitionValue}%`\n          : `${t(\"slope\")}: ${slopeValue}%`;\n\n        const generatedDate = new Date().toISOString().slice(0, 10);\n\n        return `<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<svg xmlns=\"http://www.w3.org/2000/svg\"\n     width=\"1123\"\n     height=\"794\"\n     viewBox=\"0 0 1123 794\">\n  <style>\n    :root {\n      --text: #151b2b;\n      --muted: #6d7892;\n      --line-strong: #c9d3e3;\n      --accent: #79a1fd;\n      --surface-solid: #ffffff;\n      --surface-2: #f4f7fb;\n    }\n    text {\n      font-family: Vazirmatn, Tahoma, Arial, sans-serif;\n      fill: var(--text);\n    }\n    .sheet-title { font-size: 24px; font-weight: 900; }\n    .sheet-subtitle { font-size: 15px; font-weight: 800; }\n    .sheet-meta { font-size: 12px; font-weight: 700; fill: var(--muted); }\n    .sheet-small { font-size: 10px; font-weight: 700; fill: var(--muted); }\n  </style>\n\n  <rect x=\"0\" y=\"0\" width=\"1123\" height=\"794\" fill=\"#ffffff\"/>\n  <rect x=\"24\" y=\"24\" width=\"1075\" height=\"746\" rx=\"4\"\n        fill=\"none\" stroke=\"#c9d3e3\" stroke-width=\"1.4\"/>\n\n  <text x=\"62\" y=\"62\" class=\"sheet-title\">${escapeXML(t(\"appTitle\"))}</text>\n  <text x=\"1060\" y=\"58\" text-anchor=\"end\" class=\"sheet-subtitle\">${escapeXML(drawingTitle)} — ${escapeXML(viewTitle)}</text>\n  <text x=\"1060\" y=\"82\" text-anchor=\"end\" class=\"sheet-meta\">${escapeXML(slopeLine)}</text>\n\n  <line x1=\"62\" y1=\"103\" x2=\"1061\" y2=\"103\"\n        stroke=\"#c9d3e3\" stroke-width=\"1\"/>\n\n  <g transform=\"translate(81 132) scale(1.068)\">\n    ${drawing}\n  </g>\n\n  <line x1=\"62\" y1=\"724\" x2=\"1061\" y2=\"724\"\n        stroke=\"#c9d3e3\" stroke-width=\"1\"/>\n\n  <text x=\"62\" y=\"750\" class=\"sheet-small\">Pixel Studio</text>\n  <text x=\"561.5\" y=\"750\" text-anchor=\"middle\" class=\"sheet-meta\">${escapeXML(t(\"totalLength\"))}: ${escapeXML(totalLabel)}</text>\n  <text x=\"1061\" y=\"750\" text-anchor=\"end\" class=\"sheet-small\">${generatedDate}</text>\n</svg>`;\n      }\n\n      async function renderTechnicalSheetToJpeg(view) {\n        if (document.fonts?.ready) await document.fonts.ready;\n\n        const sheetSVG = buildTechnicalSheetSVG(view);\n        const svgBlob = new Blob(\n          [sheetSVG],\n          { type: \"image/svg+xml;charset=utf-8\" }\n        );\n\n        const url = URL.createObjectURL(svgBlob);\n\n        try {\n          const image = new Image();\n\n          await new Promise((resolve, reject) => {\n            image.onload = resolve;\n            image.onerror = () =>\n              reject(new Error(\"A4 SVG render failed\"));\n            image.src = url;\n          });\n\n          const canvas = document.createElement(\"canvas\");\n\n          // اندازه A4 افقی با کیفیت بالا\n          canvas.width = 2806;\n          canvas.height = 1984;\n\n          const ctx = canvas.getContext(\"2d\", { alpha: false });\n\n          ctx.fillStyle = \"#ffffff\";\n          ctx.fillRect(0, 0, canvas.width, canvas.height);\n          ctx.drawImage(image, 0, 0, canvas.width, canvas.height);\n\n          const jpegBlob = await new Promise((resolve, reject) => {\n            canvas.toBlob(\n              blob => blob\n                ? resolve(blob)\n                : reject(new Error(\"JPEG render failed\")),\n              \"image/jpeg\",\n              0.96\n            );\n          });\n\n          return {\n            bytes: new Uint8Array(await jpegBlob.arrayBuffer()),\n            width: canvas.width,\n            height: canvas.height\n          };\n        } finally {\n          URL.revokeObjectURL(url);\n        }\n      }\n\n      function buildA4Pdf(pages) {\n        const encoder = new TextEncoder();\n        const chunks = [];\n\n        const objectCount = 2 + pages.length * 3;\n        const offsets = new Array(objectCount + 1).fill(0);\n\n        let byteOffset = 0;\n\n        const pushBytes = bytes => {\n          chunks.push(bytes);\n          byteOffset += bytes.length;\n        };\n\n        const pushText = value => {\n          pushBytes(encoder.encode(value));\n        };\n\n        const object = (number, body) => {\n          offsets[number] = byteOffset;\n          pushText(`${number} 0 obj\n${body}\nendobj\n`);\n        };\n\n        pushText(\"%PDF-1.4\\n%TECH-A4\\n\");\n\n        object(1, \"<< /Type /Catalog /Pages 2 0 R >>\");\n\n        const pageObjects = pages.map(\n          (_, index) => 3 + index * 3\n        );\n\n        object(\n          2,\n          `<< /Type /Pages /Kids [${\n            pageObjects.map(number => `${number} 0 R`).join(\" \")\n          }] /Count ${pages.length} >>`\n        );\n\n        pages.forEach((page, index) => {\n          const pageObject = 3 + index * 3;\n          const imageObject = pageObject + 1;\n          const contentObject = pageObject + 2;\n          const imageName = `Im${index}`;\n\n          // اندازه استاندارد A4 افقی برحسب PDF Point\n          object(\n            pageObject,\n            `<< /Type /Page\n          /Parent 2 0 R\n          /MediaBox [0 0 841.89 595.28]\n          /Resources <<\n            /XObject <<\n              /${imageName} ${imageObject} 0 R\n            >>\n          >>\n          /Contents ${contentObject} 0 R\n       >>`\n          );\n\n          offsets[imageObject] = byteOffset;\n\n          pushText(\n            `${imageObject} 0 obj\n<<\n  /Type /XObject\n  /Subtype /Image\n  /Width ${page.width}\n  /Height ${page.height}\n  /ColorSpace /DeviceRGB\n  /BitsPerComponent 8\n  /Filter /DCTDecode\n  /Length ${page.bytes.length}\n>>\nstream\n`\n          );\n\n          pushBytes(page.bytes);\n          pushText(\"\\nendstream\\nendobj\\n\");\n\n          const content =\n            `q\n841.89 0 0 595.28 0 0 cm\n/${imageName} Do\nQ\n`;\n\n          object(\n            contentObject,\n            `<< /Length ${encoder.encode(content).length} >>\nstream\n${content}endstream`\n          );\n        });\n\n        const xrefOffset = byteOffset;\n\n        pushText(\n          `xref\n0 ${objectCount + 1}\n0000000000 65535 f \n`\n        );\n\n        for (let i = 1; i <= objectCount; i++) {\n          pushText(\n            `${String(offsets[i]).padStart(10, \"0\")} 00000 n \\n`\n          );\n        }\n\n        pushText(\n          `trailer\n<< /Size ${objectCount + 1} /Root 1 0 R >>\nstartxref\n${xrefOffset}\n%%EOF`\n        );\n\n        return new Blob(chunks, {\n          type: \"application/pdf\"\n        });\n      }\n\n      async function downloadPDF() {\n        const button = document.querySelector(\"#pdfBtn\");\n\n        if (button.disabled) return;\n\n        button.disabled = true;\n        button.setAttribute(\"aria-busy\", \"true\");\n\n        showToast(t(\"pdfPreparing\"));\n\n        try {\n          calculateCurrent(true);\n\n          const pages = [];\n\n          // صفحه اول: نما\n          // صفحه دوم: پلان\n          for (const view of [\"section\", \"plan\"]) {\n            pages.push(\n              await renderTechnicalSheetToJpeg(view)\n            );\n          }\n\n          const pdf = buildA4Pdf(pages);\n          const date = new Date()\n            .toISOString()\n            .slice(0, 10);\n\n          downloadBlob(\n            pdf,\n            \"application/pdf\",\n            `ramp-technical-A4-${state.type}-section-plan-${date}.pdf`\n          );\n\n          showToast(t(\"pdfDownloaded\"));\n        } catch (error) {\n          console.error(error);\n          showToast(t(\"pdfFailed\"));\n        } finally {\n          button.disabled = false;\n          button.removeAttribute(\"aria-busy\");\n        }\n      }\n\n      document\n        .querySelector(\"#pdfBtn\")\n        .addEventListener(\"click\", downloadPDF);\n\n      function downloadDXF");
+
+    source = source.replace(
+      '      function buildTechnicalSheetSVG(view) {\n        const r = state.result || invalidResult();\n        const drawing = view === "section" ? drawSection(r) : drawPlan(r);',
+      '      function buildTechnicalSheetSVG(view) {\n        const r = state.result || invalidResult();\n        const activeFormat = (document.querySelector("#exportFormatBadge")?.textContent || "PDF").trim().toLowerCase();\n        const widthInput = activeFormat === "jpg" ? document.querySelector("#exportJpgWidth") : document.querySelector("#exportPdfWidth");\n        const planWidthM = Number(widthInput?.value);\n        const drawing = view === "section" ? drawSection(r) : drawPlan(r, Number.isFinite(planWidthM) && planWidthM > 0 ? planWidthM : null);'
+    );
+    source = source.replace(
+      '        const planWidthM = Number(widthInput?.value);',
+      '        const widthUnit = activeFormat === "jpg" ? document.querySelector("#exportJpgWidthUnit")?.value : document.querySelector("#exportPdfWidthUnit")?.value;\n        const widthValue = Number(widthInput?.value);\n        const planWidthM = widthUnit === "cm" ? widthValue / 100 : widthValue;'
+    );
 
     const helperMarker = '      const $ = (s, root=document) => root.querySelector(s);';
     if (!source.includes(helperMarker)) {
@@ -326,7 +384,7 @@ ${helperMarker}`
 
     source = source.replace(
       '        const toX = value => originX + value * scale;\n\n        let rects = "";',
-      '        const toX = value => originX + value * scale;\n        const overallEndPx = toX(overallEndX);\n\n        let rects = "";'
+      '        const toX = value => originX + value * scale;\n        const overallEndPx = toX(state.type === "car" ? Math.max(0, totalX - Number(r.stopLength || 0)) : totalX);\n\n        let rects = "";'
     );
 
     source = source.replace(
@@ -1526,7 +1584,7 @@ ${helperMarker}`
       let exportDxfBlock = source.slice(exportDxfStart, exportDxfEnd);
       exportDxfBlock = exportDxfBlock.replace(
         '        const geom = buildRampGeometry(state.result || invalidResult());\n        const dxfScale = lengthScaleFactor();\n        const insUnits = state.heightUnit === "cm" ? 5 : 6;\n        const dxfValue = value => Number((Number(value) * dxfScale).toFixed(state.heightUnit === "cm" ? 3 : 6));',
-        '        const geom = buildRampGeometry(state.result || invalidResult());\n        const exportDxfView = document.querySelector("#exportDxfView")?.value || state.view;\n        const exportDxfUnit = document.querySelector("#exportDxfUnit")?.value || selectedLengthUnit();\n        const dxfScale = exportDxfUnit === "cm" ? 100 : 1;\n        const insUnits = exportDxfUnit === "cm" ? 5 : 6;\n        const dxfValue = value => Number((Number(value) * dxfScale).toFixed(exportDxfUnit === "cm" ? 3 : 6));'
+        '        const geom = buildRampGeometry(state.result || invalidResult());\n        const exportDxfView = document.querySelector("#exportDxfView")?.value || state.view;\n        const exportDxfUnit = document.querySelector("#exportDxfUnit")?.value || selectedLengthUnit();\n        const exportDxfWidthUnit = document.querySelector("#exportDxfWidthUnit")?.value || exportDxfUnit;\n        const widthInputValue = Number(document.querySelector("#exportDxfWidth")?.value);\n        const widthM = Number.isFinite(widthInputValue) && widthInputValue > 0\n          ? (exportDxfWidthUnit === "cm" ? widthInputValue / 100 : widthInputValue)\n          : (Number(geom.widthM) || 1.2);\n        const exportDxfWidth = Math.max(0.01, widthM * (exportDxfUnit === "cm" ? 100 : 1));\n        const dxfScale = exportDxfUnit === "cm" ? 100 : 1;\n        const insUnits = exportDxfUnit === "cm" ? 5 : 6;\n        const dxfValue = value => Number((Number(value) * dxfScale).toFixed(exportDxfUnit === "cm" ? 3 : 6));'
       );
       exportDxfBlock = exportDxfBlock.replace('        if (state.view === "section") {', '        if (exportDxfView === "section" || exportDxfView === "both") {');
       exportDxfBlock = exportDxfBlock.replace(
@@ -1540,7 +1598,7 @@ ${helperMarker}`
         }`,
         `        }
         if (exportDxfView === "plan" || exportDxfView === "both") {
-          const w = geom.widthM;
+          const w = exportDxfWidth;
           const offset = exportDxfView === "both" ? w + 2 : 0;
           line(offset,0,offset + geom.totalX,0,"EDGE");
           line(offset + geom.totalX,0,offset + geom.totalX,w,"EDGE");
@@ -1712,6 +1770,14 @@ ${helperMarker}`
         cursor: pointer;
       }
       .export-select:focus { border-color: var(--accent); }
+      .export-number-with-unit {
+        width: 100%;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 88px;
+        gap: 8px;
+      }
+      .export-number-with-unit .export-select { min-width: 0; }
+      .export-number-with-unit input:disabled { opacity: .46; cursor: not-allowed; }
       .export-check-control {
         min-height: 38px;
         display: inline-flex;
@@ -1769,6 +1835,7 @@ ${helperMarker}`
       .export-setting-row.is-muted input { cursor: not-allowed; }
       @media (max-width: 520px) {
         .export-setting-row-inner { grid-template-columns: 1fr; gap: 8px; }
+        .export-number-with-unit { grid-template-columns: minmax(0, 1fr) 82px; }
       }
 
       .export-meta {
@@ -2265,12 +2332,13 @@ ${helperMarker}`
       return new Blob([glb], { type: 'model/gltf-binary' });
     }
 
-    function buildRampDxf3D(geometry, rampType, unit, thicknessCm = 15, solid = true) {
+    function buildRampDxf3D(geometry, rampType, unit, thicknessCm = 15, solid = true, widthValue = null) {
       if (!geometry?.points?.length || geometry.points.length < 2) {
         throw new Error('Ramp geometry is not available');
       }
       const scale = unit === 'centimeter' ? 100 : 1;
-      const width = (Number(geometry.widthM) || (rampType === 'car' ? 3.5 : 1.2)) * scale;
+      const defaultWidth = (Number(geometry.widthM) || (rampType === 'car' ? 3.5 : 1.2)) * scale;
+      const width = Number.isFinite(Number(widthValue)) && Number(widthValue) > 0 ? Number(widthValue) : defaultWidth;
       const halfWidth = width / 2;
       const thickness = Math.max(0.1, Number(thicknessCm) || 15) / 100 * scale;
       const points = geometry.points.map(point => ({ x: Number(point.x) * scale, z: Number(point.z) * scale }));
@@ -2419,6 +2487,25 @@ ${helperMarker}`
               </select>
             </div>
 
+            <div class="export-setting-row" id="exportJpgWidthRow">
+              <div class="export-setting-copy">
+                <div class="export-setting-label" id="exportJpgWidthLabel">عرض رمپ در پلان</div>
+                <div class="export-setting-hint" id="exportJpgWidthHint">واحد عرض را انتخاب کنید؛ فقط در پلان یا پلان + نما</div>
+              </div>
+              <input class="export-select" id="exportJpgWidth" type="number" min="0.01" step="0.01" value="3.5" inputmode="decimal">
+            </div>
+
+            <div class="export-setting-row" id="exportJpgWidthUnitRow">
+              <div class="export-setting-copy">
+                <div class="export-setting-label">واحد اندازه‌ها</div>
+                <div class="export-setting-hint">واحد نمایش اندازه‌های خروجی</div>
+              </div>
+              <select class="export-select" id="exportJpgWidthUnit" aria-label="واحد اندازه‌ها">
+                <option value="m" selected>متر (m)</option>
+                <option value="cm">سانتی‌متر (cm)</option>
+              </select>
+            </div>
+
             <div class="export-setting-row">
               <div class="export-setting-copy">
                 <div class="export-setting-label" id="exportJpgQualityLabel">کیفیت</div>
@@ -2444,6 +2531,23 @@ ${helperMarker}`
                 <div class="export-setting-hint" id="exportDxf3dUnitHint">واحد مدل در فایل DXF سه‌بعدی</div>
               </div>
               <select class="export-select" id="exportDxf3dUnit">
+                <option value="meter">متر (m)</option>
+                <option value="centimeter" selected>سانتی‌متر (cm)</option>
+              </select>
+            </div>
+            <div class="export-setting-row">
+              <div class="export-setting-copy">
+                <div class="export-setting-label" id="exportDxf3dWidthLabel">عرض رمپ</div>
+                <div class="export-setting-hint" id="exportDxf3dWidthHint">مقدار عرض رمپ و واحد آن را انتخاب کنید</div>
+              </div>
+              <input class="export-select" id="exportDxf3dWidth" type="number" min="0.01" step="0.01" value="350" inputmode="decimal">
+            </div>
+            <div class="export-setting-row" id="exportDxf3dWidthUnitRow">
+              <div class="export-setting-copy">
+                <div class="export-setting-label">واحد اندازه‌ها</div>
+                <div class="export-setting-hint">واحد نمایش اندازه‌های مدل</div>
+              </div>
+              <select class="export-select" id="exportDxf3dWidthUnit" aria-label="واحد اندازه‌ها">
                 <option value="meter">متر (m)</option>
                 <option value="centimeter" selected>سانتی‌متر (cm)</option>
               </select>
@@ -2476,12 +2580,51 @@ ${helperMarker}`
           const choices = [...field.querySelectorAll('[data-format-choice]')];
           const scrollCue = field.querySelector('#exportFormatScrollCue');
           const jpgView = jpgPanel.querySelector('#exportJpgView');
+          const jpgWidth = jpgPanel.querySelector('#exportJpgWidth');
+          const jpgWidthUnit = jpgPanel.querySelector('#exportJpgWidthUnit');
+          const jpgWidthRow = jpgPanel.querySelector('#exportJpgWidthRow');
           const jpgQuality = jpgPanel.querySelector('#exportJpgQuality');
           const dxf3dUnit = dxf3dPanel.querySelector('#exportDxf3dUnit');
+          const dxf3dWidth = dxf3dPanel.querySelector('#exportDxf3dWidth');
+          const dxf3dWidthUnit = dxf3dPanel.querySelector('#exportDxf3dWidthUnit');
           const dxf3dThickness = dxf3dPanel.querySelector('#exportDxf3dThickness');
           const dxf3dGeometry = dxf3dPanel.querySelector('#exportDxf3dGeometry');
           const dxf3dThicknessRow = dxf3dPanel.querySelector('#exportDxf3dThicknessRow');
           let selectedFormat = 'pdf';
+          const syncJpgWidthVisibility = () => {
+            const includesPlan = jpgView.value === 'plan' || jpgView.value === 'both';
+            if (jpgWidth) jpgWidth.disabled = !includesPlan;
+          };
+          jpgView.addEventListener('change', syncJpgWidthVisibility);
+          let jpgWidthPreviousUnit = jpgWidthUnit?.value || 'm';
+          jpgWidthUnit?.addEventListener('change', () => {
+            const numericWidth = Number(jpgWidth?.value);
+            if (!Number.isFinite(numericWidth) || numericWidth <= 0) {
+              jpgWidthPreviousUnit = jpgWidthUnit.value;
+              return;
+            }
+            const widthM = jpgWidthPreviousUnit === 'cm' ? numericWidth / 100 : numericWidth;
+            jpgWidth.value = jpgWidthUnit.value === 'cm'
+              ? Number((widthM * 100).toFixed(2))
+              : Number(widthM.toFixed(3));
+            jpgWidthPreviousUnit = jpgWidthUnit.value;
+          });
+          try {
+            const api = frame.contentWindow.rampExportAPI;
+            const geometry = api?.geometry?.();
+            const fallbackWidth = api?.type?.() === 'car' ? 3.5 : 1.2;
+            const widthM = Number(geometry?.widthM) || fallbackWidth;
+            if (jpgWidth) jpgWidth.value = Number(widthM.toFixed(3));
+            if (jpgWidthUnit) jpgWidthUnit.value = 'm';
+          } catch (_) { /* keep the safe default */ }
+          try {
+            const api = frame.contentWindow.rampExportAPI;
+            const geometry = api?.geometry?.();
+            const fallbackWidth = api?.type?.() === 'car' ? 3.5 : 1.2;
+            const widthM = Number(geometry?.widthM) || fallbackWidth;
+            if (dxf3dWidth) dxf3dWidth.value = Number((widthM * 100).toFixed(2));
+            if (dxf3dWidthUnit) dxf3dWidthUnit.value = 'centimeter';
+          } catch (_) { /* keep the safe default */ }
 
           const isEnglish = () => doc.documentElement.dataset.lang === 'en';
           const copy = {
@@ -2493,6 +2636,8 @@ ${helperMarker}`
               dxf3dHint: 'مدل سه‌بعدی قابل استفاده در نرم‌افزارهای سه‌بعدی',
               viewLabel: 'محتوای خروجی',
               viewHint: 'انتخاب ترسیم مورد نظر برای خروجی',
+              jpgWidthLabel: 'عرض رمپ در پلان',
+              jpgWidthHint: 'واحد عرض را انتخاب کنید؛ فقط در پلان یا پلان + نما',
               jpgQualityLabel: 'کیفیت',
               jpgQualityHint: 'رزولوشن تصویر خروجی',
               plan: 'پلان',
@@ -2506,6 +2651,8 @@ ${helperMarker}`
               downloadJpg: 'دانلود JPG',
               dxf3dUnitLabel: 'واحد مدل',
               dxf3dUnitHint: 'واحد مدل در فایل DXF سه‌بعدی',
+              dxf3dWidthLabel: 'عرض رمپ',
+              dxf3dWidthHint: 'مقدار عرض رمپ و واحد آن را انتخاب کنید',
               dxf3dGeometryLabel: 'نوع مدل',
               dxf3dGeometryHint: 'نوع مدل سه‌بعدی را انتخاب کنید',
               dxf3dSolid: 'مدل با ضخامت حجم',
@@ -2524,6 +2671,8 @@ ${helperMarker}`
               dxf3dHint: '3D model for use in 3D software',
               viewLabel: 'Output content',
               viewHint: 'Choose the drawings to include in the output',
+              jpgWidthLabel: 'Ramp width in plan',
+              jpgWidthHint: 'Choose the width unit; used for Plan or Plan + Section',
               jpgQualityLabel: 'Quality',
               jpgQualityHint: 'Output image resolution',
               plan: 'Plan',
@@ -2537,6 +2686,8 @@ ${helperMarker}`
               downloadJpg: 'Download JPG',
               dxf3dUnitLabel: 'Model unit',
               dxf3dUnitHint: 'Geometry unit in the 3D DXF file',
+              dxf3dWidthLabel: 'Ramp width',
+              dxf3dWidthHint: 'Choose the ramp width and its unit',
               dxf3dGeometryLabel: 'Geometry type',
               dxf3dGeometryHint: 'Choose the DXF 3D model type',
               dxf3dSolid: 'Solid with thickness',
@@ -2616,6 +2767,7 @@ ${helperMarker}`
             } else if (selectedFormat === 'jpg') {
               jpgPanel.classList.add('active');
               syncJpgDefaultView();
+              syncJpgWidthVisibility();
               downloadLabel.textContent = c.downloadJpg;
               downloadBtn.disabled = false;
             }
@@ -2635,6 +2787,8 @@ ${helperMarker}`
             hint.textContent = selectedFormat === 'pdf' ? c.pdfHint : selectedFormat === 'jpg' ? c.jpgHint : selectedFormat === 'dxf' ? c.dxfHint : c.dxf3dHint;
             doc.querySelector('#exportJpgViewLabel').textContent = c.viewLabel;
             doc.querySelector('#exportJpgViewHint').textContent = c.viewHint;
+            doc.querySelector('#exportJpgWidthLabel').textContent = c.jpgWidthLabel;
+            doc.querySelector('#exportJpgWidthHint').textContent = c.jpgWidthHint;
             doc.querySelector('#exportJpgQualityLabel').textContent = c.jpgQualityLabel;
             doc.querySelector('#exportJpgQualityHint').textContent = c.jpgQualityHint;
             jpgView.options[0].textContent = c.plan;
@@ -2645,12 +2799,22 @@ ${helperMarker}`
             jpgQuality.options[2].textContent = c.medium;
             jpgQuality.options[3].textContent = c.high;
             jpgQuality.options[4].textContent = c.maximum;
+            if (jpgWidthUnit) {
+              jpgWidthUnit.options[0].textContent = c.meter;
+              jpgWidthUnit.options[1].textContent = c.centimeter;
+            }
             doc.querySelector('#exportDxf3dUnitLabel').textContent = c.dxf3dUnitLabel;
             doc.querySelector('#exportDxf3dUnitHint').textContent = c.dxf3dUnitHint;
+            doc.querySelector('#exportDxf3dWidthLabel').textContent = c.dxf3dWidthLabel;
+            doc.querySelector('#exportDxf3dWidthHint').textContent = c.dxf3dWidthHint;
             doc.querySelector('#exportDxf3dThicknessLabel').textContent = c.dxf3dThicknessLabel;
             doc.querySelector('#exportDxf3dThicknessHint').textContent = c.dxf3dThicknessHint;
             dxf3dUnit.options[0].textContent = c.meter;
             dxf3dUnit.options[1].textContent = c.centimeter;
+            if (dxf3dWidthUnit) {
+              dxf3dWidthUnit.options[0].textContent = c.meter;
+              dxf3dWidthUnit.options[1].textContent = c.centimeter;
+            }
             doc.querySelector('#exportDxf3dGeometryLabel').textContent = c.dxf3dGeometryLabel;
             doc.querySelector('#exportDxf3dGeometryHint').textContent = c.dxf3dGeometryHint;
             dxf3dGeometry.options[0].textContent = c.dxf3dSolid;
@@ -2685,6 +2849,19 @@ ${helperMarker}`
             dxf3dPreviousUnit = dxf3dUnit.value;
             syncDxf3dThickness();
           });
+          let dxf3dWidthPreviousUnit = dxf3dWidthUnit?.value || 'centimeter';
+          dxf3dWidthUnit?.addEventListener('change', () => {
+            const numericWidth = Number(dxf3dWidth?.value);
+            if (!Number.isFinite(numericWidth) || numericWidth <= 0) {
+              dxf3dWidthPreviousUnit = dxf3dWidthUnit.value;
+              return;
+            }
+            const widthM = dxf3dWidthPreviousUnit === 'centimeter' ? numericWidth / 100 : numericWidth;
+            dxf3dWidth.value = dxf3dWidthUnit.value === 'centimeter'
+              ? Number((widthM * 100).toFixed(2))
+              : Number(widthM.toFixed(3));
+            dxf3dWidthPreviousUnit = dxf3dWidthUnit.value;
+          });
           dxf3dGeometry.addEventListener('change', () => {
             syncDxf3dThickness();
             updateLanguage();
@@ -2706,7 +2883,10 @@ ${helperMarker}`
                 if (!api.valid()) return;
                 downloadBtn.disabled = true;
                 const solid = dxf3dGeometry.value === 'solid';
-                const blob = buildRampDxf3D(api.geometry(), api.type(), dxf3dUnit.value, dxf3dThickness.value, solid);
+                const widthInputValue = Number(dxf3dWidth.value);
+                const widthM = dxf3dWidthUnit?.value === 'meter' ? widthInputValue : widthInputValue / 100;
+                const widthForModelUnit = dxf3dUnit.value === 'meter' ? widthM : widthM * 100;
+                const blob = buildRampDxf3D(api.geometry(), api.type(), dxf3dUnit.value, dxf3dThickness.value, solid, widthForModelUnit);
                 const url = URL.createObjectURL(blob);
                 const a = doc.createElement('a');
                 const date = new Date().toISOString().slice(0, 10);
@@ -2826,7 +3006,9 @@ ${helperMarker}`
         jpeg: view => renderTechnicalSheetToJpeg(view),
         pdf: pages => buildA4Pdf(pages),
         dxf: () => downloadDXF(),
-        type: () => state.type
+        type: () => state.type,
+        view: () => state.view,
+        setView: view => setView(view)
       };
       function buildRampGeometry(r) {`);
     // Fixed ISO A-series aspect ratio for print-safe PDF and JPG output.
@@ -2907,6 +3089,24 @@ ${helperMarker}`
     frame.addEventListener("load", () => {
       try {
         const doc = frame.contentDocument;
+
+        // The drawing view controls live inside the source iframe. Bind them
+        // in capture phase as a stable fallback so the Plan button keeps
+        // working even if a later injected UI listener intercepts the click.
+        if (!doc.documentElement.dataset.drawingViewControlsReady) {
+          doc.documentElement.dataset.drawingViewControlsReady = "true";
+          doc.addEventListener("click", event => {
+            const button = event.target.closest?.(".view-tab[data-view]");
+            if (!button) return;
+            const view = button.dataset.view;
+            if (view !== "plan" && view !== "section") return;
+            const api = frame.contentWindow.rampExportAPI;
+            if (typeof api?.setView !== "function") return;
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            api.setView(view);
+          }, true);
+        }
 
         // Small scroll affordance for long pages, responsive to viewport height.
         if (!doc.getElementById('pageScrollCue')) {
@@ -3048,6 +3248,25 @@ ${helperMarker}`
                       </select>
                     </div>
 
+                    <div class="export-setting-row" id="exportPdfWidthRow">
+                      <div class="export-setting-copy">
+                        <div class="export-setting-label" data-export-i18n="pdfWidthLabel">عرض رمپ در پلان</div>
+                        <div class="export-setting-hint" data-export-i18n="pdfWidthHint">واحد عرض را انتخاب کنید؛ فقط در پلان یا پلان + نما</div>
+                      </div>
+                      <input class="export-select" id="exportPdfWidth" type="number" min="0.01" step="0.01" value="3.5" inputmode="decimal">
+                    </div>
+
+                    <div class="export-setting-row" id="exportPdfWidthUnitRow">
+                      <div class="export-setting-copy">
+                        <div class="export-setting-label" data-export-i18n="widthUnitLabel">واحد اندازه‌ها</div>
+                        <div class="export-setting-hint" data-export-i18n="widthUnitHint">واحد نمایش اندازه‌های خروجی</div>
+                      </div>
+                      <select class="export-select" id="exportPdfWidthUnit" aria-label="واحد اندازه‌ها">
+                        <option value="m" selected>متر (m)</option>
+                        <option value="cm">سانتی‌متر (cm)</option>
+                      </select>
+                    </div>
+
                     <div class="export-setting-row">
                       <div class="export-setting-copy">
                         <div class="export-setting-label" data-export-i18n="pdfQualityLabel">کیفیت</div>
@@ -3087,6 +3306,25 @@ ${helperMarker}`
                       </select>
                     </div>
 
+                    <div class="export-setting-row">
+                      <div class="export-setting-copy">
+                        <div class="export-setting-label" data-export-i18n="dxfWidthLabel">عرض رمپ</div>
+                        <div class="export-setting-hint" data-export-i18n="dxfWidthHint">مقدار عرض رمپ و واحد آن را انتخاب کنید</div>
+                      </div>
+                      <input class="export-select" id="exportDxfWidth" type="number" min="0.01" step="0.01" value="3.5" inputmode="decimal">
+                    </div>
+
+                    <div class="export-setting-row" id="exportDxfWidthUnitRow">
+                      <div class="export-setting-copy">
+                        <div class="export-setting-label" data-export-i18n="widthUnitLabel">واحد اندازه‌ها</div>
+                        <div class="export-setting-hint" data-export-i18n="widthUnitHint">واحد نمایش اندازه‌های خروجی</div>
+                      </div>
+                      <select class="export-select" id="exportDxfWidthUnit" aria-label="واحد اندازه‌ها">
+                        <option value="m" selected>متر (m)</option>
+                        <option value="cm">سانتی‌متر (cm)</option>
+                      </select>
+                    </div>
+
                   </div>
                 </div>
 
@@ -3105,22 +3343,62 @@ ${helperMarker}`
             const formatButtons = [...modal.querySelectorAll("[data-export-format]")];
             const panels = [...modal.querySelectorAll("[data-export-panel]")];
             const pdfPages = modal.querySelector("#exportPdfPages");
+            const pdfWidth = modal.querySelector("#exportPdfWidth");
+            const pdfWidthUnit = modal.querySelector("#exportPdfWidthUnit");
+            const pdfWidthRow = modal.querySelector("#exportPdfWidthRow");
             const pdfQuality = modal.querySelector("#exportPdfQuality");
             const dxfView = modal.querySelector("#exportDxfView");
             const dxfUnit = modal.querySelector("#exportDxfUnit");
+            const dxfWidth = modal.querySelector("#exportDxfWidth");
+            const dxfWidthUnit = modal.querySelector("#exportDxfWidthUnit");
             let activeFormat = "pdf";
+            try {
+              const api = frame.contentWindow.rampExportAPI;
+              const geometry = api?.geometry?.();
+              const fallbackWidth = api?.type?.() === "car" ? 3.5 : 1.2;
+              const widthM = Number(geometry?.widthM) || fallbackWidth;
+              if (dxfWidth) dxfWidth.value = Number(widthM.toFixed(3));
+              if (pdfWidth) pdfWidth.value = Number(widthM.toFixed(3));
+              if (dxfWidthUnit) dxfWidthUnit.value = "m";
+              if (pdfWidthUnit) pdfWidthUnit.value = "m";
+            } catch (_) { /* keep the safe default */ }
+
+            const syncPdfWidthVisibility = () => {
+              const includesPlan = pdfPages.value === "plan" || pdfPages.value === "both";
+              if (pdfWidth) pdfWidth.disabled = !includesPlan;
+            };
+            pdfPages.addEventListener("change", syncPdfWidthVisibility);
+            let pdfWidthPreviousUnit = pdfWidthUnit?.value || "m";
+            pdfWidthUnit?.addEventListener("change", () => {
+              const numericWidth = Number(pdfWidth?.value);
+              if (!Number.isFinite(numericWidth) || numericWidth <= 0) {
+                pdfWidthPreviousUnit = pdfWidthUnit.value;
+                return;
+              }
+              const widthM = pdfWidthPreviousUnit === "cm" ? numericWidth / 100 : numericWidth;
+              pdfWidth.value = pdfWidthUnit.value === "cm"
+                ? Number((widthM * 100).toFixed(2))
+                : Number(widthM.toFixed(3));
+              pdfWidthPreviousUnit = pdfWidthUnit.value;
+            });
 
             const textFA = {
               title: "خروجی فایل",
               close: "بستن",
               pdfPagesLabel: "محتوای خروجی",
               pdfPagesHint: "انتخاب ترسیم مورد نظر برای خروجی",
+              pdfWidthLabel: "عرض رمپ در پلان",
+              pdfWidthHint: "واحد عرض را انتخاب کنید؛ فقط در پلان یا پلان + نما",
+              widthUnitLabel: "واحد اندازه‌ها",
+              widthUnitHint: "واحد نمایش اندازه‌های خروجی",
               pdfQualityLabel: "کیفیت",
               pdfQualityHint: "رزولوشن خروجی فنی",
               dxfViewLabel: "محتوای خروجی",
               dxfViewHint: "انتخاب ترسیم مورد نظر برای خروجی",
               dxfUnitLabel: "واحد",
               dxfUnitHint: "واحد هندسه در فایل DXF",
+              dxfWidthLabel: "عرض رمپ",
+              dxfWidthHint: "مقدار عرض رمپ و واحد آن را انتخاب کنید",
               landscape: "افقی",
               technicalSheet: "نقشه فنی",
               vectorGeometry: "هندسه برداری",
@@ -3132,12 +3410,18 @@ ${helperMarker}`
               close: "Close",
               pdfPagesLabel: "Output content",
               pdfPagesHint: "Choose the drawings to include in the output",
+              pdfWidthLabel: "Ramp width in plan",
+              pdfWidthHint: "Choose the width unit; used for Plan or Plan + Section",
+              widthUnitLabel: "Measurement unit",
+              widthUnitHint: "Unit used to display output dimensions",
               pdfQualityLabel: "Quality",
               pdfQualityHint: "Technical export resolution",
               dxfViewLabel: "Output content",
               dxfViewHint: "Choose the drawings to include in the output",
               dxfUnitLabel: "Unit",
               dxfUnitHint: "Geometry unit in the DXF file",
+              dxfWidthLabel: "Ramp width",
+              dxfWidthHint: "Choose the ramp width and its unit",
               landscape: "Landscape",
               technicalSheet: "Technical Sheet",
               vectorGeometry: "Vector Geometry",
@@ -3159,6 +3443,7 @@ ${helperMarker}`
               pageOptions[0].textContent = en ? "Plan" : "پلان";
               pageOptions[1].textContent = en ? "Section" : "نما";
               pageOptions[2].textContent = en ? "Plan + Section" : "پلان + نما";
+              syncPdfWidthVisibility();
               pdfQuality.options[0].textContent = en ? "Minimum (smallest file · 72 DPI)" : "Minimum (72 DPI · کمترین حجم)";
               pdfQuality.options[1].textContent = en ? "Low (lightweight · 96 DPI)" : "Low (96 DPI · فایل سبک)";
               pdfQuality.options[2].textContent = en ? "Medium (general use · 144 DPI)" : "Medium (144 DPI · استفاده عمومی)";
@@ -3169,6 +3454,14 @@ ${helperMarker}`
               dxfView.options[2].textContent = en ? "Plan + Section" : "پلان + نما";
               dxfUnit.options[0].textContent = en ? "Meter (m)" : "متر (m)";
               dxfUnit.options[1].textContent = en ? "Centimeter (cm)" : "سانتی‌متر (cm)";
+              if (pdfWidthUnit) {
+                pdfWidthUnit.options[0].textContent = en ? "Meter (m)" : "متر (m)";
+                pdfWidthUnit.options[1].textContent = en ? "Centimeter (cm)" : "سانتی‌متر (cm)";
+              }
+              if (dxfWidthUnit) {
+                dxfWidthUnit.options[0].textContent = en ? "Meter (m)" : "متر (m)";
+                dxfWidthUnit.options[1].textContent = en ? "Centimeter (cm)" : "سانتی‌متر (cm)";
+              }
               downloadLabel.textContent = activeFormat === "pdf" ? tx.downloadPdf : tx.downloadDxf;
             };
 
@@ -3180,6 +3473,7 @@ ${helperMarker}`
                 btn.setAttribute("aria-selected", active ? "true" : "false");
               });
               panels.forEach(panel => panel.classList.toggle("active", panel.dataset.exportPanel === activeFormat));
+              if (activeFormat === "pdf") syncPdfWidthVisibility();
               updateExportLanguage();
             };
 
@@ -3190,9 +3484,28 @@ ${helperMarker}`
               const visibleUnitSelect = [...doc.querySelectorAll(".height-unit-select")]
                 .find(el => el.offsetParent !== null) || doc.querySelector(".height-unit-select");
               if (visibleUnitSelect && (visibleUnitSelect.value === "m" || visibleUnitSelect.value === "cm")) {
-                dxfUnit.value = visibleUnitSelect.value;
+                const nextUnit = visibleUnitSelect.value;
+                dxfUnit.value = nextUnit;
+                dxfPreviousUnit = nextUnit;
               }
             };
+            let dxfPreviousUnit = dxfUnit.value;
+            let dxfWidthPreviousUnit = dxfWidthUnit?.value || "m";
+            dxfWidthUnit?.addEventListener("change", () => {
+              const numericWidth = Number(dxfWidth?.value);
+              if (!Number.isFinite(numericWidth) || numericWidth <= 0) {
+                dxfWidthPreviousUnit = dxfWidthUnit.value;
+                return;
+              }
+              const widthM = dxfWidthPreviousUnit === "cm" ? numericWidth / 100 : numericWidth;
+              dxfWidth.value = dxfWidthUnit.value === "cm"
+                ? Number((widthM * 100).toFixed(2))
+                : Number(widthM.toFixed(3));
+              dxfWidthPreviousUnit = dxfWidthUnit.value;
+            });
+            dxfUnit.addEventListener("change", () => {
+              dxfPreviousUnit = dxfUnit.value;
+            });
 
             const openExport = () => {
               syncDxfDefaults();
@@ -3249,10 +3562,79 @@ ${helperMarker}`
           let historyIndex = 0;
           const undo = doc.querySelector("#undoCalculationBtn");
           const redo = doc.querySelector("#redoCalculationBtn");
+          const historyButton = doc.querySelector("#openCalculationHistoryBtn");
+          const historyPopover = doc.querySelector("#calculationHistoryPopover");
+          const historyList = doc.querySelector("#calculationHistoryList");
+          const closeHistoryButton = doc.querySelector("#closeCalculationHistoryBtn");
           const calculate = doc.querySelector("#calculateBtn");
           const syncHistoryButtons = () => {
             if (undo) undo.disabled = historyIndex <= 0;
             if (redo) redo.disabled = historyIndex >= history.length - 1;
+          };
+          const historyTypeLabels = { car: "خودرو", disabled: "معلول", human: "عمومی" };
+          const historyDetail = snapshot => {
+            const fields = snapshot.type === "disabled"
+              ? ["#disabledHeight", "#disabledSlope"]
+              : snapshot.type === "human"
+                ? ["#humanHeight", "#humanSlope"]
+                : ["#carHeight", "#carSlope"];
+            const values = fields.map(selector => snapshot.values?.[selector]).filter(value => value !== null && value !== undefined && value !== "");
+            const unit = Object.values(snapshot.units || {}).find(value => value === "m" || value === "cm") || "";
+            const height = values[0] ? `ارتفاع ${values[0]}${unit ? ` ${unit}` : ""}` : "";
+            const slope = values[1] ? `شیب ${values[1]}%` : "";
+            return [historyTypeLabels[snapshot.type] || snapshot.type, height, slope].filter(Boolean).join(" · ");
+          };
+          const renderHistoryList = () => {
+            if (!historyList) return;
+            historyList.replaceChildren();
+            const start = Math.max(0, history.length - 10);
+            const recent = history.slice(start).reverse();
+            if (!recent.length) {
+              const empty = doc.createElement("div");
+              empty.className = "history-popover-empty";
+              empty.textContent = "هنوز محاسبه‌ای ثبت نشده است.";
+              historyList.appendChild(empty);
+              return;
+            }
+            recent.forEach((snapshot, offset) => {
+              const absoluteIndex = history.length - 1 - offset;
+              const item = doc.createElement("button");
+              item.type = "button";
+              item.className = "history-popover-item" + (absoluteIndex === historyIndex ? " is-current" : "");
+              item.setAttribute("aria-label", absoluteIndex === 0 ? "وضعیت اولیه" : `محاسبه ${absoluteIndex}`);
+
+              const main = doc.createElement("span");
+              main.className = "history-popover-item-main";
+              const title = doc.createElement("span");
+              title.className = "history-popover-item-title";
+              title.textContent = absoluteIndex === 0 ? "وضعیت اولیه" : `محاسبه ${absoluteIndex}`;
+              const detail = doc.createElement("span");
+              detail.className = "history-popover-item-detail";
+              detail.textContent = historyDetail(snapshot);
+              main.append(title, detail);
+
+              const index = doc.createElement("span");
+              index.className = "history-popover-item-index";
+              index.textContent = absoluteIndex === history.length - 1 ? "آخرین" : `#${absoluteIndex}`;
+              item.append(main, index);
+              item.addEventListener("click", () => {
+                historyIndex = absoluteIndex;
+                applyHistoryState(history[historyIndex]);
+                closeHistory();
+              });
+              historyList.appendChild(item);
+            });
+          };
+          const closeHistory = () => {
+            historyPopover?.classList.remove("open");
+            historyPopover?.setAttribute("aria-hidden", "true");
+            historyButton?.setAttribute("aria-expanded", "false");
+          };
+          const openHistory = () => {
+            renderHistoryList();
+            historyPopover?.classList.add("open");
+            historyPopover?.setAttribute("aria-hidden", "false");
+            historyButton?.setAttribute("aria-expanded", "true");
           };
           const applyHistoryState = snapshot => {
             if (!snapshot) return;
@@ -3274,6 +3656,7 @@ ${helperMarker}`
             doc.querySelector(`.view-tab[data-view="${snapshot.view}"]`)?.click();
             frame.contentWindow.rampExportAPI?.refresh();
             syncHistoryButtons();
+            renderHistoryList();
           };
           calculate?.addEventListener("click", () => {
             const next = captureHistoryState();
@@ -3283,6 +3666,7 @@ ${helperMarker}`
               historyIndex = history.length - 1;
             }
             syncHistoryButtons();
+            renderHistoryList();
           });
           undo?.addEventListener("click", event => {
             event.preventDefault();
@@ -3298,7 +3682,25 @@ ${helperMarker}`
             historyIndex += 1;
             applyHistoryState(history[historyIndex]);
           }, true);
+          historyButton?.addEventListener("click", event => {
+            event.preventDefault();
+            event.stopPropagation();
+            if (historyPopover?.classList.contains("open")) closeHistory();
+            else openHistory();
+          });
+          closeHistoryButton?.addEventListener("click", event => {
+            event.preventDefault();
+            event.stopPropagation();
+            closeHistory();
+            historyButton?.focus({ preventScroll: true });
+          });
+          doc.addEventListener("click", event => {
+            if (!historyPopover?.classList.contains("open")) return;
+            if (historyPopover.contains(event.target) || event.target === historyButton) return;
+            closeHistory();
+          });
           syncHistoryButtons();
+          renderHistoryList();
         }
         if (!frame.contentWindow.renderTechnicalSheetToJpeg && !frame.contentWindow.buildA4Pdf) { /* functions are scoped inside the app IIFE */ }
 
@@ -3548,3 +3950,4 @@ ${helperMarker}`
 </script>
 </body>
 </html>
+
