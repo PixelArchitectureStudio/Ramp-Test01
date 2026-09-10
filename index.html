@@ -1778,6 +1778,9 @@ ${helperMarker}`
       }
       .export-number-with-unit .export-select { min-width: 0; }
       .export-number-with-unit input:disabled { opacity: .46; cursor: not-allowed; }
+      .export-number-with-suffix { display: flex; align-items: center; gap: 7px; width: 100%; }
+      .export-number-with-suffix .export-select { flex: 1 1 auto; min-width: 0; }
+      .export-width-unit-suffix { flex: 0 0 auto; color: var(--muted); font-size: 11px; font-weight: 900; direction: ltr; }
       .export-check-control {
         min-height: 38px;
         display: inline-flex;
@@ -2492,7 +2495,7 @@ ${helperMarker}`
                 <div class="export-setting-label" id="exportJpgWidthLabel">عرض رمپ در پلان</div>
                 <div class="export-setting-hint" id="exportJpgWidthHint">واحد عرض را انتخاب کنید؛ فقط در پلان یا پلان + نما</div>
               </div>
-              <input class="export-select" id="exportJpgWidth" type="number" min="0.01" step="0.01" value="3.5" inputmode="decimal">
+              <div class="export-number-with-suffix"><input class="export-select" id="exportJpgWidth" type="number" min="0.01" step="0.01" value="3.5" inputmode="decimal"><span class="export-width-unit-suffix" id="exportJpgWidthSuffix">m</span></div>
             </div>
 
             <div class="export-setting-row" id="exportJpgWidthUnitRow">
@@ -2540,7 +2543,7 @@ ${helperMarker}`
                 <div class="export-setting-label" id="exportDxf3dWidthLabel">عرض رمپ</div>
                 <div class="export-setting-hint" id="exportDxf3dWidthHint">مقدار عرض رمپ و واحد آن را انتخاب کنید</div>
               </div>
-              <input class="export-select" id="exportDxf3dWidth" type="number" min="0.01" step="0.01" value="350" inputmode="decimal">
+              <div class="export-number-with-suffix"><input class="export-select" id="exportDxf3dWidth" type="number" min="0.01" step="0.01" value="350" inputmode="decimal"><span class="export-width-unit-suffix" id="exportDxf3dWidthSuffix">cm</span></div>
             </div>
             <div class="export-setting-row" id="exportDxf3dWidthUnitRow">
               <div class="export-setting-copy">
@@ -2593,6 +2596,7 @@ ${helperMarker}`
           let selectedFormat = 'pdf';
           const syncJpgWidthVisibility = () => {
             const includesPlan = jpgView.value === 'plan' || jpgView.value === 'both';
+            jpgWidthRow?.classList.toggle('is-muted', !includesPlan);
             if (jpgWidth) jpgWidth.disabled = !includesPlan;
           };
           jpgView.addEventListener('change', syncJpgWidthVisibility);
@@ -3090,6 +3094,25 @@ ${helperMarker}`
       try {
         const doc = frame.contentDocument;
 
+        // Keep a clear unit suffix beside every numeric ramp-width field.
+        setTimeout(() => {
+          [
+            ["#exportJpgWidthUnit", "#exportJpgWidthSuffix"],
+            ["#exportPdfWidthUnit", "#exportPdfWidthSuffix"],
+            ["#exportDxfWidthUnit", "#exportDxfWidthSuffix"],
+            ["#exportDxf3dWidthUnit", "#exportDxf3dWidthSuffix"]
+          ].forEach(([unitSelector, suffixSelector]) => {
+            const unit = doc.querySelector(unitSelector);
+            const suffix = doc.querySelector(suffixSelector);
+            if (!unit || !suffix) return;
+            const sync = () => {
+              suffix.textContent = unit.value === "cm" || unit.value === "centimeter" ? "cm" : "m";
+            };
+            unit.addEventListener("change", sync);
+            sync();
+          });
+        }, 80);
+
         // The drawing view controls live inside the source iframe. Bind them
         // in capture phase as a stable fallback so the Plan button keeps
         // working even if a later injected UI listener intercepts the click.
@@ -3253,7 +3276,7 @@ ${helperMarker}`
                         <div class="export-setting-label" data-export-i18n="pdfWidthLabel">عرض رمپ در پلان</div>
                         <div class="export-setting-hint" data-export-i18n="pdfWidthHint">واحد عرض را انتخاب کنید؛ فقط در پلان یا پلان + نما</div>
                       </div>
-                      <input class="export-select" id="exportPdfWidth" type="number" min="0.01" step="0.01" value="3.5" inputmode="decimal">
+                      <div class="export-number-with-suffix"><input class="export-select" id="exportPdfWidth" type="number" min="0.01" step="0.01" value="3.5" inputmode="decimal"><span class="export-width-unit-suffix" id="exportPdfWidthSuffix">m</span></div>
                     </div>
 
                     <div class="export-setting-row" id="exportPdfWidthUnitRow">
@@ -3311,7 +3334,7 @@ ${helperMarker}`
                         <div class="export-setting-label" data-export-i18n="dxfWidthLabel">عرض رمپ</div>
                         <div class="export-setting-hint" data-export-i18n="dxfWidthHint">مقدار عرض رمپ و واحد آن را انتخاب کنید</div>
                       </div>
-                      <input class="export-select" id="exportDxfWidth" type="number" min="0.01" step="0.01" value="3.5" inputmode="decimal">
+                      <div class="export-number-with-suffix"><input class="export-select" id="exportDxfWidth" type="number" min="0.01" step="0.01" value="3.5" inputmode="decimal"><span class="export-width-unit-suffix" id="exportDxfWidthSuffix">m</span></div>
                     </div>
 
                     <div class="export-setting-row" id="exportDxfWidthUnitRow">
@@ -3350,6 +3373,7 @@ ${helperMarker}`
             const dxfView = modal.querySelector("#exportDxfView");
             const dxfUnit = modal.querySelector("#exportDxfUnit");
             const dxfWidth = modal.querySelector("#exportDxfWidth");
+            const dxfWidthRow = modal.querySelector("#exportDxfWidth")?.closest(".export-setting-row");
             const dxfWidthUnit = modal.querySelector("#exportDxfWidthUnit");
             let activeFormat = "pdf";
             try {
@@ -3365,6 +3389,7 @@ ${helperMarker}`
 
             const syncPdfWidthVisibility = () => {
               const includesPlan = pdfPages.value === "plan" || pdfPages.value === "both";
+              pdfWidthRow?.classList.toggle("is-muted", !includesPlan);
               if (pdfWidth) pdfWidth.disabled = !includesPlan;
             };
             pdfPages.addEventListener("change", syncPdfWidthVisibility);
@@ -3488,7 +3513,16 @@ ${helperMarker}`
                 dxfUnit.value = nextUnit;
                 dxfPreviousUnit = nextUnit;
               }
+              const includesPlan = dxfView.value === "plan" || dxfView.value === "both";
+              dxfWidthRow?.classList.toggle("is-muted", !includesPlan);
+              if (dxfWidth) dxfWidth.disabled = !includesPlan;
             };
+            const syncDxfWidthVisibility = () => {
+              const includesPlan = dxfView.value === "plan" || dxfView.value === "both";
+              dxfWidthRow?.classList.toggle("is-muted", !includesPlan);
+              if (dxfWidth) dxfWidth.disabled = !includesPlan;
+            };
+            dxfView.addEventListener("change", syncDxfWidthVisibility);
             let dxfPreviousUnit = dxfUnit.value;
             let dxfWidthPreviousUnit = dxfWidthUnit?.value || "m";
             dxfWidthUnit?.addEventListener("change", () => {
