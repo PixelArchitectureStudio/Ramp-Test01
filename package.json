@@ -1,0 +1,13 @@
+{
+  "name": "ramp-test01",
+  "private": true,
+  "scripts": {
+    "test": "node tests/ui-regression.cjs"
+  },
+  "devDependencies": {
+    "jsdom": "30.0.1"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}
