@@ -43,13 +43,24 @@ html,body{margin:0;width:100%;height:100%;background:#121629}
     source = source.replace("</style>", ".measurement-input { grid-template-columns: minmax(0, 1fr) 68px; gap: 8px; }\n.height-unit-select { min-width: 0; padding-inline: 6px; }\n.form-section[data-form=\"disabled\"] > .field-row,\n.form-section[data-form=\"human\"] > .field-row { grid-template-columns: minmax(0, 1fr) 124px; gap: 10px; }\n.form-section[data-form=\"disabled\"] > .field-row > .field,\n.form-section[data-form=\"human\"] > .field-row > .field { min-width: 0; }\n\ninput[type=\"number\"] { padding-right: 66px; }\n.input-wrap.has-unit input[type=\"number\"] { padding-right: 88px; }\n.number-stepper { top: 6px; right: 6px; height: 36px; grid-template-columns: 28px 28px; }\n.number-step-btn { width: 28px; height: 36px; }\n.number-step-btn svg { width: 14px; height: 14px; }\n.unit { right: 68px; }\n\n#carSlope + .unit,\n#carTransition + .unit {\n  right: auto !important;\n  left: 0;\n  transition: left .08s linear;\n}\n\n.footer-left { position: relative; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }\n.version-popover-wrap, .download-menu-wrap { position: relative; display: inline-flex; align-items: center; }\n.footer-pill-btn {\n  border: 1px solid var(--line); background: var(--surface-solid); color: var(--text);\n  cursor: pointer; transition: background .14s ease, border-color .14s ease, color .14s ease;\n}\n.footer-pill-btn:hover, .footer-pill-btn:focus-visible {\n  outline: none; border-color: var(--accent); background: var(--accent-soft);\n}\n.footer-pill-btn[aria-expanded=\"true\"], #downloadBtn[aria-expanded=\"true\"] {\n  border-color: var(--accent); background: var(--accent-soft);\n}\n\n.version-popover, .download-popover {\n  position: absolute; left: 0; bottom: calc(100% + 10px); z-index: 80; direction: rtl;\n  opacity: 0; visibility: hidden; pointer-events: none;\n  transform: translateY(7px) scale(.985); transform-origin: left bottom;\n  transition: opacity .16s ease, transform .16s ease, visibility .16s ease;\n}\n.version-popover.open, .download-popover.open {\n  opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0) scale(1);\n}\n\n.version-popover {\n  width: 290px; padding: 10px; border: 1px solid var(--line); border-radius: 16px;\n  background: color-mix(in srgb, var(--surface-solid) 92%, #09143b 8%);\n  box-shadow: 0 18px 45px rgba(0,0,0,.24);\n}\n.version-popover-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 8px; }\n.version-popover-title { font-size: 14px; font-weight: 900; line-height: 1.6; }\n.version-popover-version { font-size: 12px; color: var(--accent); font-weight: 800; line-height: 1.6; }\n.version-popover-label { font-size: 12px; font-weight: 800; margin: 6px 0 4px; }\n.version-popover-desc { font-size: 12px; line-height: 1.9; color: var(--muted); margin: 0; }\n.version-popover-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }\n.version-popover-item { display: grid; grid-template-columns: 1fr; gap: 0; font-size: 12px; line-height: 1.9; }\n.version-popover-item strong { color: var(--text); font-weight: 820; }\n.version-popover-divider { height: 1px; margin: 9px 0; background: var(--line); }\n.version-instagram-btn {\n  width: 100%; min-height: 36px; border-radius: 999px; border: 1px solid var(--line);\n  display: inline-flex; align-items: center; justify-content: center; gap: 8px;\n  text-decoration: none; color: var(--text); background: var(--surface-2);\n  font-size: 12px; font-weight: 800; transition: border-color .14s ease, background .14s ease, color .14s ease;\n}\n.version-instagram-btn:hover, .version-instagram-btn:focus-visible {\n  outline: none; border-color: var(--accent); color: var(--accent); background: var(--accent-soft);\n}\n.version-instagram-btn svg { width: 14px; height: 14px; flex: 0 0 14px; }\n.version-authors { margin-top: 8px; text-align: center; font-size: 11.5px; color: var(--muted); font-weight: 760; }\n\n.download-popover {\n  width: 244px; padding: 8px; border: 1px solid var(--line); border-radius: 14px;\n  background: var(--surface-solid); box-shadow: 0 18px 45px rgba(0,0,0,.22);\n}\n.download-menu-item {\n  width: 100%; min-height: 40px; padding: 0 9px; border: 0; border-radius: 9px;\n  display: flex; align-items: center; justify-content: flex-start; gap: 10px;\n  background: transparent; color: var(--text); font: inherit; font-size: 12px; font-weight: 800;\n  text-align: right; white-space: nowrap; cursor: pointer;\n  transition: background .14s ease, color .14s ease, transform .14s ease;\n}\n.download-menu-item:hover, .download-menu-item:focus-visible {\n  background: var(--surface-2); color: var(--accent); outline: none;\n}\n.download-menu-item:active { transform: scale(.985); }\n.download-menu-item svg { width: 17px; height: 17px; flex: 0 0 17px; color: var(--muted); }\n.download-menu-item:hover svg, .download-menu-item:focus-visible svg { color: currentColor; }\n.download-menu-divider { height: 1px; margin: 5px 7px; background: var(--line); }\n\n@media (max-width: 620px) {\n  .form-section[data-form=\"disabled\"] > .field-row,\n  .form-section[data-form=\"human\"] > .field-row { grid-template-columns: 1fr; gap: 0; }\n  .measurement-input { grid-template-columns: minmax(0, 1fr) 68px; }\n  .version-popover { width: min(290px, calc(100vw - 26px)); }\n  .download-popover { width: min(244px, calc(100vw - 26px)); }\n}" + "\n</style>");
 
     source = source.replace("</style>", `
-      .history-switch-row { position: relative; max-width: 430px; gap: 12px !important; }
-      .calculation-history-controls { display: inline-flex; align-items: center; gap: 6px; margin-inline-start: 0; margin-inline-end: auto; direction: ltr; }
-      .history-btn { min-width: 70px; height: 30px; padding: 0 8px; display: inline-flex; align-items: center; justify-content: center; gap: 5px; border: 1px solid var(--line); border-radius: 9px; background: var(--surface-2); color: var(--muted); cursor: pointer; font: inherit; font-size: 10px; font-weight: 850; transition: color .14s ease, background .14s ease, border-color .14s ease, opacity .14s ease, transform .14s ease; }
+      .history-switch-row { position: relative; grid-column: 1 / -1 !important; justify-self: stretch !important; align-self: stretch !important; width: 100% !important; max-width: none !important; box-sizing: border-box; gap: 12px !important; padding: 0 !important; margin-bottom: 10px !important; }
+      .history-switch-row { display: flex !important; flex-direction: column; align-items: stretch; gap: 14px !important; margin-inline: 0 !important; }
+      .parking-stop-box, .calculation-history-box { width: 100% !important; min-width: 0; box-sizing: border-box; display: flex; align-items: center; gap: 10px; }
+      .parking-stop-box { height: 48px; min-height: 48px; justify-content: space-between; align-items: center; padding: 0 13px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-solid); box-shadow: none; }
+      .parking-stop-box .switch-label, .parking-stop-box .switch { margin: 0; }
+      .calculation-history-box { direction: ltr; }
+      .calculation-history-controls { width: 100% !important; min-width: 0; display: flex; align-items: center; gap: 6px; margin: 0; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; direction: ltr; }
+      .history-switch-row, .history-switch-row::before, .history-switch-row::after, .calculation-history-box { border: 0 !important; background: transparent !important; box-shadow: none !important; }
+      .history-switch-row .history-btn { border: 1px solid var(--line); background: var(--surface-2); }
+      .history-switch-row .history-btn:hover:not(:disabled), .history-switch-row .history-btn:focus-visible:not(:disabled) { border-color: var(--accent) !important; background: var(--accent-soft); }
+      .calculation-history-controls .history-btn { flex: 1 1 0; }
+      .history-btn { min-width: 70px; height: 36px; padding: 0 8px; display: inline-flex; align-items: center; justify-content: center; gap: 5px; border: 1px solid var(--line); border-radius: 9px; background: var(--surface-2); color: var(--muted); cursor: pointer; font: inherit; font-size: 10px; font-weight: 850; transition: color .14s ease, background .14s ease, border-color .14s ease, opacity .14s ease, transform .14s ease; }
       .history-btn:hover:not(:disabled), .history-btn:focus-visible:not(:disabled) { color: var(--accent); background: var(--accent-soft); border-color: var(--accent); outline: none; }
       .history-btn:active:not(:disabled) { transform: scale(.94); }
       .history-btn:disabled { opacity: .34; cursor: not-allowed; }
       .history-btn svg { width: 15px; height: 15px; flex: 0 0 15px; }
+      .history-btn img.history-time-machine-icon { width: 15px; height: 15px; flex: 0 0 15px; object-fit: contain; }
+      html[data-theme="dark"] .history-btn img.history-time-machine-icon { filter: invert(1) brightness(1.25); }
       .history-open-btn { min-width: 78px; }
       .calculation-history-popover {
         position: absolute; left: 0; top: calc(100% + 8px); z-index: 160;
@@ -77,7 +88,7 @@ html,body{margin:0;width:100%;height:100%;background:#121629}
       .history-popover-item-detail { color: var(--muted); font-size: 10px; line-height: 1.5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
       .history-popover-item-index { flex: 0 0 auto; color: var(--muted); font-size: 10px; font-weight: 850; direction: ltr; }
       .history-popover-empty { padding: 12px 8px; color: var(--muted); font-size: 11px; text-align: center; }
-      @media (max-width: 620px) { .history-switch-row { max-width: none; } .calculation-history-controls { margin-inline-start: 0; } }
+      @media (max-width: 620px) { .history-switch-row { width: 100%; max-width: none !important; } }
     </style>`);
 
     if (!source.includes("<select id=\"carTransition\">\n                <option value=\"10\">10%</option>\n                <option value=\"5\">5%</option>\n              </select>")) throw new Error("ساختار شیب ابتدا و انتها پیدا نشد.");
@@ -92,13 +103,16 @@ html,body{margin:0;width:100%;height:100%;background:#121629}
           </div>
 
           <div class="switch-row history-switch-row">
-            <div class="switch-label">
-              <strong data-i18n="afterRamp3m">3 متر فضای توقف</strong>
+            <div class="parking-stop-box">
+              <div class="switch-label">
+                <strong data-i18n="afterRamp3m">3 متر فضای توقف</strong>
+              </div>
+              <label class="switch">
+                <input id="carAfterRamp3m" type="checkbox" checked>
+                <span class="slider"></span>
+              </label>
             </div>
-            <label class="switch">
-              <input id="carAfterRamp3m" type="checkbox" checked>
-              <span class="slider"></span>
-            </label>
+            <div class="calculation-history-box" aria-label="Calculation history controls">
             <div class="calculation-history-controls" aria-label="Calculation history">
               <button type="button" class="history-btn" id="undoCalculationBtn" aria-label="بازگشت به محاسبه قبل" title="بازگشت به محاسبه قبل">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h9a7 7 0 0 1 7 7v1"/></svg>
@@ -112,6 +126,7 @@ html,body{margin:0;width:100%;height:100%;background:#121629}
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v5l3.2 1.8"/><path d="M5.5 5.5 3.8 3.8"/></svg>
                 <span>History</span>
               </button>
+            </div>
             </div>
             <div class="calculation-history-popover" id="calculationHistoryPopover" role="dialog" aria-modal="false" aria-hidden="true" aria-label="تاریخچه محاسبات">
               <div class="history-popover-head">
@@ -132,8 +147,15 @@ html,body{margin:0;width:100%;height:100%;background:#121629}
     }
     source = source.replace(carSectionEnd, carSectionWith3m);
 
+    source = source.replace(
+      /(<button[^>]*id="openCalculationHistoryBtn"[^>]*>)[\s\S]*?(<span>History<\/span>)/,
+      '$1\n                <img class="history-time-machine-icon" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiID8+DQo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+DQo8c3ZnIHdpZHRoPSI5NnB0IiBoZWlnaHQ9Ijk2cHQiIHZpZXdCb3g9IjAgMCA5NiA5NiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCjxnIGlkPSIjMDAwMDAwZmYiPg0KPHBhdGggZmlsbD0iIzAwMDAwMCIgZD0iIE0gNDIuMDYgOC40OCBDIDUyLjc0IDYuODIgNjQuMDcgOS42OCA3Mi41NyAxNi40MSBDIDgxLjM3IDIzLjIxIDg3LjE4IDMzLjgxIDg3LjgzIDQ0Ljk1IEMgODguOTQgNTcuODQgODMuMjAgNzEuMDEgNzMuMTAgNzkuMDcgQyA2MC43NyA4OS4zMSA0Mi4xMiA5MC44OCAyOC4yOSA4Mi43NiBDIDE3LjIyIDc2LjUzIDkuMzAgNjQuNzMgOC4yOSA1Mi4wMSBDIDcuOTQgNDguMzUgMTMuMzIgNDYuNTUgMTUuMzcgNDkuNTUgQyAxNi41MSA1MS44MiAxNi41OCA1NC40NiAxNy4zMCA1Ni44NyBDIDIwLjMzIDY3LjkyIDI5Ljg3IDc2Ljg0IDQxLjA3IDc5LjIxIEMgNTUuMTYgODIuNjEgNzAuODEgNzQuOTIgNzYuODQgNjEuNzggQyA4My41MyA0OC4zOSA3OS4xOCAzMC43MSA2Ni44OCAyMi4xMSBDIDU0LjQzIDEyLjY1IDM1LjQyIDE0LjYwIDI0LjgzIDI2LjAxIEMgMjcuMTMgMjguNDQgMjkuNzkgMzAuNTYgMzEuNzggMzMuMjYgQyAzMi41NSAzNC4zMSAzMS4zMSAzNi4xMiAzMC4wNyAzNS45MSBDIDI0LjM2IDM2LjEzIDE4LjYzIDM1Ljk3IDEyLjkyIDM2LjAwIEMgMTAuNTcgMzYuMjggNy45MiAzNC42NCA4LjA2IDMyLjA2IEMgNy45NCAyNi4wNSA3LjkyIDIwLjAxIDguMDggMTQuMDAgQyA3Ljg4IDEyLjIyIDEwLjMxIDExLjM0IDExLjQyIDEyLjY4IEMgMTQuMTQgMTUuMDcgMTYuNTMgMTcuODIgMTkuMTUgMjAuMzIgQyAyNS4zNCAxNC4xNSAzMy4zNSA5LjcwIDQyLjA2IDguNDggWiIgLz4NCjxwYXRoIGZpbGw9IiMwMDAwMDAiIGQ9IiBNIDQ2LjM4IDI0LjM2IEMgNDguODQgMjMuMDcgNTIuMDQgMjUuMjAgNTEuOTQgMjcuOTQgQyA1Mi4yNiAzMy45NCA1MS42OCAzOS45NiA1Mi4xMyA0NS45NiBDIDU0LjMyIDQ5Ljg2IDU4Ljk1IDUxLjk5IDYwLjk3IDU2LjA2IEMgNjIuMjkgNTkuNTkgNTcuNTEgNjIuNzcgNTQuNzUgNjAuMjYgQyA1MS4xOSA1Ni44OCA0Ny41MSA1My41MiA0NC40MSA0OS43MCBDIDQzLjQzIDQ0LjIyIDQ0LjI5IDM4LjU0IDQzLjk4IDMyLjk4IEMgNDQuMTcgMzAuMDggNDMuMDcgMjUuOTEgNDYuMzggMjQuMzYgWiIgLz4NCjwvZz4NCjwvc3ZnPg0K" alt="" aria-hidden="true">\n                $2'
+    );
+
     if (!source.includes("<div class=\"footer-left\">\n        <div class=\"footer-pill\" id=\"versionBadge\">v2.10.7</div>\n        <button class=\"footer-btn\" id=\"downloadBtn\">\n          <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.9\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 3v11\"/><path d=\"m7.5 10.5 4.5 4.5 4.5-4.5\"/><path d=\"M4 20h16\"/></svg>\n          <span data-i18n=\"downloadApp\">دانلود</span>\n        </button>\n      </div>")) throw new Error("ساختار فوتر پیدا نشد.");
     source = source.replace("<div class=\"footer-left\">\n        <div class=\"footer-pill\" id=\"versionBadge\">v2.10.7</div>\n        <button class=\"footer-btn\" id=\"downloadBtn\">\n          <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.9\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 3v11\"/><path d=\"m7.5 10.5 4.5 4.5 4.5-4.5\"/><path d=\"M4 20h16\"/></svg>\n          <span data-i18n=\"downloadApp\">دانلود</span>\n        </button>\n      </div>", "<div class=\"footer-left\">\n        <div class=\"version-popover-wrap\">\n          <button class=\"footer-pill footer-pill-btn\" id=\"versionBtn\" type=\"button\" aria-haspopup=\"dialog\" aria-expanded=\"false\">\n            <span id=\"versionBadge\">v2.10.7</span>\n          </button>\n\n          <div class=\"version-popover\" id=\"versionPopover\" role=\"dialog\" aria-modal=\"false\" aria-label=\"Version information\">\n            <div class=\"version-popover-head\">\n              <div>\n                <div class=\"version-popover-title\" id=\"versionPopoverTitle\">نرم‌افزار محاسبه رمپ</div>\n                <div class=\"version-popover-version\" id=\"versionPopoverVersion\">نسخه 2.10.7</div>\n              </div>\n            </div>\n\n            <div class=\"version-popover-label\" id=\"versionChangesLabel\">آخرین تغییرات</div>\n            <ul class=\"version-popover-list\">\n              <li class=\"version-popover-item\"><strong id=\"versionChange1\">بهبود نوارهای ورودی</strong><span id=\"versionChange1Desc\">نمایش عدد، واحد و کنترل‌های + و − مرتب‌تر شده است.</span></li>\n              <li class=\"version-popover-item\"><strong id=\"versionChange2\">ورود دستی شیب ابتدا و انتها</strong><span id=\"versionChange2Desc\">در رمپ خودرو، شیب ابتدا و انتها به‌صورت کامل دستی تنظیم می‌شود.</span></li>\n              <li class=\"version-popover-item\"><strong id=\"versionChange3\">خروجی فنی بهتر</strong><span id=\"versionChange3Desc\">پلان، نما و خروجی PDF با نمایش منظم‌تر آماده می‌شوند.</span></li>\n            </ul>\n\n            <div class=\"version-popover-divider\" aria-hidden=\"true\"></div>\n            <p class=\"version-popover-desc\" id=\"versionFollowText\">برای دریافت آخرین نسخه و به‌روزرسانی‌های این ابزار، پیج Pixel Studio را دنبال کنید.</p>\n\n            <div class=\"version-popover-divider\" aria-hidden=\"true\"></div>\n            <a class=\"version-instagram-btn\" href=\"https://instagram.com/pixel_architecture_studio\" target=\"_blank\" rel=\"noreferrer noopener\" id=\"versionInstagramBtn\">\n              <span>@pixel_architecture_studio</span>\n              <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"5\" ry=\"5\"/><circle cx=\"12\" cy=\"12\" r=\"4\"/><path d=\"M17.5 6.5h.01\"/></svg>\n            </a>\n            <div class=\"version-authors\" id=\"versionAuthors\">ساخته شده توسط علی و آرین</div>\n          </div>\n        </div>\n\n        <div class=\"download-menu-wrap\">\n          <button class=\"footer-btn\" id=\"downloadBtn\" type=\"button\" aria-haspopup=\"menu\" aria-expanded=\"false\">\n            <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.9\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 3v11\"/><path d=\"m7.5 10.5 4.5 4.5 4.5-4.5\"/><path d=\"M4 20h16\"/></svg>\n            <span data-i18n=\"downloadApp\">دانلود</span>\n          </button>\n\n          <div class=\"download-popover\" id=\"downloadPopover\" role=\"menu\" aria-label=\"Download options\">\n            <button class=\"download-menu-item\" type=\"button\" role=\"menuitem\" data-download-action=\"windows\">\n              <svg viewBox=\"0 0 24 24\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M3 3h8v8H3V3Zm10 0h8v8h-8V3ZM3 13h8v8H3v-8Zm10 0h8v8h-8v-8Z\"/></svg>\n              <span data-download-label=\"windows\">دانلود نسخه ویندوز</span>\n            </button>\n            <button class=\"download-menu-item\" type=\"button\" role=\"menuitem\" data-download-action=\"android\">\n              <svg viewBox=\"0 0 24 24\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M7.4 7.2 5.9 4.6l.8-.45 1.55 2.7A9.2 9.2 0 0 1 12 6.05c1.33 0 2.6.28 3.75.8l1.55-2.7.8.45-1.5 2.6A7.2 7.2 0 0 1 20 13H4a7.2 7.2 0 0 1 3.4-5.8ZM8 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm8 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2ZM4 14h16v5.3A2.7 2.7 0 0 1 17.3 22H6.7A2.7 2.7 0 0 1 4 19.3V14Z\"/></svg>\n              <span data-download-label=\"android\">دانلود نسخه اندروید</span>\n            </button>\n            <button class=\"download-menu-item\" type=\"button\" role=\"menuitem\" data-download-action=\"webapp\">\n              <svg viewBox=\"0 0 384 512\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5c0 26.2 4.8 53.2 14.1 77.3 12.6 35.7 58 123.1 105.6 121.6 24.9-.6 42.5-17.7 74.9-17.7 31.4 0 47.8 17.7 75.5 17.7 48-.7 89.1-80.8 101.1-116.6-64.3-30.3-56.5-89-56.5-87.1Zm-23.2-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3Z\"/></svg>\n              <span data-download-label=\"webapp\">نسخه وب اپ</span>\n            </button>\n            <div class=\"download-menu-divider\" aria-hidden=\"true\"></div>\n            <button class=\"download-menu-item\" type=\"button\" role=\"menuitem\" data-download-action=\"share\">\n              <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M14 5h5v5\"/><path d=\"M10 14 19 5\"/><path d=\"M19 13v6H5V5h6\"/></svg>\n              <span data-download-label=\"share\">اشتراک‌گذاری لینک</span>\n            </button>\n            <button class=\"download-menu-item\" type=\"button\" role=\"menuitem\" data-download-action=\"install\">\n              <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M9.8 9a2.4 2.4 0 1 1 3.3 2.22c-.72.32-1.1.76-1.1 1.53v.25\"/><path d=\"M12 17h.01\"/></svg>\n              <span data-download-label=\"install\">آموزش نصب نسخه وب اپ</span>\n            </button>\n          </div>\n        </div>\n      </div>");
+
+    source = source.replace(/<img class="history-time-machine-icon"[^>]*>/, '<svg class="history-time-machine-icon" viewBox="0 0 96 96" fill="currentColor" aria-hidden="true"><path d="M42.06 8.48C52.74 6.82 64.07 9.68 72.57 16.41C81.37 23.21 87.18 33.81 87.83 44.95C88.94 57.84 83.2 71.01 73.1 79.07C60.77 89.31 42.12 90.88 28.29 82.76C17.22 76.53 9.3 64.73 8.29 52.01C7.94 48.35 13.32 46.55 15.37 49.55C16.51 51.82 16.58 54.46 17.3 56.87C20.33 67.92 29.87 76.84 41.07 79.21C55.16 82.61 70.81 74.92 76.84 61.78C83.53 48.39 79.18 30.71 66.88 22.11C54.43 12.65 35.42 14.6 24.83 26.01C27.13 28.44 29.79 30.56 31.78 33.26C32.55 34.31 31.31 36.12 30.07 35.91C24.36 36.13 18.63 35.97 12.92 36C10.57 36.28 7.92 34.64 8.06 32.06C7.94 26.05 7.92 20.01 8.08 14C7.88 12.22 10.31 11.34 11.42 12.68C14.14 15.07 16.53 17.82 19.15 20.32C25.34 14.15 33.35 9.7 42.06 8.48Z"/><path d="M46.38 24.36C48.84 23.07 52.04 25.2 51.94 27.94C52.26 33.94 51.68 39.96 52.13 45.96C54.32 49.86 58.95 51.99 60.97 56.06C62.29 59.59 57.51 62.77 54.75 60.26C51.19 56.88 47.51 53.52 44.41 49.7C43.43 44.22 44.29 38.54 43.98 32.98C44.17 30.08 43.07 25.91 46.38 24.36Z"/></svg>');
 
     const calculatePattern = /      function calculateCar\(heightCm, slope, transitionSlope\) \{[\s\S]*?\n      \}\n\n      function calculateDisabled/;
     if (!calculatePattern.test(source)) throw new Error("تابع محاسبه رمپ خودرو پیدا نشد.");
@@ -279,6 +301,10 @@ html,body{margin:0;width:100%;height:100%;background:#121629}
     source = source.replace(
       'document.addEventListener("keydown", e => { if (e.key === "Escape") closeRulesModal(); if (e.key === "Enter" && !rulesModal.classList.contains("open")) calculateCurrent(true); });',
       'document.addEventListener("keydown", e => { if (e.key === "Escape") { closeRulesModal(); closeDownloadPopover(); closeVersionPopover(); } });'
+    );
+    source = source.replace(
+      'document.addEventListener("keydown", e => { if (e.key === "Escape") { closeRulesModal(); closeDownloadPopover(); closeVersionPopover(); } });',
+      'document.addEventListener("keydown", e => { if (e.key === "Escape") { closeRulesModal(); closeDownloadPopover(); closeVersionPopover(); return; } const tag = e.target?.tagName; if (e.key === "Enter" && !rulesModal.classList.contains("open") && tag !== "BUTTON" && tag !== "A" && tag !== "TEXTAREA") { e.preventDefault(); document.querySelector("#calculateBtn")?.click(); } });'
     );
 
     source = source.replace(
@@ -1678,7 +1704,7 @@ ${helperMarker}`
         overflow: hidden;
         border-radius: 22px;
         border: 1px solid color-mix(in srgb, var(--line) 76%, rgba(255,255,255,.34));
-        background: color-mix(in srgb, var(--surface-solid) 76%, transparent);
+        background: transparent;
         box-shadow: 0 28px 80px rgba(8, 14, 34, .30), inset 0 1px 0 rgba(255,255,255,.28);
         backdrop-filter: blur(26px) saturate(160%);
         -webkit-backdrop-filter: blur(26px) saturate(160%);
@@ -1687,6 +1713,13 @@ ${helperMarker}`
         direction: rtl;
       }
       .export-modal-backdrop.open .export-modal { transform: translateY(0) scale(1); }
+      .export-modal > .glass-filter, .export-modal > .glass-overlay, .export-modal > .glass-specular { position: absolute; inset: 0; border-radius: inherit; pointer-events: none; }
+      .export-modal > .glass-filter { z-index: 1; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); filter: url(#glass-distortion) saturate(125%) brightness(1.08); }
+      .export-modal > .glass-overlay { z-index: 2; background: rgba(255,255,255,.20); }
+      .export-modal > .glass-specular { z-index: 3; box-shadow: inset 1px 1px 1px rgba(255,255,255,.42), inset -1px -1px 1px rgba(255,255,255,.08); }
+      .export-modal > .glass-content { position: relative; z-index: 4; }
+      [data-theme="dark"] .export-modal > .glass-overlay { background: rgba(18, 25, 50, .44); }
+      [data-theme="dark"] .export-modal > .glass-specular { box-shadow: inset 1px 1px 1px rgba(255,255,255,.18), inset -1px -1px 1px rgba(0,0,0,.22); }
 
       .export-modal-head {
         min-height: 62px;
@@ -3094,6 +3127,58 @@ ${helperMarker}`
       try {
         const doc = frame.contentDocument;
 
+        // Calculate button state: keep the core calculation logic isolated.
+        const calculateButton = doc.querySelector("#calculateBtn");
+        if (calculateButton && !doc.querySelector("#calculationInputChangedNote")) {
+          const note = doc.createElement("div");
+          note.id = "calculationInputChangedNote";
+          note.setAttribute("role", "status");
+          note.setAttribute("aria-live", "polite");
+          note.hidden = true;
+          note.textContent = "ورودی‌ها تغییر کرده؛ دوباره محاسبه کنید.";
+          calculateButton.parentNode.insertBefore(note, calculateButton);
+
+          const style = doc.createElement("style");
+          style.textContent = `#calculationInputChangedNote{display:flex;align-items:center;gap:7px;margin:0 0 8px;padding:0;border:0;background:transparent;color:var(--muted);font-size:11px;font-weight:750;line-height:1.7;text-align:right}#calculationInputChangedNote::before{content:"";width:7px;height:7px;flex:0 0 7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 18%,transparent)}#calculationInputChangedNote[hidden]{display:none!important}#calculateBtn:disabled{opacity:.42;cursor:not-allowed;filter:saturate(.55)}.calculate-button-wrap{position:relative;width:100%}.calculate-button-tooltip{position:absolute;right:0;bottom:calc(100% + 8px);z-index:20;max-width:min(300px,calc(100vw - 32px));padding:7px 10px;border:1px solid var(--line);border-radius:9px;background:var(--surface-solid);color:var(--text);font-size:11px;font-weight:750;line-height:1.7;box-shadow:0 10px 24px rgba(0,0,0,.18);opacity:0;visibility:hidden;transform:translateY(4px);pointer-events:none;transition:opacity .16s ease,transform .16s ease,visibility .16s ease}.calculate-button-wrap.is-explaining .calculate-button-tooltip{opacity:1;visibility:visible;transform:translateY(0)}`;
+          style.textContent += `#calculationInputChangedNote.is-dirty::before{display:block;animation:calculationNotePulse 1.1s ease-in-out infinite;will-change:transform,opacity,box-shadow}@keyframes calculationNotePulse{0%,100%{transform:scale(1);opacity:.65;box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 20%,transparent)}50%{transform:scale(1.35);opacity:1;box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 12%,transparent)}}`;
+          doc.head.appendChild(style);
+
+          const buttonWrap = doc.createElement("div");
+          buttonWrap.className = "calculate-button-wrap";
+          const tooltip = doc.createElement("div");
+          tooltip.className = "calculate-button-tooltip";
+          tooltip.setAttribute("role", "tooltip");
+          tooltip.textContent = "برای جلوگیری از محاسبه تکراری خاموش است؛ ابتدا یکی از ورودی‌ها را تغییر دهید.";
+          buttonWrap.appendChild(tooltip);
+          calculateButton.parentNode.insertBefore(buttonWrap, calculateButton);
+          buttonWrap.appendChild(calculateButton);
+
+          let hasCalculated = true;
+          const sync = dirty => {
+            calculateButton.disabled = hasCalculated && !dirty;
+            note.hidden = !hasCalculated;
+            note.classList.toggle("is-dirty", dirty);
+            note.textContent = dirty
+              ? "ورودی‌ها تغییر کرده؛ دوباره محاسبه کنید."
+              : "نتیجه مطابق آخرین محاسبه است.";
+            note.setAttribute("aria-hidden", String(note.hidden));
+          };
+          calculateButton.addEventListener("click", () => {
+            hasCalculated = true;
+            sync(false);
+          }, true);
+          const explainIfDisabled = () => buttonWrap.classList.toggle("is-explaining", calculateButton.disabled);
+          buttonWrap.addEventListener("mouseenter", explainIfDisabled);
+          buttonWrap.addEventListener("mouseleave", () => buttonWrap.classList.remove("is-explaining"));
+          buttonWrap.addEventListener("focusin", explainIfDisabled);
+          buttonWrap.addEventListener("focusout", () => buttonWrap.classList.remove("is-explaining"));
+          doc.querySelectorAll("input, select").forEach(input => {
+            input.addEventListener("input", () => { if (hasCalculated) sync(true); });
+            input.addEventListener("change", () => { if (hasCalculated) sync(true); });
+          });
+          sync(false);
+        }
+
         // Keep a clear unit suffix beside every numeric ramp-width field.
         setTimeout(() => {
           [
@@ -3358,6 +3443,23 @@ ${helperMarker}`
                   </button>
                 </div>
               </section>`;
+            const exportPanel = modal.querySelector(".export-modal");
+            if (exportPanel && !exportPanel.querySelector(":scope > .glass-content")) {
+              const exportNodes = [...exportPanel.childNodes];
+              const glassFilter = doc.createElement("div");
+              glassFilter.className = "glass-filter";
+              glassFilter.setAttribute("aria-hidden", "true");
+              const glassOverlay = doc.createElement("div");
+              glassOverlay.className = "glass-overlay";
+              glassOverlay.setAttribute("aria-hidden", "true");
+              const glassSpecular = doc.createElement("div");
+              glassSpecular.className = "glass-specular";
+              glassSpecular.setAttribute("aria-hidden", "true");
+              const glassContent = doc.createElement("div");
+              glassContent.className = "glass-content";
+              exportNodes.forEach(node => glassContent.appendChild(node));
+              exportPanel.append(glassFilter, glassOverlay, glassSpecular, glassContent);
+            }
             doc.body.appendChild(modal);
 
             const closeBtn = modal.querySelector("#exportCloseBtn");
@@ -3984,4 +4086,3 @@ ${helperMarker}`
 </script>
 </body>
 </html>
-
