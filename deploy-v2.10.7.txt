@@ -1,2 +1,0 @@
-Force GitHub Pages redeploy for Ramp Calculator v2.10.7 PDF export.
-2026-08-18
