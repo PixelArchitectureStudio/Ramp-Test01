@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ramp Calculator</title>
+  <style>
+    html,body{margin:0;min-height:100%;background:#101827;color:#fff;font:16px system-ui,sans-serif}
+    #status{min-height:100vh;display:grid;place-items:center;padding:24px;text-align:center}
+  </style>
+</head>
+<body>
+  <div id="status">Loading Ramp Calculator…</div>
+  <script>
+    (async () => {
+      const parts = [
+        "ramp-app-part-01.txt",
+        "ramp-app-part-02.txt",
+        "ramp-app-part-03.txt",
+        "ramp-app-part-04.txt",
+        "ramp-app-part-05.txt"
+      ];
+      const responses = await Promise.all(parts.map(path => fetch(path, {cache:"no-store"})));
+      if (responses.some(response => !response.ok)) throw new Error("Ramp source part could not be loaded.");
+      const source = (await Promise.all(responses.map(response => response.text()))).join("");
+      document.open();
+      document.write(source);
+      document.close();
+    })().catch(error => {
+      document.getElementById("status").textContent = "Ramp Calculator could not be loaded.";
+      console.error(error);
+    });
+  </script>
+</body>
+</html>
