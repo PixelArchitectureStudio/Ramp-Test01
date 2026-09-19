@@ -1,35 +1,63 @@
 <!doctype html>
-<html lang="en">
+<html lang="fa" dir="rtl">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Ramp Calculator</title>
   <style>
-    html,body{margin:0;min-height:100%;background:#101827;color:#fff;font:16px system-ui,sans-serif}
-    #status{min-height:100vh;display:grid;place-items:center;padding:24px;text-align:center}
+    :root{color-scheme:light;background:#f7f9fc;color:#182238;font-family:Vazirmatn,system-ui,-apple-system,"Segoe UI",sans-serif}
+    *{box-sizing:border-box}
+    html,body{margin:0;min-height:100%;background:#f7f9fc}
+    #loader{min-height:100vh;padding:22px;background:radial-gradient(circle at 10% 0%,rgba(121,161,253,.18),transparent 30%),radial-gradient(circle at 95% 100%,rgba(147,167,208,.12),transparent 30%);transition:opacity .18s ease}
+    #loader.is-leaving{opacity:0;pointer-events:none}
+    .shell{width:min(1480px,calc(100% - 32px));margin:0 auto}
+    .surface{border:1px solid #d8e2f0;background:rgba(255,255,255,.9);border-radius:18px;box-shadow:0 18px 50px rgba(38,61,100,.07)}
+    .header{height:70px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between}
+    .brand{width:190px;height:24px}.actions{display:flex;gap:8px}.action{width:40px;height:36px;border-radius:11px}
+    .tabs{height:58px;margin:18px 0;padding:7px;display:flex;gap:8px}.tab{flex:1;height:42px;border-radius:12px}
+    .workspace{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(340px,.75fr);gap:18px;direction:ltr}
+    .card{min-height:650px;overflow:hidden}.visual{display:flex;flex-direction:column}.card-head{height:75px;padding:20px 22px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #d8e2f0}.title{width:170px;height:18px}.caption{width:220px;height:10px;margin-top:8px}.mini-tabs{display:flex;gap:4px}.mini{width:52px;height:32px;border-radius:10px}.drawing{flex:1;min-height:420px}.tools{height:58px;border-top:1px solid #d8e2f0;padding:14px 20px;display:flex;justify-content:space-between}.tool{width:90px;height:30px;border-radius:10px}
+    .form{direction:rtl;padding:20px}.form-title{width:48%;height:20px}.form-subtitle{width:78%;height:11px;margin-top:9px}.field{margin-top:22px}.label{width:42%;height:12px;margin-bottom:10px}.input{height:44px;border-radius:10px}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.button{height:44px;margin-top:22px;border-radius:11px}.result{height:150px;margin-top:18px;border-radius:16px}.footer{display:flex;justify-content:space-between;gap:18px;margin-top:18px}.footer .block{width:120px;height:20px}
+    .block{position:relative;overflow:hidden;background:#eef3fa;border-radius:8px}.block::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 20%,rgba(150,170,200,.24) 50%,transparent 80%);transform:translateX(-100%);animation:shimmer 1.15s ease-in-out infinite}@keyframes shimmer{to{transform:translateX(100%)}}
+    .loader-label{margin-top:18px;text-align:center;color:#687692;font-size:13px;font-weight:700;opacity:.85}
+    #error{display:none;min-height:100vh;place-items:center;padding:24px;text-align:center;color:#182238}.error-card{max-width:420px;padding:28px}.error-card strong{display:block;margin-bottom:8px}.error-card span{color:#687692;font-size:13px}
+    @media(max-width:760px){#loader{padding:12px}.shell{width:100%}.workspace{grid-template-columns:1fr}.visual{order:1}.form{order:2}.drawing{min-height:260px}.tabs{gap:6px}.loader-label{font-size:12px}}
+    @media(prefers-reduced-motion:reduce){.block::after{animation:none}}
   </style>
 </head>
 <body>
-  <div id="status">Loading Ramp Calculator…</div>
+  <main id="loader" aria-label="در حال بارگذاری ابزار محاسبه رمپ">
+    <div class="shell">
+      <div class="surface header"><div class="block brand"></div><div class="actions"><div class="block action"></div><div class="block action"></div><div class="block action"></div></div></div>
+      <div class="surface tabs"><div class="block tab"></div><div class="block tab"></div><div class="block tab"></div></div>
+      <div class="workspace">
+        <section class="surface card visual"><div class="card-head"><div><div class="block title"></div><div class="block caption"></div></div><div class="mini-tabs"><div class="block mini"></div><div class="block mini"></div></div></div><div class="block drawing"></div><div class="tools"><div class="block tool"></div><div class="block tool"></div></div></section>
+        <section class="surface card form"><div class="block form-title"></div><div class="block form-subtitle"></div><div class="field"><div class="block label"></div><div class="block input"></div></div><div class="field"><div class="block label"></div><div class="block input"></div></div><div class="row"><div class="field"><div class="block label"></div><div class="block input"></div></div><div class="field"><div class="block label"></div><div class="block input"></div></div></div><div class="block button"></div><div class="block result"></div></section>
+      </div>
+      <div class="footer"><div class="block"></div><div class="block"></div></div>
+      <div id="loaderLabel" class="loader-label">در حال آماده‌سازی ابزار محاسبه رمپ…</div>
+    </div>
+  </main>
+  <div id="error"><div class="surface error-card"><strong>بارگذاری ابزار انجام نشد</strong><span id="errorText">لطفاً صفحه را دوباره باز کنید.</span></div></div>
   <script>
-    (async () => {
-      const parts = [
-        "ramp-app-part-01.txt",
-        "ramp-app-part-02.txt",
-        "ramp-app-part-03.txt",
-        "ramp-app-part-04.txt",
-        "ramp-app-part-05.txt"
-      ];
-      const responses = await Promise.all(parts.map(path => fetch(path, {cache:"no-store"})));
-      if (responses.some(response => !response.ok)) throw new Error("Ramp source part could not be loaded.");
-      const source = (await Promise.all(responses.map(response => response.text()))).join("");
-      document.open();
-      document.write(source);
-      document.close();
-    })().catch(error => {
-      document.getElementById("status").textContent = "Ramp Calculator could not be loaded.";
-      console.error(error);
-    });
+    (async()=>{
+      const parts=["ramp-app-part-01.txt","ramp-app-part-02.txt","ramp-app-part-03.txt","ramp-app-part-04.txt","ramp-app-part-05.txt"];
+      const label=document.getElementById("loaderLabel");
+      try{
+        const responses=await Promise.all(parts.map(path=>fetch(path,{cache:"no-store"})));
+        if(responses.some(r=>!r.ok)) throw new Error("Ramp source part could not be loaded.");
+        label.textContent="در حال آماده‌سازی رابط ابزار…";
+        const source=(await Promise.all(responses.map(r=>r.text()))).join("");
+        document.open();
+        document.write(source);
+        document.close();
+      }catch(error){
+        console.error(error);
+        document.getElementById("loader").style.display="none";
+        document.getElementById("error").style.display="grid";
+        document.getElementById("errorText").textContent="فایل‌های برنامه دریافت نشدند. صفحه را با Ctrl+F5 دوباره بارگذاری کنید.";
+      }
+    })();
   </script>
 </body>
 </html>
