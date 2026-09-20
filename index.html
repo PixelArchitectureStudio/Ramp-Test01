@@ -66,6 +66,97 @@ html,body{margin:0;width:100%;height:100%;background:#121629}
 
     source = source.replace("</style>", ".measurement-input { grid-template-columns: minmax(0, 1fr) 68px; gap: 8px; }\n.height-unit-select { min-width: 0; padding-inline: 6px; }\n.form-section[data-form=\"disabled\"] > .field-row,\n.form-section[data-form=\"human\"] > .field-row { grid-template-columns: minmax(0, 1fr) 124px; gap: 10px; }\n.form-section[data-form=\"disabled\"] > .field-row > .field,\n.form-section[data-form=\"human\"] > .field-row > .field { min-width: 0; }\n\ninput[type=\"number\"] { padding-right: 66px; }\n.input-wrap.has-unit input[type=\"number\"] { padding-right: 88px; }\n.number-stepper { top: 6px; right: 6px; height: 36px; grid-template-columns: 28px 28px; }\n.number-step-btn { width: 28px; height: 36px; }\n.number-step-btn svg { width: 14px; height: 14px; }\n.unit { right: 68px; }\n\n#carSlope + .unit,\n#carTransition + .unit {\n  right: auto !important;\n  left: 0;\n  transition: left .08s linear;\n}\n\n/* Keep the native select arrow comfortably inset from the field corner. */\n#carTransition,\n#disabledSlope {\n  appearance: none !important;\n  -webkit-appearance: none !important;\n  padding-left: 36px !important;\n  padding-right: 12px !important;\n  background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236d7892' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m7 9 5 5 5-5'/%3E%3C/svg%3E\") !important;\n  background-repeat: no-repeat !important;\n  background-position: left 12px center !important;\n  background-size: 15px 15px !important;\n}\n\n/* Keep every Export format selector consistent with the inset custom arrow. */\n.export-modal select {\n  appearance: none !important;\n  -webkit-appearance: none !important;\n  padding-left: 36px !important;\n  padding-right: 12px !important;\n  background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236d7892' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m7 9 5 5 5-5'/%3E%3C/svg%3E\") !important;\n  background-repeat: no-repeat !important;\n  background-position: left 12px center !important;\n  background-size: 15px 15px !important;\n}\n\n/* Match the unit selectors to the inset custom arrow used for the slope selector. */\n.height-unit-select {\n  appearance: none !important;\n  -webkit-appearance: none !important;\n  padding-left: 30px !important;\n  padding-right: 10px !important;\n  background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236d7892' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m7 9 5 5 5-5'/%3E%3C/svg%3E\") !important;\n  background-repeat: no-repeat !important;\n  background-position: left 9px center !important;\n  background-size: 14px 14px !important;\n}\n\n.footer-left { position: relative; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }\n.version-popover-wrap, .download-menu-wrap { position: relative; display: inline-flex; align-items: center; }\n.footer-pill-btn {\n  border: 1px solid var(--line); background: var(--surface-solid); color: var(--text);\n  cursor: pointer; transition: background .14s ease, border-color .14s ease, color .14s ease;\n}\n.footer-pill-btn:hover, .footer-pill-btn:focus-visible {\n  outline: none; border-color: var(--accent); background: var(--accent-soft);\n}\n.footer-pill-btn[aria-expanded=\"true\"], #downloadBtn[aria-expanded=\"true\"] {\n  border-color: var(--accent); background: var(--accent-soft);\n}\n\n.version-popover, .download-popover {\n  position: absolute; left: 0; bottom: calc(100% + 10px); z-index: 80; direction: rtl;\n  opacity: 0; visibility: hidden; pointer-events: none;\n  transform: translateY(7px) scale(.985); transform-origin: left bottom;\n  transition: opacity .16s ease, transform .16s ease, visibility .16s ease;\n}\n.version-popover.open, .download-popover.open {\n  opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0) scale(1);\n}\n\n.version-popover {\n  width: 290px; padding: 10px; border: 1px solid var(--line); border-radius: 16px;\n  background: color-mix(in srgb, var(--surface-solid) 92%, #09143b 8%);\n  box-shadow: 0 18px 45px rgba(0,0,0,.24);\n}\n.version-popover-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 8px; }\n.version-popover-title { font-size: 14px; font-weight: 900; line-height: 1.6; }\n.version-popover-version { font-size: 12px; color: var(--accent); font-weight: 800; line-height: 1.6; }\n.version-popover-label { font-size: 12px; font-weight: 800; margin: 6px 0 4px; }\n.version-popover-desc { font-size: 12px; line-height: 1.9; color: var(--muted); margin: 0; }\n.version-popover-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }\n.version-popover-item { display: grid; grid-template-columns: 1fr; gap: 0; font-size: 12px; line-height: 1.9; }\n.version-popover-item strong { color: var(--text); font-weight: 820; }\n.version-popover-divider { height: 1px; margin: 9px 0; background: var(--line); }\n.version-instagram-btn {\n  width: 100%; min-height: 36px; border-radius: 999px; border: 1px solid var(--line);\n  display: inline-flex; align-items: center; justify-content: center; gap: 8px;\n  text-decoration: none; color: var(--text); background: var(--surface-2);\n  font-size: 12px; font-weight: 800; transition: border-color .14s ease, background .14s ease, color .14s ease;\n}\n.version-instagram-btn:hover, .version-instagram-btn:focus-visible {\n  outline: none; border-color: var(--accent); color: var(--accent); background: var(--accent-soft);\n}\n.version-instagram-btn svg { width: 14px; height: 14px; flex: 0 0 14px; }\n.version-authors { margin-top: 8px; text-align: center; font-size: 11.5px; color: var(--muted); font-weight: 760; }\n\n.download-popover {\n  width: 244px; padding: 8px; border: 1px solid var(--line); border-radius: 14px;\n  background: var(--surface-solid); box-shadow: 0 18px 45px rgba(0,0,0,.22);\n}\n.download-menu-item {\n  width: 100%; min-height: 40px; padding: 0 9px; border: 0; border-radius: 9px;\n  display: flex; align-items: center; justify-content: flex-start; gap: 10px;\n  background: transparent; color: var(--text); font: inherit; font-size: 12px; font-weight: 800;\n  text-align: right; white-space: nowrap; cursor: pointer;\n  transition: background .14s ease, color .14s ease, transform .14s ease;\n}\n.download-menu-item:hover, .download-menu-item:focus-visible {\n  background: var(--surface-2); color: var(--accent); outline: none;\n}\n.download-menu-item:active { transform: scale(.985); }\n.download-menu-item svg { width: 17px; height: 17px; flex: 0 0 17px; color: var(--muted); }\n.download-menu-item:hover svg, .download-menu-item:focus-visible svg { color: currentColor; }\n.download-menu-divider { height: 1px; margin: 5px 7px; background: var(--line); }\n\n@media (max-width: 620px) {\n  .form-section[data-form=\"disabled\"] > .field-row,\n  .form-section[data-form=\"human\"] > .field-row { grid-template-columns: 1fr; gap: 0; }\n  .measurement-input { grid-template-columns: minmax(0, 1fr) 68px; }\n  .version-popover { width: min(290px, calc(100vw - 26px)); }\n  .download-popover { width: min(244px, calc(100vw - 26px)); }\n}" + "\n</style>");
 
+    source = source.replace('<button class="lang-btn" id="langBtn" title="Change language">EN</button>', '<div class="notification-wrap"><button class="icon-btn notification-btn" id="notificationBtn" type="button" title="اعلان‌ها" aria-label="اعلان‌ها" aria-expanded="false" aria-controls="notificationPopover"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg><span class="notification-dot" id="notificationDot" aria-label="اعلان خوانده‌نشده"></span></button><div class="notification-popover" id="notificationPopover" role="status" aria-live="polite" aria-hidden="true"><span class="notification-popover-label">اعلان</span><strong>TEST</strong></div></div>');
+    source = source.replace("lang: localStorage.getItem(\"rampLang\") || \"fa\",", "lang: \"fa\",");
+    source = source.replace("state.lang = lang;", "state.lang = \"fa\";");
+    source = source.replace("localStorage.setItem(\"rampLang\", lang);", "localStorage.setItem(\"rampLang\", \"fa\");");
+    source = source.replace("document.documentElement.lang = lang;", "document.documentElement.lang = \"fa\";");
+    source = source.replace("document.documentElement.dataset.lang = lang;", "document.documentElement.dataset.lang = \"fa\";");
+    source = source.replace('        $("#langBtn").textContent = lang === "fa" ? "EN" : "FA";\n', "");
+    source = source.replace(
+      '      $("#langBtn").addEventListener("click", () => setLanguage(state.lang === "fa" ? "en" : "fa"));',
+      '      $("#notificationBtn").addEventListener("click", toggleNotificationPopover);'
+    );
+
+    source = source.replace("</style>", `
+      .notification-wrap { position: relative; display: inline-flex; align-items: center; }
+      .notification-btn { position: relative; justify-content: center !important; padding: 0 !important; gap: 0 !important; }
+      .notification-btn > svg { position: absolute; inset: 0; width: 19px; height: 19px; margin: auto !important; }
+      .notification-btn svg { transform-origin: 50% 15%; transition: color .18s ease, filter .18s ease; }
+      .notification-btn:hover svg,
+      .notification-btn:focus-visible svg { animation: notificationBellHover .62s cubic-bezier(.22,1,.36,1); filter: drop-shadow(0 0 6px color-mix(in srgb, var(--accent) 62%, transparent)); }
+      .notification-btn.has-unread svg { animation: notificationBellUnread 2.4s ease-in-out infinite; }
+      .notification-btn.has-unread:hover svg,
+      .notification-btn.has-unread:focus-visible svg { animation: notificationBellHover .62s cubic-bezier(.22,1,.36,1); }
+      .notification-dot { position: absolute; top: 3px; right: 3px; width: 8px; height: 8px; border-radius: 50%; background: #ef4444; border: 2px solid var(--surface-solid); box-shadow: 0 2px 7px rgba(239,68,68,.38); pointer-events: none; }
+      .notification-dot.is-hidden { display: none; }
+      .notification-popover { position: absolute; top: calc(100% + 10px); right: 0; z-index: 120; min-width: 150px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 14px; background: color-mix(in srgb, var(--surface-solid) 88%, transparent); color: var(--text); box-shadow: 0 16px 36px rgba(20,32,64,.18), inset 0 1px 0 rgba(255,255,255,.24); backdrop-filter: blur(16px) saturate(135%); -webkit-backdrop-filter: blur(16px) saturate(135%); display: grid; gap: 3px; opacity: 0; visibility: hidden; pointer-events: none; transform: translateY(-5px) scale(.98); transform-origin: top right; transition: opacity .16s ease, transform .16s ease, visibility .16s ease; direction: rtl; }
+      .notification-popover.open { opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0) scale(1); }
+      .notification-popover-label { color: var(--muted); font-size: 10px; font-weight: 800; }
+      .notification-popover strong { font-size: 14px; font-weight: 900; }
+      [data-theme="dark"] .notification-popover { background: color-mix(in srgb, var(--surface-solid) 78%, transparent); box-shadow: 0 18px 40px rgba(0,0,0,.34), inset 0 1px 0 rgba(255,255,255,.12); }
+      @keyframes notificationBellHover {
+        0% { transform: rotate(0deg) translateY(0); }
+        28% { transform: rotate(-11deg) translateY(-1px); }
+        52% { transform: rotate(9deg) translateY(-1px); }
+        74% { transform: rotate(-5deg) translateY(0); }
+        100% { transform: rotate(0deg) translateY(0); }
+      }
+      @keyframes notificationBellUnread {
+        0%, 72%, 100% { transform: rotate(0deg) translateY(0); }
+        77% { transform: rotate(-8deg) translateY(-1px); }
+        82% { transform: rotate(7deg) translateY(-1px); }
+        87% { transform: rotate(-4deg) translateY(0); }
+        92% { transform: rotate(0deg) translateY(0); }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .notification-btn.has-unread svg,
+        .notification-btn:hover svg,
+        .notification-btn:focus-visible svg { animation: none; }
+      }
+    </style>`);
+
+    const notificationMarker = "      // Events";
+    source = source.replace(notificationMarker, `
+      const notificationButton = $("#notificationBtn");
+      const notificationPopover = $("#notificationPopover");
+      const notificationDot = $("#notificationDot");
+
+      function setNotificationOpen(open) {
+        if (!notificationPopover || !notificationButton) return;
+        notificationPopover.classList.toggle("open", open);
+        notificationPopover.setAttribute("aria-hidden", String(!open));
+        notificationButton.setAttribute("aria-expanded", String(open));
+      }
+
+      function setNotificationUnread(unread) {
+        notificationDot?.classList.toggle("is-hidden", !unread);
+        notificationButton?.classList.toggle("has-unread", unread);
+      }
+
+      function toggleNotificationPopover(event) {
+        event?.preventDefault();
+        event?.stopPropagation();
+        const nextOpen = !notificationPopover?.classList.contains("open");
+        setNotificationOpen(nextOpen);
+        if (nextOpen) {
+          setNotificationUnread(false);
+        }
+      }
+
+      document.addEventListener("click", event => {
+        if (notificationPopover?.classList.contains("open") && !notificationPopover.contains(event.target) && !notificationButton?.contains(event.target)) setNotificationOpen(false);
+      });
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape") setNotificationOpen(false);
+      });
+      // Temporary test mode: show the unread dot on every page load.
+      setTimeout(() => {
+        setNotificationUnread(true);
+      }, 700);
+
+` + notificationMarker);
+
     source = source.replace("</style>", `
       .history-switch-row { position: relative; grid-column: 1 / -1 !important; justify-self: stretch !important; align-self: stretch !important; width: 100% !important; max-width: none !important; box-sizing: border-box; gap: 12px !important; padding: 0 !important; margin-bottom: 10px !important; }
       .history-switch-row { display: flex !important; flex-direction: column; align-items: stretch; gap: 14px !important; margin-inline: 0 !important; }
@@ -94,24 +185,35 @@ html,body{margin:0;width:100%;height:100%;background:#121629}
       .calculation-history-popover {
         position: absolute; left: 0; top: calc(100% + 8px); z-index: 160;
         width: min(330px, calc(100vw - 28px)); max-height: min(360px, calc(100dvh - 140px));
-        overflow: auto; padding: 10px; border: 1px solid var(--line); border-radius: 14px;
-        background: color-mix(in srgb, var(--surface-solid) 94%, transparent);
-        box-shadow: 0 18px 45px rgba(0,0,0,.22); direction: rtl;
+        overflow: auto; padding: 12px; border: 1px solid color-mix(in srgb, var(--line) 88%, #fff 12%); border-radius: 20px;
+        background: linear-gradient(145deg, color-mix(in srgb, var(--surface-solid) 58%, transparent), color-mix(in srgb, var(--surface-2) 48%, transparent));
+        box-shadow: 0 24px 60px rgba(24,35,60,.18), inset 0 1px 0 rgba(255,255,255,.22), inset 0 -1px 0 rgba(20,30,55,.08);
+        backdrop-filter: blur(24px) saturate(155%); -webkit-backdrop-filter: blur(24px) saturate(155%); direction: rtl;
         opacity: 0; visibility: hidden; pointer-events: none;
         transform: translateY(-5px); transform-origin: left top;
         transition: opacity .16s ease, transform .16s ease, visibility .16s ease;
       }
+      html[data-theme="dark"] .calculation-history-popover {
+        border-color: color-mix(in srgb, var(--line) 82%, #fff 18%);
+        background: linear-gradient(145deg, rgba(34,43,73,.60), rgba(18,25,48,.52));
+        box-shadow: 0 24px 60px rgba(0,0,0,.38), inset 0 1px 0 rgba(255,255,255,.10), inset 0 -1px 0 rgba(0,0,0,.16);
+      }
       .calculation-history-popover.open { opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0); }
-      .history-popover-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
-      .history-popover-title { color: var(--text); font-size: 12px; font-weight: 900; }
-      .history-popover-close { width: 25px; height: 25px; padding: 0; border: 1px solid var(--line); border-radius: 7px; background: var(--surface-2); color: var(--muted); display: inline-grid; place-items: center; cursor: pointer; }
-      .history-popover-close:hover, .history-popover-close:focus-visible { color: var(--accent); border-color: var(--accent); outline: none; }
-      .history-popover-close svg { width: 13px; height: 13px; }
-      .history-popover-list { display: grid; gap: 5px; }
-      .history-popover-item { width: 100%; min-height: 44px; padding: 7px 9px; border: 1px solid transparent; border-radius: 9px; background: var(--surface-2); color: var(--text); display: flex; align-items: center; justify-content: space-between; gap: 10px; text-align: right; font: inherit; cursor: pointer; transition: background .14s ease, border-color .14s ease, transform .14s ease; }
-      .history-popover-item:hover, .history-popover-item:focus-visible { background: var(--accent-soft); border-color: var(--accent); outline: none; }
+      .history-popover-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: -2px -2px 10px; padding: 3px 3px 9px; border-bottom: 1px solid color-mix(in srgb, var(--line) 72%, transparent); }
+      .history-popover-title { color: var(--text); font-size: 12px; font-weight: 900; letter-spacing: -.01em; }
+      .history-popover-close { width: 28px; height: 28px; padding: 0; border: 1px solid color-mix(in srgb, var(--line) 86%, #fff 14%); border-radius: 10px; background: color-mix(in srgb, var(--surface-solid) 56%, transparent); color: var(--muted); display: inline-grid; place-items: center; cursor: pointer; box-shadow: inset 0 1px 0 rgba(255,255,255,.16); transition: color .14s ease, border-color .14s ease, background .14s ease, transform .14s ease; }
+      .history-popover-close:hover, .history-popover-close:focus-visible { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 65%, var(--line)); background: color-mix(in srgb, var(--accent-soft) 52%, transparent); outline: none; }
+      .history-popover-close:active { transform: scale(.92); }
+      .history-popover-close svg { width: 14px; height: 14px; }
+      .history-popover-list { display: grid; gap: 7px; }
+      .history-popover-item { width: 100%; min-height: 48px; padding: 8px 10px; border: 1px solid color-mix(in srgb, var(--line) 66%, transparent); border-radius: 14px; background: linear-gradient(135deg, color-mix(in srgb, var(--surface-solid) 43%, transparent), color-mix(in srgb, var(--surface-2) 43%, transparent)); color: var(--text); display: flex; align-items: center; justify-content: space-between; gap: 10px; text-align: right; font: inherit; cursor: pointer; box-shadow: inset 0 1px 0 rgba(255,255,255,.14), 0 4px 14px rgba(28,42,72,.04); transition: background .14s ease, border-color .14s ease, transform .14s ease, box-shadow .14s ease; }
+      .history-popover-item:hover { background: linear-gradient(135deg, rgba(255,255,255,.84), rgba(255,255,255,.58)); border-color: transparent; box-shadow: inset 0 0 0 1px rgba(255,255,255,.42), inset 0 1px 0 rgba(255,255,255,.34), 0 8px 20px rgba(28,42,72,.07); outline: none; }
+      html[data-theme="dark"] .history-popover-item:hover { background: linear-gradient(135deg, rgba(255,255,255,.17), rgba(255,255,255,.09)); border-color: transparent; box-shadow: inset 0 0 0 1px rgba(255,255,255,.22), inset 0 1px 0 rgba(255,255,255,.20), 0 8px 20px rgba(0,0,0,.18); }
+      .history-popover-item.is-current:hover { border-color: color-mix(in srgb, var(--accent) 78%, var(--line)); box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 18%, transparent), inset 0 0 0 1px rgba(255,255,255,.28), inset 0 1px 0 rgba(255,255,255,.34), 0 8px 20px rgba(53,86,150,.10); }
+      html[data-theme="dark"] .history-popover-item.is-current:hover { border-color: color-mix(in srgb, var(--accent) 82%, var(--line)); box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 22%, transparent), inset 0 0 0 1px rgba(255,255,255,.16), inset 0 1px 0 rgba(255,255,255,.20), 0 8px 20px rgba(0,0,0,.20); }
+      .history-popover-item:focus-visible { background: linear-gradient(135deg, color-mix(in srgb, var(--surface-solid) 62%, transparent), color-mix(in srgb, var(--surface-2) 52%, transparent)); border-color: color-mix(in srgb, var(--line) 88%, #fff 12%); outline: 2px solid color-mix(in srgb, var(--accent) 34%, transparent); outline-offset: 2px; }
       .history-popover-item:active { transform: scale(.985); }
-      .history-popover-item.is-current { border-color: color-mix(in srgb, var(--accent) 70%, transparent); }
+      .history-popover-item.is-current { border-color: color-mix(in srgb, var(--accent) 78%, var(--line)); box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 18%, transparent), inset 0 1px 0 rgba(255,255,255,.16), 0 8px 20px rgba(53,86,150,.07); }
       .history-popover-item-main { min-width: 0; display: grid; gap: 2px; }
       .history-popover-item-title { font-size: 11px; font-weight: 900; line-height: 1.4; }
       .history-popover-item-detail { color: var(--muted); font-size: 10px; line-height: 1.5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -489,6 +591,57 @@ ${helperMarker}`
       '          $("#extraLength").textContent = `${formatLength(r.extra)}${r.stopLength ? ` + ${formatLength(r.stopLength)} ${t("stopSpace")}` : ""}`;'
     );
 
+    // Dimension arrows are drawn as real geometry rather than SVG markers.
+    // Markers reverse differently on start/end and are unreliable for vertical
+    // dimensions.  Here the tip is explicitly aimed into the measured span:
+    // left→right, top→bottom, and each segmented length are all deterministic.
+    const dimensionFunctionAnchor = '      function renderSegmentDimensions(geom, toX, dimY, textY, tickTopY, tickBottomY, muted, markerId) {';
+    if (!source.includes(dimensionFunctionAnchor)) {
+      throw new Error("تابع دایمنشن ترسیم پیدا نشد.");
+    }
+    source = source.replace(
+      dimensionFunctionAnchor,
+      `      function dimensionArrow(x, y, angle, color) {
+        const headLength = 7;
+        const headHalfWidth = 3.1;
+        const baseX = x - Math.cos(angle) * headLength;
+        const baseY = y - Math.sin(angle) * headLength;
+        const wingX = Math.sin(angle) * headHalfWidth;
+        const wingY = -Math.cos(angle) * headHalfWidth;
+        return \`<path d="M \${x} \${y} L \${baseX + wingX} \${baseY + wingY} L \${baseX - wingX} \${baseY - wingY} Z" fill="\${color}"/>\`;
+      }
+
+      function dimensionLine(x1, y1, x2, y2, color) {
+        const angle = Math.atan2(y2 - y1, x2 - x1);
+        return \`<line x1="\${x1}" y1="\${y1}" x2="\${x2}" y2="\${y2}" stroke="\${color}"/>\${dimensionArrow(x1, y1, angle, color)}\${dimensionArrow(x2, y2, angle + Math.PI, color)}\`;
+      }
+
+${dimensionFunctionAnchor}`
+    );
+    source = source.replace(
+      '          svg += `<line x1="${x1}" y1="${dimY}" x2="${x2}" y2="${dimY}" stroke="${muted}" marker-start="url(#${markerId})" marker-end="url(#${markerId})"/>`;',
+      '          svg += dimensionLine(x1, dimY, x2, dimY, muted);'
+    );
+    source = source.replace(
+      '          <line x1="${toX(0)}" y1="${top - 26}" x2="${toX(overallEndX)}" y2="${top - 26}" stroke="${muted}" marker-start="url(#arr)" marker-end="url(#arr)"/>',
+      '          ${dimensionLine(toX(0), top - 26, toX(overallEndX), top - 26, muted)}'
+    );
+    source = source.replace(
+      '          <line x1="${toX(0) - 35}" y1="${toY(0)}" x2="${toX(0) - 35}" y2="${toY(geom.totalRise)}" stroke="${muted}" marker-start="url(#arr)" marker-end="url(#arr)"/>',
+      '          ${dimensionLine(toX(0) - 35, toY(0), toX(0) - 35, toY(geom.totalRise), muted)}'
+    );
+    source = source.replace(
+      '          <line x1="${originX}" y1="${originY - 36}" x2="${overallEndPx}" y2="${originY - 36}" stroke="${muted}" marker-start="url(#dimArr)" marker-end="url(#dimArr)"/>',
+      '          ${dimensionLine(originX, originY - 36, overallEndPx, originY - 36, muted)}'
+    );
+    source = source.replace(
+      '          <line x1="${originX - 34}" y1="${originY}" x2="${originX - 34}" y2="${originY + drawH}" stroke="${muted}" marker-start="url(#dimArr)" marker-end="url(#dimArr)"/>',
+      '          ${dimensionLine(originX - 34, originY, originX - 34, originY + drawH, muted)}'
+    );
+    if (source.includes('marker-start="url(#arr)"') || source.includes('marker-start="url(#dimArr)"')) {
+      throw new Error("فلش‌های قدیمی دایمنشن هنوز باقی مانده‌اند.");
+    }
+
     // Snipzy Liquid Glass Navigation effect adapted to the existing topbar.
     // Important: keep the app's original sticky behavior.
     const snipzyGlassCSS = `
@@ -501,9 +654,10 @@ ${helperMarker}`
         /* Preserve original ramp app behavior */
         position: sticky !important;
         top: 12px !important;
-        z-index: 20 !important;
+        z-index: 500 !important;
 
-        overflow: hidden !important;
+        /* Let floating controls escape the glass bar instead of being clipped. */
+        overflow: visible !important;
         background: transparent !important;
         isolation: isolate;
       }
@@ -542,7 +696,17 @@ ${helperMarker}`
       .topbar.glass-nav > .brand,
       .topbar.glass-nav > .top-actions {
         position: relative;
-        z-index: 4;
+        z-index: 20 !important;
+      }
+
+      /* The notification menu must sit above the bar, cards, and modal layers. */
+      .topbar.glass-nav .notification-wrap {
+        position: relative;
+        z-index: 30 !important;
+      }
+
+      .topbar.glass-nav .notification-popover {
+        z-index: 9999 !important;
       }
 
       /* Keep the original controls readable while the bar itself stays glass */
@@ -673,6 +837,41 @@ ${helperMarker}`
         background: color-mix(in srgb, var(--surface-solid) 34%, transparent) !important;
         backdrop-filter: blur(14px) saturate(125%);
         -webkit-backdrop-filter: blur(14px) saturate(125%);
+      }
+
+      /* Match the Export close button, including its gentle hover brighten. */
+      .modal.rules-glass #closeRules,
+      .modal.rules-clean-glass #closeRules {
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+        display: grid;
+        place-items: center;
+        border: 1px solid var(--line);
+        background: var(--surface-solid);
+        color: var(--muted);
+        cursor: pointer;
+        line-height: 0;
+        transform: none !important;
+        transition: background .14s ease, color .14s ease, border-color .14s ease;
+      }
+      .modal.rules-glass #closeRules:hover,
+      .modal.rules-glass #closeRules:focus-visible,
+      .modal.rules-clean-glass #closeRules:hover,
+      .modal.rules-clean-glass #closeRules:focus-visible {
+        background: var(--surface-2);
+        color: var(--text);
+        outline: none;
+        transform: none !important;
+      }
+      .modal.rules-glass #closeRules svg,
+      .modal.rules-clean-glass #closeRules svg {
+        width: 16px;
+        height: 16px;
+        display: block;
+        margin: 0;
+        place-self: center;
+        transform: none;
       }
 
       /* Only the content scrolls */
@@ -1692,7 +1891,9 @@ ${helperMarker}`
       .export-modal-backdrop {
         position: fixed;
         inset: 0;
-        z-index: 190;
+        /* Keep the navigation behind the export veil so it is blurred, not
+           rendered above the dialog. */
+        z-index: 3000 !important;
         display: grid;
         place-items: center;
         padding: 18px;
@@ -1812,16 +2013,16 @@ ${helperMarker}`
       }
       /* Download and Version stay free of cursor-following highlight. */
       /* Brighter hover preview for controls and rule cards. */
-      .modal.rules-glass button:hover,
-      .modal.rules-glass button:focus-visible,
+      .modal.rules-glass button:not(#closeRules):hover,
+      .modal.rules-glass button:not(#closeRules):focus-visible,
       .modal.rules-glass .rule-card:hover,
       .modal.rules-glass .rules-document-content:hover,
       .modal.rules-glass .rules-card-heading:hover {
         background: color-mix(in srgb, var(--accent-soft) 72%, rgba(255,255,255,.20)) !important;
         outline: none !important;
       }
-      [data-theme="dark"] .modal.rules-glass button:hover,
-      [data-theme="dark"] .modal.rules-glass button:focus-visible,
+      [data-theme="dark"] .modal.rules-glass button:not(#closeRules):hover,
+      [data-theme="dark"] .modal.rules-glass button:not(#closeRules):focus-visible,
       [data-theme="dark"] .modal.rules-glass .rule-card:hover,
       [data-theme="dark"] .modal.rules-glass .rules-document-content:hover,
       [data-theme="dark"] .modal.rules-glass .rules-card-heading:hover {
@@ -3695,20 +3896,45 @@ ${helperMarker}`
               border: 1px solid color-mix(in srgb, var(--line) 82%, var(--text) 18%);
               border-radius: 999px;
               background: color-mix(in srgb, var(--surface-solid) 76%, transparent);
-              color: var(--muted);
-              box-shadow: 0 8px 22px rgba(8, 15, 35, .14);
+              color: color-mix(in srgb, var(--accent) 72%, var(--text));
+              border-color: color-mix(in srgb, var(--accent) 58%, var(--line));
+              box-shadow:
+                0 0 0 0 color-mix(in srgb, var(--accent) 42%, transparent),
+                0 8px 22px rgba(8, 15, 35, .14),
+                inset 0 1px 0 rgba(255,255,255,.34);
               -webkit-backdrop-filter: blur(12px) saturate(145%);
               backdrop-filter: blur(12px) saturate(145%);
               transform: translateX(-50%);
               opacity: 1;
               pointer-events: auto;
               cursor: pointer;
-              transition: opacity .24s ease, transform .24s ease;
+              animation: pageScrollCueGlow 2.2s ease-in-out infinite;
+              transition: opacity .24s ease, transform .24s ease, color .18s ease, border-color .18s ease;
+            }
+            #pageScrollCue::before {
+              content: "";
+              position: absolute;
+              inset: -6px;
+              border-radius: inherit;
+              background: radial-gradient(circle, transparent 42%, color-mix(in srgb, var(--accent) 18%, transparent) 58%, transparent 78%);
+              filter: blur(2.5px);
+              opacity: .72;
+              pointer-events: none;
+              animation: pageScrollCueHalo 2.2s ease-out infinite;
             }
             #pageScrollCue svg {
               width: 16px;
               height: 16px;
+              position: relative;
+              z-index: 1;
+              filter: drop-shadow(0 0 5px color-mix(in srgb, var(--accent) 72%, transparent));
               animation: pageScrollCueBounce 1.15s ease-in-out infinite;
+            }
+            #pageScrollCue:hover,
+            #pageScrollCue:focus-visible {
+              color: var(--accent);
+              border-color: color-mix(in srgb, var(--accent) 82%, var(--line));
+              outline: none;
             }
             #pageScrollCue.is-hidden {
               opacity: 0;
@@ -3718,7 +3944,27 @@ ${helperMarker}`
               0%, 100% { transform: translateY(-2px); }
               50% { transform: translateY(4px); }
             }
+            @keyframes pageScrollCueGlow {
+              0%, 100% {
+                box-shadow:
+                  0 0 0 0 color-mix(in srgb, var(--accent) 0%, transparent),
+                  0 8px 22px rgba(8, 15, 35, .14),
+                  inset 0 1px 0 rgba(255,255,255,.34);
+              }
+              50% {
+                box-shadow:
+                  0 0 18px 5px color-mix(in srgb, var(--accent) 13%, transparent),
+                  0 10px 28px color-mix(in srgb, var(--accent) 20%, rgba(8,15,35,.14)),
+                  inset 0 1px 0 rgba(255,255,255,.42);
+              }
+            }
+            @keyframes pageScrollCueHalo {
+              0% { transform: scale(.82); opacity: .68; }
+              70%, 100% { transform: scale(1.18); opacity: 0; }
+            }
             @media (prefers-reduced-motion: reduce) {
+              #pageScrollCue,
+              #pageScrollCue::before,
               #pageScrollCue svg { animation: none; }
             }
           `;
@@ -4562,6 +4808,26 @@ ${helperMarker}`
 
     // Main Rules shell glass (inner text/image panel intentionally untouched).
     source = source.replace("</style>", `
+      /* Rules must sit above the sticky liquid-glass navigation at every size. */
+      #rulesModal.modal-backdrop {
+        z-index: 3000 !important;
+      }
+      #rulesModal.modal-backdrop.open,
+      #rulesModal.modal-backdrop.closing {
+        z-index: 3000 !important;
+      }
+      /* The full-screen source-image viewer still stays above the Rules dialog. */
+      #rulesImageViewer { z-index: 4100 !important; }
+      #rulesSelectionActions { z-index: 4200 !important; }
+      /* Use one continuous veil behind Rules; the old four-strip blur created
+         a visibly separate band along the top edge. */
+      .modal-backdrop.rules-backdrop-split-blur {
+        backdrop-filter: blur(8px) !important;
+        -webkit-backdrop-filter: blur(8px) !important;
+      }
+      .modal-backdrop.rules-backdrop-split-blur > .rules-backdrop-blur-strip {
+        display: none !important;
+      }
       .modal.rules-glass, .modal.rules-clean-glass {
         background: transparent !important;
         border: 1px solid color-mix(in srgb, var(--line) 74%, rgba(255,255,255,.34)) !important;
@@ -4745,6 +5011,22 @@ ${helperMarker}`
       .rules-backdrop-blur-strip { position: absolute; z-index: 0; pointer-events: none; background: transparent; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
       .modal-backdrop.rules-backdrop-split-blur > .modal { position: relative; z-index: 1; }
     ` + "</style>");
+
+    // This rule must be injected after the Rules glass CSS above: that block
+    // intentionally disables the old split-strip blur, so the final backdrop
+    // rule restores one continuous blur layer without bringing the strips back.
+    source = source.replace(
+      "</style>",
+      `
+        .modal-backdrop.rules-backdrop-split-blur {
+          backdrop-filter: blur(8px) !important;
+          -webkit-backdrop-filter: blur(8px) !important;
+        }
+        .modal-backdrop.rules-backdrop-split-blur > .rules-backdrop-blur-strip {
+          display: none !important;
+        }
+      </style>`
+    );
 
     // Update the Version popover follow text in both the initial markup and
     // the language-refresh handler.
