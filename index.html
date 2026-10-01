@@ -36,12 +36,50 @@ html,body{margin:0;width:100%;height:100%;background:#121629}
       'appSubtitle: "محاسبه، کنترل ضوابط و ترسیم"'
     );
 
+    const vehicleHeightRules = `
+              <div class="source-rule-row"><span class="source-bullet" aria-hidden="true">•</span><div class="source-rule-text"><strong dir="ltr">5-3-10-5-4</strong> : در کلیه توقفگاه های عمومی و توقفگاه های بزرگ و متوسط خصوصی رعایت حداقل ارتفاع آزاد درب ورودی و خروجی خودرو به میزان 2.10 متر الزامی است.</div></div>
+              <div class="source-rule-row"><span class="source-bullet" aria-hidden="true">•</span><div class="source-rule-text"><strong dir="ltr">6-3-10-5-4</strong> : در توقفگاه های خصوصی کوچک، در صورت وجود ورودی مجزای دیگری برای اشخاص، پیش بینی ورودی و خروجی سواره به ارتفاع حداقل 1.95 متر الزامی است. در غیر این صورت تابع حداقل ارتفاع الزامی در بند <strong dir="ltr">4-5-10-3-5</strong> خواهد بود.</div></div>`;
+    let vehicleHeightRulesInserted = false;
+    source = source.replace(
+      /(<div class="source-rule-row"><span class="source-bullet" aria-hidden="true">•<\/span><div class="source-rule-text"><strong>1-3-10-5-<\/strong><strong>4<\/strong> : [^<]*?3 متر است\.<\/div><\/div>)(\s*<\/div>\s*<\/section>\s*<section class="rules-source-card rules-accessible-card")/,
+      (_match, lastVehicleRule, nextSection) => {
+        vehicleHeightRulesInserted = true;
+        return `${lastVehicleRule}${vehicleHeightRules}${nextSection}`;
+      }
+    );
+    if (!vehicleHeightRulesInserted) throw new Error("Could not locate the vehicle regulations section.");
+
     // Use the same compact numeric control for the accessible slope as the
     // general slope. The calculator already reads this value as a number.
     source = source.replace(
       /<select id="disabledSlope">[\s\S]*?<\/select>/,
-      '<div class="input-wrap"><input id="disabledSlope" type="number" min="5" max="10" step="1" value="8"><span class="unit">%</span></div>'
+      '<div class="input-wrap"><input id="disabledSlope" type="number" min="1" step="1" value="8"><span class="unit">%</span></div>'
     );
+    const humanSlopeInput = '<input id="humanSlope" type="number" min="0.1" step="0.1" value="12">';
+    if (!source.includes(humanSlopeInput)) throw new Error("ورودی شیب عمومی پیدا نشد.");
+    source = source.replace(humanSlopeInput, '<input id="humanSlope" type="number" min="1" step="1" value="12">');
+
+    // Keep the accessible slope buttons unrestricted above 10, and make
+    // the general slope buttons produce whole-number percentages.
+    const disabledSlopeStepAnchor = `        if (!input || input.disabled || input.readOnly) return;
+        try {
+          direction > 0 ? input.stepUp() : input.stepDown();`;
+    if (!source.includes(disabledSlopeStepAnchor)) throw new Error("کنترل گام شیب معلول پیدا نشد.");
+    source = source.replace(disabledSlopeStepAnchor, `        if (!input || input.disabled || input.readOnly) return;
+        if (input.id === "disabledSlope" || input.id === "humanSlope") {
+          const current = Number(input.value);
+          const base = Number.isFinite(current) ? current : (input.id === "humanSlope" ? 12 : 8);
+          const next = input.id === "humanSlope"
+            ? (direction > 0 ? Math.floor(base) + 1 : Math.ceil(base) - 1)
+            : base + direction;
+          input.value = String(Math.max(1, next));
+          input.dispatchEvent(new Event("input", { bubbles: true }));
+          input.dispatchEvent(new Event("change", { bubbles: true }));
+          updateNumberStepperState(input);
+          return;
+        }
+        try {
+          direction > 0 ? input.stepUp() : input.stepDown();`);
 
     // Restore the complete version/download footer controls styling from
     // version 60. Keep this block separate so responsive layout rules can
@@ -50,8 +88,6 @@ html,body{margin:0;width:100%;height:100%;background:#121629}
       .measurement-input { grid-template-columns: minmax(0, 1fr) 68px; gap: 8px; }
       input[type="number"] { padding-right: 66px; }
       .input-wrap.has-unit input[type="number"] { padding-right: 88px; }
-      .form-section[data-form="disabled"] .input-wrap.has-unit input[type="number"],
-      .form-section[data-form="human"] .input-wrap.has-unit input[type="number"] { text-align: right; padding-right: 82px; }
       .number-stepper { top: 6px; right: 6px; height: 36px; grid-template-columns: 28px 28px; }
       .number-step-btn { width: 28px; height: 36px; }
       .number-step-btn svg { width: 14px; height: 14px; }
@@ -106,6 +142,9 @@ html,body{margin:0;width:100%;height:100%;background:#121629}
       .form-card { container-type: inline-size; }
       .form-card .form-subtitle { margin-bottom: 16px; }
       .form-card .form-section.active { display: grid; gap: 16px; }
+      /* Tab changes must not translate or fade the calculation fields. */
+      .form-card .form-section.active,
+      .form-card.switch-animate .form-section.active { animation: none; }
       .form-card .field { min-width: 0; margin: 0; }
       .form-card .field > label { margin-bottom: 8px; }
       .form-card .field-row { gap: 16px; align-items: end; }
@@ -113,10 +152,21 @@ html,body{margin:0;width:100%;height:100%;background:#121629}
       .form-card .input-wrap { min-width: 0; }
       .form-card .measurement-input { grid-template-columns: minmax(0, 1fr) 72px; gap: 8px; }
       .form-card .field input, .form-card .field select { height: 48px; min-width: 0; }
+      .form-card #carTransition {
+        appearance: none; -webkit-appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='m2.5 4.5 3.5 3 3.5-3' fill='none' stroke='%2395a0b5' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+        background-repeat: no-repeat; background-size: 12px 12px;
+      }
+      [dir="rtl"] .form-card #carTransition { background-position: left 10px center; padding-left: 32px; }
+      [dir="ltr"] .form-card #carTransition { background-position: right 10px center; padding-right: 32px; }
+      .form-card .height-unit-select {
+        appearance: none; -webkit-appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='m2.5 4.5 3.5 3 3.5-3' fill='none' stroke='%2395a0b5' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+        background-repeat: no-repeat; background-position: right 10px center; background-size: 12px 12px;
+        padding-right: 30px;
+      }
       .form-card .field input[type="number"] { padding-right: 48px; }
       .form-card .form-section .input-wrap.has-unit input[type="number"] { padding-right: 66px; }
-      .form-card .form-section[data-form="disabled"] .input-wrap.has-unit input[type="number"],
-      .form-card .form-section[data-form="human"] .input-wrap.has-unit input[type="number"] { text-align: right; padding-right: 82px; }
       .form-card .number-stepper { top: 6px; right: 6px; height: 36px; grid-template-columns: 28px 28px; grid-template-rows: 1fr; }
       .form-card .number-step-btn { width: 28px; height: 36px; }
       .form-card .number-step-btn + .number-step-btn { border-left: 1px solid var(--line); border-top: 0; }
@@ -330,6 +380,9 @@ html,body{margin:0;width:100%;height:100%;background:#121629}
       .history-switch-row { display: flex !important; flex-direction: column; align-items: stretch; gap: 14px !important; margin-inline: 0 !important; }
       .parking-stop-box, .calculation-history-box { width: 100% !important; min-width: 0; box-sizing: border-box; display: flex; align-items: center; gap: 10px; }
       .parking-stop-box { height: 48px; min-height: 48px; justify-content: space-between; align-items: center; padding: 0 13px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-solid); box-shadow: none; }
+      .car-options-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; width: 100%; min-width: 0; }
+      .car-options-row .parking-stop-box { padding-inline: 16px; gap: 5px; }
+      .car-options-row .switch-label { min-width: 0; white-space: nowrap; font-size: 11px; }
       .parking-stop-box .switch-label, .parking-stop-box .switch { margin: 0; }
       /* Mirror only the switch track: ON is always on the right, OFF on the left. */
       /* Keep the native RTL geometry while mirroring the knob states safely. */
@@ -340,7 +393,7 @@ html,body{margin:0;width:100%;height:100%;background:#121629}
       .calculation-history-controls { width: 100% !important; min-width: 0; display: flex; align-items: center; gap: 6px; margin: 0; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; direction: ltr; }
       .history-switch-row, .history-switch-row::before, .history-switch-row::after, .calculation-history-box { border: 0 !important; background: transparent !important; box-shadow: none !important; }
       .history-switch-row .history-btn { border: 1px solid var(--line); background: var(--surface-2); }
-      .history-switch-row .history-btn:hover:not(:disabled), .history-switch-row .history-btn:focus-visible:not(:disabled) { border-color: var(--accent) !important; background: var(--accent-soft); }
+      .history-switch-row .history-btn:hover:not(:disabled), .history-switch-row .history-btn:focus-visible:not(:disabled), .history-switch-row .history-btn[aria-expanded="true"]:not(:disabled) { border-color: var(--accent) !important; background: var(--accent-soft); color: var(--accent); }
       .calculation-history-controls .history-btn { flex: 1 1 0; }
       .history-btn { min-width: 70px; height: 36px; padding: 0 8px; display: inline-flex; align-items: center; justify-content: center; gap: 5px; border: 1px solid var(--line); border-radius: 9px; background: var(--surface-2); color: var(--muted); cursor: pointer; font: inherit; font-size: 10px; font-weight: 850; transition: color .14s ease, background .14s ease, border-color .14s ease, opacity .14s ease, transform .14s ease; }
       .history-btn:hover:not(:disabled), .history-btn:focus-visible:not(:disabled) { color: var(--accent); background: var(--accent-soft); border-color: var(--accent); outline: none; }
@@ -351,14 +404,14 @@ html,body{margin:0;width:100%;height:100%;background:#121629}
       html[data-theme="dark"] .history-btn img.history-time-machine-icon { filter: invert(1) brightness(1.25); }
       .history-open-btn { min-width: 78px; }
       .calculation-history-popover {
-        position: absolute; left: 0; top: calc(100% + 8px); z-index: 160;
+        position: absolute; right: 0; left: auto; top: calc(100% + 8px); z-index: 160;
         width: min(330px, calc(100vw - 28px)); max-height: min(360px, calc(100dvh - 140px));
         overflow: hidden; overscroll-behavior: contain; padding: 12px; border: 1px solid color-mix(in srgb, var(--line) 88%, #fff 12%); border-radius: 20px;
         background: linear-gradient(145deg, color-mix(in srgb, var(--surface-solid) 58%, transparent), color-mix(in srgb, var(--surface-2) 48%, transparent));
         box-shadow: 0 24px 60px rgba(24,35,60,.18), inset 0 1px 0 rgba(255,255,255,.22), inset 0 -1px 0 rgba(20,30,55,.08);
         backdrop-filter: blur(24px) saturate(155%); -webkit-backdrop-filter: blur(24px) saturate(155%); direction: rtl;
         opacity: 0; visibility: hidden; pointer-events: none;
-        transform: translateY(-5px); transform-origin: left top;
+        transform: translateY(-5px); transform-origin: right top;
         transition: opacity .16s ease, transform .16s ease, visibility .16s ease;
       }
       html[data-theme="dark"] .calculation-history-popover {
@@ -403,15 +456,44 @@ html,body{margin:0;width:100%;height:100%;background:#121629}
           </div>
 
           <div class="switch-row history-switch-row">
-            <div class="parking-stop-box">
-              <div class="switch-label">
-                <strong data-i18n="afterRamp3m">3 متر فضای توقف</strong>
+            <div class="car-options-row">
+              <div class="parking-stop-box">
+                <div class="switch-label">
+                  <strong title="۳ متر فضای توقف">۳ متر توقف</strong>
+                </div>
+                <label class="switch">
+                  <input id="carAfterRamp3m" type="checkbox" checked>
+                  <span class="slider"></span>
+                </label>
               </div>
-              <label class="switch">
-                <input id="carAfterRamp3m" type="checkbox" checked>
-                <span class="slider"></span>
+              <div class="parking-stop-box sargiri-box">
+                <div class="switch-label"><strong>سرگیری رمپ</strong></div>
+                <div class="sargiri-control-group">
+                <button type="button" class="sargiri-settings-button" id="openSargiriSettingsBtn" aria-label="تنظیمات سرگیری" title="تنظیمات سرگیری" aria-haspopup="dialog" aria-expanded="false">
+                  <svg class="sargiri-settings-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h5m4 0h7M4 17h10m4 0h2"/><circle cx="11" cy="7" r="2"/><circle cx="16" cy="17" r="2"/></svg>
+                </button>
+                <label class="switch" title="روشن یا خاموش کردن سرگیری رمپ">
+                  <input id="carSargiriEnabled" type="checkbox" aria-label="روشن یا خاموش کردن سرگیری رمپ">
+                  <span class="slider"></span>
+                </label>
+                </div>
+                            <div class="sargiri-settings-popover" id="sargiriSettingsPopover" role="dialog" aria-modal="false" aria-label="تنظیمات سرگیری رمپ" aria-hidden="true">
+              <div class="history-popover-head"><strong class="history-popover-title" id="sargiriSettingsTitle">تنظیمات سرگیری</strong><button type="button" class="history-popover-close" id="closeSargiriSettingsBtn" aria-label="بستن"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button></div>
+              <div class="sargiri-settings-row">
+                <label for="carSargiriHeight">ارتفاع سرگیری</label>
+                <div class="sargiri-height-control">
+                  <input id="carSargiriHeight" type="number" min="0.1" step="0.05" value="2.10">
+                  <span class="sargiri-height-unit" aria-hidden="true">m</span>
+                </div>
+              </div>
+              <label class="sargiri-min-row" for="carSargiriMinHeight">
+                <span><strong>حداقل ارتفاع سرگیری</strong><small>۲٫۱۰ متر</small></span>
+                <span class="switch"><input id="carSargiriMinHeight" type="checkbox" checked><span class="slider"></span></span>
               </label>
             </div>
+              </div>
+            </div>
+
             <div class="calculation-history-box" aria-label="Calculation history controls">
             <div class="calculation-history-controls" aria-label="Calculation history">
               <button type="button" class="history-btn" id="undoCalculationBtn" aria-label="بازگشت به محاسبه قبل" title="بازگشت به محاسبه قبل">
@@ -446,6 +528,38 @@ html,body{margin:0;width:100%;height:100%;background:#121629}
       throw new Error("محل گزینه ۳ متر بعد از رمپ پیدا نشد.");
     }
     source = source.replace(carSectionEnd, carSectionWith3m);
+    source = source.replace('</style>', `
+      .history-switch-row { position: relative; }
+      .sargiri-settings-button { width:25px; min-width:25px; height:25px; flex:0 0 25px; padding:0; display:grid; place-items:center; border:1px solid var(--line); border-radius:50%; background:var(--surface-2); color:var(--muted); cursor:pointer; transition:background .2s ease,border-color .2s ease,box-shadow .2s ease,color .2s ease; }
+      .sargiri-control-group { display:flex; align-items:center; gap:8px; flex:0 0 auto; }
+      .sargiri-settings-button:hover, .sargiri-settings-button:focus-visible, .sargiri-settings-button[aria-expanded="true"] { outline:none; border-color:color-mix(in srgb,var(--accent) 55%,var(--line)); background:var(--accent-soft); color:var(--accent); box-shadow:inset 0 1px 0 rgba(255,255,255,.18); }
+      .sargiri-settings-icon { width:14px; height:14px; flex:0 0 14px; color:var(--muted); transition:color .2s ease; }
+      .sargiri-settings-button:hover .sargiri-settings-icon, .sargiri-settings-button[aria-expanded="true"] .sargiri-settings-icon { color:var(--accent); }
+      .form-card.sargiri-popover-open { position:relative; z-index:180; overflow:visible !important; }
+      .sargiri-box { position:relative; overflow:visible; }
+      .sargiri-settings-popover { position:absolute; left:0; right:auto; top:calc(100% + 8px); z-index:170; width:min(300px,calc(100vw - 28px)); max-height:min(360px,calc(100dvh - 140px)); display:grid; gap:14px; overflow:hidden; overscroll-behavior:contain; padding:12px; border:1px solid color-mix(in srgb,var(--line) 88%,#fff 12%); border-radius:20px; background:linear-gradient(145deg,color-mix(in srgb,var(--surface-solid) 58%,transparent),color-mix(in srgb,var(--surface-2) 48%,transparent)); color:var(--text); box-shadow:0 24px 60px rgba(24,35,60,.18),inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(20,30,55,.08); backdrop-filter:blur(24px) saturate(155%); -webkit-backdrop-filter:blur(24px) saturate(155%); direction:rtl; opacity:0; visibility:hidden; pointer-events:none; transform:translateY(-5px); transform-origin:left top; transition:opacity .16s ease,transform .16s ease,visibility .16s ease; }
+      html[data-theme="dark"] .sargiri-settings-popover { border-color:color-mix(in srgb,var(--line) 82%,#fff 18%); background:linear-gradient(145deg,rgba(34,43,73,.60),rgba(18,25,48,.52)); box-shadow:0 24px 60px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.10),inset 0 -1px 0 rgba(0,0,0,.16); }
+      .sargiri-settings-popover.open { opacity:1; visibility:visible; pointer-events:auto; transform:translateY(0); }
+      .sargiri-settings-row { display:grid; gap:7px; }
+      .sargiri-settings-row label, .sargiri-min-row strong, .sargiri-enabled-row { font-size:12px;font-weight:800; }
+      .sargiri-height-control { display:flex; align-items:center; gap:7px; width:100%; direction:rtl; }
+      .sargiri-settings-row input { flex:1 1 auto; min-width:0; width:100%; height:42px; padding:0 12px; direction:ltr; text-align:left; border-color:color-mix(in srgb,var(--line) 66%,transparent); background:color-mix(in srgb,var(--surface-solid) 58%,transparent); box-shadow:inset 0 1px 0 rgba(255,255,255,.18); }
+      .sargiri-height-unit { flex:0 0 auto; color:var(--muted); font-size:14px; font-weight:900; direction:ltr; }
+      .sargiri-settings-row input:disabled { opacity:.38; cursor:not-allowed; background:var(--surface-2); color:var(--muted); }
+      .sargiri-settings-row input:disabled + .sargiri-height-unit { opacity:.38; }
+      .sargiri-min-row, .sargiri-enabled-row { display:flex; align-items:center; justify-content:space-between; gap:10px; margin:0; cursor:pointer; }
+      .sargiri-min-row, .sargiri-enabled-row { padding:9px 10px; border:1px solid color-mix(in srgb,var(--line) 48%,transparent); border-radius:12px; background:color-mix(in srgb,var(--surface-solid) 32%,transparent); }
+      .sargiri-min-row > span:first-child { display:grid; gap:2px; }
+      .sargiri-min-row small { color:var(--muted); font-size:10px; font-weight:700; }
+      .sargiri-settings-popover .switch { flex:0 0 42px; }
+    </style>`);
+
+    const extraLengthMarkup = '<div class="detail-line"><span data-i18n="extraLength">طول افزوده</span><strong id="extraLength">—</strong></div>';
+    if (!source.includes(extraLengthMarkup)) throw new Error("ردیف طول افزوده پیدا نشد.");
+    source = source.replace(
+      extraLengthMarkup,
+      `${extraLengthMarkup}\n            <div class="detail-line" id="carSargiriDetail" style="display:none"><span>سرگیری رمپ</span><strong id="carSargiriLength">—</strong></div>`
+    );
 
     source = source.replace(
       /(<button[^>]*id="openCalculationHistoryBtn"[^>]*>)[\s\S]*?(<span>History<\/span>)/,
@@ -453,13 +567,52 @@ html,body{margin:0;width:100%;height:100%;background:#121629}
     );
 
     if (!source.includes("<div class=\"footer-left\">\n        <div class=\"footer-pill\" id=\"versionBadge\">v2.10.7</div>\n        <button class=\"footer-btn\" id=\"downloadBtn\">\n          <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.9\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 3v11\"/><path d=\"m7.5 10.5 4.5 4.5 4.5-4.5\"/><path d=\"M4 20h16\"/></svg>\n          <span data-i18n=\"downloadApp\">دانلود</span>\n        </button>\n      </div>")) throw new Error("ساختار فوتر پیدا نشد.");
-    source = source.replace("<div class=\"footer-left\">\n        <div class=\"footer-pill\" id=\"versionBadge\">v2.10.7</div>\n        <button class=\"footer-btn\" id=\"downloadBtn\">\n          <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.9\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 3v11\"/><path d=\"m7.5 10.5 4.5 4.5 4.5-4.5\"/><path d=\"M4 20h16\"/></svg>\n          <span data-i18n=\"downloadApp\">دانلود</span>\n        </button>\n      </div>", "<div class=\"footer-left\">\n        <div class=\"version-popover-wrap\">\n          <button class=\"footer-pill footer-pill-btn\" id=\"versionBtn\" type=\"button\" aria-haspopup=\"dialog\" aria-expanded=\"false\">\n            <span id=\"versionBadge\">v2.10.7</span>\n          </button>\n\n          <div class=\"version-popover\" id=\"versionPopover\" role=\"dialog\" aria-modal=\"false\" aria-label=\"Version information\">\n            <div class=\"version-popover-head\">\n              <div>\n                <div class=\"version-popover-title\" id=\"versionPopoverTitle\">نرم‌افزار محاسبه رمپ</div>\n                <div class=\"version-popover-version\" id=\"versionPopoverVersion\">نسخه 2.10.7</div>\n              </div>\n            </div>\n\n            <div class=\"version-popover-label\" id=\"versionChangesLabel\">آخرین تغییرات</div>\n            <ul class=\"version-popover-list\">\n              <li class=\"version-popover-item\"><strong id=\"versionChange1\">بهبود نوارهای ورودی</strong><span id=\"versionChange1Desc\">نمایش عدد، واحد و کنترل‌های + و − مرتب‌تر شده است.</span></li>\n              <li class=\"version-popover-item\"><strong id=\"versionChange2\">ورود دستی شیب ابتدا و انتها</strong><span id=\"versionChange2Desc\">در رمپ خودرو، شیب ابتدا و انتها به‌صورت کامل دستی تنظیم می‌شود.</span></li>\n              <li class=\"version-popover-item\"><strong id=\"versionChange3\">خروجی فنی بهتر</strong><span id=\"versionChange3Desc\">پلان، نما و خروجی PDF با نمایش منظم‌تر آماده می‌شوند.</span></li>\n            </ul>\n\n            <div class=\"version-popover-divider\" aria-hidden=\"true\"></div>\n            <p class=\"version-popover-desc\" id=\"versionFollowText\">برای دریافت آخرین نسخه و به‌روزرسانی‌های این ابزار، پیج Pixel Studio را دنبال کنید.</p>\n\n            <div class=\"version-popover-divider\" aria-hidden=\"true\"></div>\n            <a class=\"version-instagram-btn\" href=\"https://instagram.com/pixel_architecture_studio\" target=\"_blank\" rel=\"noreferrer noopener\" id=\"versionInstagramBtn\">\n              <span>@pixel_architecture_studio</span>\n              <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"5\" ry=\"5\"/><circle cx=\"12\" cy=\"12\" r=\"4\"/><path d=\"M17.5 6.5h.01\"/></svg>\n            </a>\n            <div class=\"version-authors\" id=\"versionAuthors\">ساخته شده توسط علی و آرین</div>\n          </div>\n        </div>\n\n        <div class=\"download-menu-wrap\">\n          <button class=\"footer-btn\" id=\"downloadBtn\" type=\"button\" aria-haspopup=\"menu\" aria-expanded=\"false\">\n            <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.9\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 3v11\"/><path d=\"m7.5 10.5 4.5 4.5 4.5-4.5\"/><path d=\"M4 20h16\"/></svg>\n            <span data-i18n=\"downloadApp\">دانلود</span>\n          </button>\n\n          <div class=\"download-popover\" id=\"downloadPopover\" role=\"menu\" aria-label=\"Download options\">\n            <button class=\"download-menu-item\" type=\"button\" role=\"menuitem\" data-download-action=\"windows\">\n              <svg viewBox=\"0 0 24 24\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M3 3h8v8H3V3Zm10 0h8v8h-8V3ZM3 13h8v8H3v-8Zm10 0h8v8h-8v-8Z\"/></svg>\n              <span data-download-label=\"windows\">دانلود نسخه ویندوز</span>\n            </button>\n            <button class=\"download-menu-item\" type=\"button\" role=\"menuitem\" data-download-action=\"android\">\n              <svg viewBox=\"0 0 24 24\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M7.4 7.2 5.9 4.6l.8-.45 1.55 2.7A9.2 9.2 0 0 1 12 6.05c1.33 0 2.6.28 3.75.8l1.55-2.7.8.45-1.5 2.6A7.2 7.2 0 0 1 20 13H4a7.2 7.2 0 0 1 3.4-5.8ZM8 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm8 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2ZM4 14h16v5.3A2.7 2.7 0 0 1 17.3 22H6.7A2.7 2.7 0 0 1 4 19.3V14Z\"/></svg>\n              <span data-download-label=\"android\">دانلود نسخه اندروید</span>\n            </button>\n            <button class=\"download-menu-item\" type=\"button\" role=\"menuitem\" data-download-action=\"webapp\">\n              <svg viewBox=\"0 0 384 512\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5c0 26.2 4.8 53.2 14.1 77.3 12.6 35.7 58 123.1 105.6 121.6 24.9-.6 42.5-17.7 74.9-17.7 31.4 0 47.8 17.7 75.5 17.7 48-.7 89.1-80.8 101.1-116.6-64.3-30.3-56.5-89-56.5-87.1Zm-23.2-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3Z\"/></svg>\n              <span data-download-label=\"webapp\">نسخه وب اپ</span>\n            </button>\n            <div class=\"download-menu-divider\" aria-hidden=\"true\"></div>\n            <button class=\"download-menu-item\" type=\"button\" role=\"menuitem\" data-download-action=\"share\">\n              <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M14 5h5v5\"/><path d=\"M10 14 19 5\"/><path d=\"M19 13v6H5V5h6\"/></svg>\n              <span data-download-label=\"share\">اشتراک‌گذاری لینک</span>\n            </button>\n            <button class=\"download-menu-item\" type=\"button\" role=\"menuitem\" data-download-action=\"install\">\n              <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M9.8 9a2.4 2.4 0 1 1 3.3 2.22c-.72.32-1.1.76-1.1 1.53v.25\"/><path d=\"M12 17h.01\"/></svg>\n              <span data-download-label=\"install\">آموزش نصب نسخه وب اپ</span>\n            </button>\n          </div>\n        </div>\n      </div>");
+    source = source.replace("<div class=\"footer-left\">\n        <div class=\"footer-pill\" id=\"versionBadge\">v2.10.7</div>\n        <button class=\"footer-btn\" id=\"downloadBtn\">\n          <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.9\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 3v11\"/><path d=\"m7.5 10.5 4.5 4.5 4.5-4.5\"/><path d=\"M4 20h16\"/></svg>\n          <span data-i18n=\"downloadApp\">دانلود</span>\n        </button>\n      </div>", "<div class=\"footer-left\">\n        <div class=\"version-popover-wrap\">\n          <button class=\"footer-pill footer-pill-btn\" id=\"versionBtn\" type=\"button\" aria-haspopup=\"dialog\" aria-expanded=\"false\">\n            <span id=\"versionBadge\">v160</span>\n          </button>\n\n          <div class=\"version-popover\" id=\"versionPopover\" role=\"dialog\" aria-modal=\"false\" aria-label=\"Version information\">\n            <div class=\"version-popover-head\">\n              <div>\n                <div class=\"version-popover-title\" id=\"versionPopoverTitle\">نرم‌افزار محاسبه رمپ</div>\n                <div class=\"version-popover-version\" id=\"versionPopoverVersion\">نسخه ۱۶۰</div>\n              </div>\n            </div>\n\n            <div class=\"version-popover-label\" id=\"versionChangesLabel\">آخرین تغییرات</div>\n            <ul class=\"version-popover-list\">\n              <li class=\"version-popover-item\"><strong id=\"versionChange1\">قرینه کردن ترسیم هر رمپ</strong><span id=\"versionChange1Desc\">دکمهٔ آینه‌کردن برای مقطع و پلان افزوده شد و جهت هر تب جداگانه حفظ می‌شود.</span></li>\n              <li class=\"version-popover-item\"><strong id=\"versionChange2\">ورود دستی شیب ابتدا و انتها</strong><span id=\"versionChange2Desc\">در رمپ خودرو، شیب ابتدا و انتها به‌صورت کامل دستی تنظیم می‌شود.</span></li>\n              <li class=\"version-popover-item\"><strong id=\"versionChange3\">خروجی فنی بهتر</strong><span id=\"versionChange3Desc\">پلان، نما و خروجی PDF با نمایش منظم‌تر آماده می‌شوند.</span></li>\n            </ul>\n\n            <div class=\"version-popover-divider\" aria-hidden=\"true\"></div>\n            <p class=\"version-popover-desc\" id=\"versionFollowText\">برای دریافت آخرین نسخه و به‌روزرسانی‌های این ابزار، پیج Pixel Studio را دنبال کنید.</p>\n\n            <div class=\"version-popover-divider\" aria-hidden=\"true\"></div>\n            <a class=\"version-instagram-btn\" href=\"https://instagram.com/pixel_architecture_studio\" target=\"_blank\" rel=\"noreferrer noopener\" id=\"versionInstagramBtn\">\n              <span>@pixel_architecture_studio</span>\n              <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"5\" ry=\"5\"/><circle cx=\"12\" cy=\"12\" r=\"4\"/><path d=\"M17.5 6.5h.01\"/></svg>\n            </a>\n            <div class=\"version-authors\" id=\"versionAuthors\">ساخته شده توسط علی و آرین</div>\n          </div>\n        </div>\n\n        <div class=\"download-menu-wrap\">\n          <button class=\"footer-btn\" id=\"downloadBtn\" type=\"button\" aria-haspopup=\"menu\" aria-expanded=\"false\">\n            <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.9\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 3v11\"/><path d=\"m7.5 10.5 4.5 4.5 4.5-4.5\"/><path d=\"M4 20h16\"/></svg>\n            <span data-i18n=\"downloadApp\">دانلود</span>\n          </button>\n\n          <div class=\"download-popover\" id=\"downloadPopover\" role=\"menu\" aria-label=\"Download options\">\n            <button class=\"download-menu-item\" type=\"button\" role=\"menuitem\" data-download-action=\"windows\">\n              <svg viewBox=\"0 0 24 24\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M3 3h8v8H3V3Zm10 0h8v8h-8V3ZM3 13h8v8H3v-8Zm10 0h8v8h-8v-8Z\"/></svg>\n              <span data-download-label=\"windows\">دانلود نسخه ویندوز</span>\n            </button>\n            <button class=\"download-menu-item\" type=\"button\" role=\"menuitem\" data-download-action=\"android\">\n              <svg viewBox=\"0 0 24 24\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M7.4 7.2 5.9 4.6l.8-.45 1.55 2.7A9.2 9.2 0 0 1 12 6.05c1.33 0 2.6.28 3.75.8l1.55-2.7.8.45-1.5 2.6A7.2 7.2 0 0 1 20 13H4a7.2 7.2 0 0 1 3.4-5.8ZM8 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm8 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2ZM4 14h16v5.3A2.7 2.7 0 0 1 17.3 22H6.7A2.7 2.7 0 0 1 4 19.3V14Z\"/></svg>\n              <span data-download-label=\"android\">دانلود نسخه اندروید</span>\n            </button>\n            <button class=\"download-menu-item\" type=\"button\" role=\"menuitem\" data-download-action=\"webapp\">\n              <svg viewBox=\"0 0 384 512\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5c0 26.2 4.8 53.2 14.1 77.3 12.6 35.7 58 123.1 105.6 121.6 24.9-.6 42.5-17.7 74.9-17.7 31.4 0 47.8 17.7 75.5 17.7 48-.7 89.1-80.8 101.1-116.6-64.3-30.3-56.5-89-56.5-87.1Zm-23.2-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3Z\"/></svg>\n              <span data-download-label=\"webapp\">نسخه وب اپ</span>\n            </button>\n            <div class=\"download-menu-divider\" aria-hidden=\"true\"></div>\n            <button class=\"download-menu-item\" type=\"button\" role=\"menuitem\" data-download-action=\"share\">\n              <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M14 5h5v5\"/><path d=\"M10 14 19 5\"/><path d=\"M19 13v6H5V5h6\"/></svg>\n              <span data-download-label=\"share\">اشتراک‌گذاری لینک</span>\n            </button>\n            <button class=\"download-menu-item\" type=\"button\" role=\"menuitem\" data-download-action=\"install\">\n              <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M9.8 9a2.4 2.4 0 1 1 3.3 2.22c-.72.32-1.1.76-1.1 1.53v.25\"/><path d=\"M12 17h.01\"/></svg>\n              <span data-download-label=\"install\">آموزش نصب نسخه وب اپ</span>\n            </button>\n          </div>\n        </div>\n      </div>");
 
     source = source.replace(/<img class="history-time-machine-icon"[^>]*>/, '<svg class="history-time-machine-icon" viewBox="0 0 96 96" fill="currentColor" aria-hidden="true"><path d="M42.06 8.48C52.74 6.82 64.07 9.68 72.57 16.41C81.37 23.21 87.18 33.81 87.83 44.95C88.94 57.84 83.2 71.01 73.1 79.07C60.77 89.31 42.12 90.88 28.29 82.76C17.22 76.53 9.3 64.73 8.29 52.01C7.94 48.35 13.32 46.55 15.37 49.55C16.51 51.82 16.58 54.46 17.3 56.87C20.33 67.92 29.87 76.84 41.07 79.21C55.16 82.61 70.81 74.92 76.84 61.78C83.53 48.39 79.18 30.71 66.88 22.11C54.43 12.65 35.42 14.6 24.83 26.01C27.13 28.44 29.79 30.56 31.78 33.26C32.55 34.31 31.31 36.12 30.07 35.91C24.36 36.13 18.63 35.97 12.92 36C10.57 36.28 7.92 34.64 8.06 32.06C7.94 26.05 7.92 20.01 8.08 14C7.88 12.22 10.31 11.34 11.42 12.68C14.14 15.07 16.53 17.82 19.15 20.32C25.34 14.15 33.35 9.7 42.06 8.48Z"/><path d="M46.38 24.36C48.84 23.07 52.04 25.2 51.94 27.94C52.26 33.94 51.68 39.96 52.13 45.96C54.32 49.86 58.95 51.99 60.97 56.06C62.29 59.59 57.51 62.77 54.75 60.26C51.19 56.88 47.51 53.52 44.41 49.7C43.43 44.22 44.29 38.54 43.98 32.98C44.17 30.08 43.07 25.91 46.38 24.36Z"/></svg>');
 
     const calculatePattern = /      function calculateCar\(heightCm, slope, transitionSlope\) \{[\s\S]*?\n      \}\n\n      function calculateDisabled/;
     if (!calculatePattern.test(source)) throw new Error("تابع محاسبه رمپ خودرو پیدا نشد.");
     source = source.replace(calculatePattern, "      function calculateCar(heightCm, slope, transitionSlope) {\n        if (!Number.isFinite(heightCm) || !Number.isFinite(slope) || !Number.isFinite(transitionSlope) || heightCm <= 0 || slope <= 0 || transitionSlope <= 0) {\n          return invalidResult();\n        }\n\n        const deduction = Math.max(1, 30 - transitionSlope);\n        const addedTransitions = 20 / transitionSlope;\n        if (heightCm <= deduction) return invalidResult();\n\n        const pure = (heightCm - deduction) / slope;\n        const rampLength = pure + addedTransitions;\n        const stopLength = $(\"#carAfterRamp3m\")?.checked ? 3 : 0;\n        const unauthorized = slope > 17;\n\n        return {\n          valid: true, blocked: false, unauthorized,\n          total: rampLength, pure, landings: 0, extra: addedTransitions,\n          stopLength, displayTotal: rampLength,\n          message: unauthorized ? t(\"warningCar\") : \"\",\n          params: {\n            heightCm,\n            slope,\n            transitionSlope,\n            transitionDeductionCm: deduction,\n            transitionLengthEach: addedTransitions / 2\n          }\n        };\n      }\n\n      function calculateDisabled");
+
+    const carCalculationSignature = "function calculateCar(heightCm, slope, transitionSlope) {";
+    if (!source.includes(carCalculationSignature)) throw new Error("امضای تابع محاسبه خودرو پیدا نشد.");
+    source = source.replace(carCalculationSignature, "function calculateCar(heightCm, slope, transitionSlope, sargiriEnabled = false) {");
+    const stopLengthAnchor = `        const stopLength = $("#carAfterRamp3m")?.checked ? 3 : 0;
+        const unauthorized = slope > 17;`;
+    const stopLengthWithSargiri = `        const stopLength = $("#carAfterRamp3m")?.checked ? 3 : 0;
+        const sargiriInputValue = Number($("#carSargiriHeight")?.value || (state.heightUnit === "cm" ? 210 : 2.1));
+        const sargiriHeightM = sargiriInputValue * (state.heightUnit === "cm" ? 0.01 : 1);
+        const sargiriLength = sargiriEnabled
+          ? (sargiriHeightM * 100 / slope + (transitionSlope === 10 ? 1 : 3))
+          : null;
+        const unauthorized = slope > 17;`;
+    if (!source.includes(stopLengthAnchor)) throw new Error("محل محاسبه سرگیری رمپ پیدا نشد.");
+    source = source.replace(stopLengthAnchor, stopLengthWithSargiri);
+    const carResultAnchor = "          stopLength, displayTotal: rampLength,";
+    if (!source.includes(carResultAnchor)) throw new Error("محل افزودن نتیجه سرگیری رمپ پیدا نشد.");
+      source = source.replace(carResultAnchor, "          stopLength, sargiriLength, sargiriHeightM, displayTotal: rampLength,");
+
+    const carCalculationCall = 'result = calculateCar(heightValueToCm("#carHeight"), num("#carSlope"), num("#carTransition"));';
+    if (!source.includes(carCalculationCall)) throw new Error("فراخوانی محاسبه رمپ خودرو پیدا نشد.");
+    source = source.replace(
+      carCalculationCall,
+      'result = calculateCar(heightValueToCm("#carHeight"), num("#carSlope"), num("#carTransition"), $("#carSargiriEnabled")?.checked ?? false);'
+    );
+
+    const extraLengthRenderAnchor = '        $("#extraLength").textContent = formatLength(r.extra || 0);';
+    if (!source.includes(extraLengthRenderAnchor)) throw new Error("محل نمایش نتیجه سرگیری رمپ پیدا نشد.");
+    source = source.replace(
+      extraLengthRenderAnchor,
+      `${extraLengthRenderAnchor}\n        const sargiriVisible = state.type === "car" && Number.isFinite(r.sargiriLength);\n        const sargiriRow = $("#carSargiriDetail");\n        if (sargiriRow) sargiriRow.style.display = sargiriVisible ? "flex" : "none";\n        $("#carSargiriLength").textContent = sargiriVisible ? formatLength(r.sargiriLength) : "—";`
+    );
+
+    const stopTextAnchor = '        if (state.type === "car" && r.stopLength) text += `\\n${t("stop")}: ${formatLength(r.stopLength)}`;';
+    if (!source.includes(stopTextAnchor)) throw new Error("متن خروجی محاسبه خودرو پیدا نشد.");
+    source = source.replace(
+      stopTextAnchor,
+      `${stopTextAnchor}\n        if (state.type === "car" && Number.isFinite(r.sargiriLength)) text += "\\nسرگیری رمپ: " + formatLength(r.sargiriLength);`
+    );
 
     const oldGeometry = `          const deductionM = (transitionSlope === 10 ? 20 : 25) / 100;
           const transitionLenEach = (r.extra || (transitionSlope === 10 ? 2 : 4)) / 2;
@@ -476,11 +629,11 @@ html,body{margin:0;width:100%;height:100%;background:#121629}
 
     const initMarker = "      initializeNumberSteppers();";
     if (!source.includes(initMarker)) throw new Error("initializeNumberSteppers پیدا نشد.");
-    source = source.replace(initMarker, "function syncInlinePercent(inputSelector) {\n        const input = document.querySelector(inputSelector);\n        const unit = input?.parentElement?.querySelector(\".unit\");\n        if (!input || !unit) return;\n\n        const value = input.value || input.placeholder || \"\";\n        const cs = getComputedStyle(input);\n        const probe = document.createElement(\"span\");\n        probe.textContent = value;\n        probe.style.position = \"fixed\";\n        probe.style.left = \"-9999px\";\n        probe.style.top = \"-9999px\";\n        probe.style.visibility = \"hidden\";\n        probe.style.whiteSpace = \"pre\";\n        probe.style.fontFamily = cs.fontFamily;\n        probe.style.fontSize = cs.fontSize;\n        probe.style.fontWeight = cs.fontWeight;\n        probe.style.fontStyle = cs.fontStyle;\n        probe.style.letterSpacing = cs.letterSpacing;\n        document.body.appendChild(probe);\n        const textWidth = probe.getBoundingClientRect().width;\n        probe.remove();\n\n        const paddingLeft = parseFloat(cs.paddingLeft) || 0;\n        unit.style.right = \"auto\";\n        unit.style.left = `${Math.round(paddingLeft + textWidth + 2)}px`;\n      }\n\n      [\"#carSlope\", \"#carTransition\"].forEach(selector => {\n        const input = document.querySelector(selector);\n        input?.addEventListener(\"input\", () => syncInlinePercent(selector));\n        input?.addEventListener(\"change\", () => syncInlinePercent(selector));\n      });\n\n      window.addEventListener(\"resize\", () => {\n        syncInlinePercent(\"#carSlope\");\n        syncInlinePercent(\"#carTransition\");\n      });\n\n      document.fonts?.ready?.then(() => {\n        syncInlinePercent(\"#carSlope\");\n        syncInlinePercent(\"#carTransition\");\n      });\n\n      requestAnimationFrame(() => {\n        syncInlinePercent(\"#carSlope\");\n        syncInlinePercent(\"#carTransition\");\n      });" + "\n\n" + initMarker);
+    source = source.replace(initMarker, "function syncInlinePercent(inputSelector) {\n        const input = document.querySelector(inputSelector);\n        const unit = input?.parentElement?.querySelector(\".unit\");\n        if (!input || !unit) return;\n\n        const value = input.value || input.placeholder || \"\";\n        const cs = getComputedStyle(input);\n        const probe = document.createElement(\"span\");\n        probe.textContent = value;\n        probe.style.position = \"fixed\";\n        probe.style.left = \"-9999px\";\n        probe.style.top = \"-9999px\";\n        probe.style.visibility = \"hidden\";\n        probe.style.whiteSpace = \"pre\";\n        probe.style.fontFamily = cs.fontFamily;\n        probe.style.fontSize = cs.fontSize;\n        probe.style.fontWeight = cs.fontWeight;\n        probe.style.fontStyle = cs.fontStyle;\n        probe.style.letterSpacing = cs.letterSpacing;\n        document.body.appendChild(probe);\n        const textWidth = probe.getBoundingClientRect().width;\n        probe.remove();\n\n        const paddingLeft = parseFloat(cs.paddingLeft) || 0;\n        const paddingRight = parseFloat(cs.paddingRight) || 0;\n        const contentWidth = Math.max(0, input.clientWidth - paddingLeft - paddingRight);\n        const textStart = cs.textAlign === \"center\"\n          ? paddingLeft + (contentWidth - textWidth) / 2\n          : cs.textAlign === \"right\"\n            ? input.clientWidth - paddingRight - textWidth\n            : paddingLeft;\n        unit.style.right = \"auto\";\n        unit.style.left = `${Math.round(textStart + textWidth + 2)}px`;\n      }\n\n      [\"#carSlope\", \"#carTransition\", \"#disabledSlope\", \"#humanSlope\"].forEach(selector => {\n        const input = document.querySelector(selector);\n        input?.addEventListener(\"input\", () => syncInlinePercent(selector));\n        input?.addEventListener(\"change\", () => syncInlinePercent(selector));\n      });\n\n      window.addEventListener(\"resize\", () => {\n        syncInlinePercent(\"#carSlope\");\n        syncInlinePercent(\"#carTransition\");\n        syncInlinePercent(\"#disabledSlope\");\n        syncInlinePercent(\"#humanSlope\");\n      });\n\n      document.fonts?.ready?.then(() => {\n        syncInlinePercent(\"#carSlope\");\n        syncInlinePercent(\"#carTransition\");\n        syncInlinePercent(\"#disabledSlope\");\n        syncInlinePercent(\"#humanSlope\");\n      });\n\n      requestAnimationFrame(() => {\n        syncInlinePercent(\"#carSlope\");\n        syncInlinePercent(\"#carTransition\");\n        syncInlinePercent(\"#disabledSlope\");\n        syncInlinePercent(\"#humanSlope\");\n      });" + "\n\n" + initMarker);
 
     const eventsMarker = "      // Events";
     if (!source.includes(eventsMarker)) throw new Error("بخش رویدادها پیدا نشد.");
-    source = source.replace(eventsMarker, "const downloadPopover = $(\"#downloadPopover\");\n      const downloadButton = $(\"#downloadBtn\");\n      const versionPopover = $(\"#versionPopover\");\n      const versionButton = $(\"#versionBtn\");\n\n      function setDownloadMenuLanguage() {\n        if (!downloadPopover) return;\n        const en = state.lang === \"en\";\n        const labels = {\n          windows: en ? \"Download Windows version\" : \"دانلود نسخه ویندوز\",\n          android: en ? \"Download Android version\" : \"دانلود نسخه اندروید\",\n          webapp: en ? \"Web app version\" : \"نسخه وب اپ\",\n          share: en ? \"Share link\" : \"اشتراک‌گذاری لینک\",\n          install: en ? \"Web app installation guide\" : \"آموزش نصب نسخه وب اپ\"\n        };\n        Object.entries(labels).forEach(([key, value]) => {\n          const el = downloadPopover.querySelector(`[data-download-label=\"${key}\"]`);\n          if (el) el.textContent = value;\n        });\n      }\n\n      function setVersionPopoverLanguage() {\n        const en = state.lang === \"en\";\n        const setText = (selector, value) => {\n          const el = $(selector);\n          if (el) el.textContent = value;\n        };\n        setText(\"#versionPopoverTitle\", en ? \"Ramp Calculation App\" : \"نرم‌افزار محاسبه رمپ\");\n        setText(\"#versionPopoverVersion\", en ? \"Version 2.10.7\" : \"نسخه 2.10.7\");\n        setText(\"#versionChangesLabel\", en ? \"Latest changes\" : \"آخرین تغییرات\");\n        setText(\"#versionChange1\", en ? \"Improved input bars\" : \"بهبود نوارهای ورودی\");\n        setText(\"#versionChange1Desc\", en ? \"Value, unit, and + / − controls are displayed more clearly.\" : \"نمایش عدد، واحد و کنترل‌های + و − مرتب‌تر شده است.\");\n        setText(\"#versionChange2\", en ? \"Manual entry & exit slope\" : \"ورود دستی شیب ابتدا و انتها\");\n        setText(\"#versionChange2Desc\", en ? \"For the car ramp, the entry and exit slope can now be set fully manually.\" : \"در رمپ خودرو، شیب ابتدا و انتها به‌صورت کامل دستی تنظیم می‌شود.\");\n        setText(\"#versionChange3\", en ? \"Cleaner technical output\" : \"خروجی فنی بهتر\");\n        setText(\"#versionChange3Desc\", en ? \"Plan, section, and PDF output are prepared with cleaner organization.\" : \"پلان، نما و خروجی PDF با نمایش منظم‌تر آماده می‌شوند.\");\n        setText(\"#versionFollowText\", en ? \"Follow Pixel Studio to receive the latest version and updates for this tool.\" : \"برای دریافت آخرین نسخه و به‌روزرسانی‌های این ابزار، پیج Pixel Studio را دنبال کنید.\");\n        setText(\"#versionAuthors\", en ? \"Created by Ali & Arian\" : \"ساخته شده توسط علی و آرین\");\n      }\n\n      function closeDownloadPopover() {\n        if (!downloadPopover || !downloadButton) return;\n        downloadPopover.classList.remove(\"open\");\n        downloadButton.setAttribute(\"aria-expanded\", \"false\");\n      }\n\n      function closeVersionPopover() {\n        if (!versionPopover || !versionButton) return;\n        versionPopover.classList.remove(\"open\");\n        versionButton.setAttribute(\"aria-expanded\", \"false\");\n      }\n\n      function toggleDownloadPopover(event) {\n        event?.preventDefault();\n        event?.stopPropagation();\n        if (!downloadPopover || !downloadButton) return;\n        setDownloadMenuLanguage();\n        closeVersionPopover();\n        const nextOpen = !downloadPopover.classList.contains(\"open\");\n        downloadPopover.classList.toggle(\"open\", nextOpen);\n        downloadButton.setAttribute(\"aria-expanded\", String(nextOpen));\n      }\n\n      function toggleVersionPopover(event) {\n        event?.preventDefault();\n        event?.stopPropagation();\n        if (!versionPopover || !versionButton) return;\n        setVersionPopoverLanguage();\n        closeDownloadPopover();\n        const nextOpen = !versionPopover.classList.contains(\"open\");\n        versionPopover.classList.toggle(\"open\", nextOpen);\n        versionButton.setAttribute(\"aria-expanded\", String(nextOpen));\n      }\n\n      async function shareAppLink() {\n        const url = location.href;\n        try {\n          if (navigator.share) {\n            await navigator.share({ title: document.title, url });\n          } else {\n            await navigator.clipboard.writeText(url);\n            showToast(state.lang === \"fa\" ? \"لینک کپی شد\" : \"Link copied\");\n          }\n        } catch (error) {\n          if (error?.name === \"AbortError\") return;\n          try {\n            await navigator.clipboard.writeText(url);\n            showToast(state.lang === \"fa\" ? \"لینک کپی شد\" : \"Link copied\");\n          } catch {}\n        }\n      }\n\n      downloadPopover?.addEventListener(\"click\", async event => {\n        const item = event.target.closest(\"[data-download-action]\");\n        if (!item) return;\n        const action = item.dataset.downloadAction;\n        closeDownloadPopover();\n\n        if (action === \"webapp\") { downloadCurrentHTML(); return; }\n        if (action === \"share\") { await shareAppLink(); return; }\n        if (action === \"install\") {\n          showToast(state.lang === \"fa\"\n            ? \"از منوی مرورگر Add to Home Screen / Install App را انتخاب کنید.\"\n            : \"Choose Add to Home Screen / Install App from your browser menu.\");\n          return;\n        }\n        if (action === \"windows\" || action === \"android\") {\n          showToast(state.lang === \"fa\" ? \"لینک این نسخه هنوز متصل نشده است.\" : \"This version is not linked yet.\");\n        }\n      });\n\n      document.addEventListener(\"click\", event => {\n        if (downloadPopover?.classList.contains(\"open\")) {\n          if (!downloadPopover.contains(event.target) && !downloadButton?.contains(event.target)) closeDownloadPopover();\n        }\n        if (versionPopover?.classList.contains(\"open\")) {\n          if (!versionPopover.contains(event.target) && !versionButton?.contains(event.target)) closeVersionPopover();\n        }\n      });" + "\n\n" + eventsMarker);
+    source = source.replace(eventsMarker, "const downloadPopover = $(\"#downloadPopover\");\n      const downloadButton = $(\"#downloadBtn\");\n      const versionPopover = $(\"#versionPopover\");\n      const versionButton = $(\"#versionBtn\");\n\n      function setDownloadMenuLanguage() {\n        if (!downloadPopover) return;\n        const en = state.lang === \"en\";\n        const labels = {\n          windows: en ? \"Download Windows version\" : \"دانلود نسخه ویندوز\",\n          android: en ? \"Download Android version\" : \"دانلود نسخه اندروید\",\n          webapp: en ? \"Web app version\" : \"نسخه وب اپ\",\n          share: en ? \"Share link\" : \"اشتراک‌گذاری لینک\",\n          install: en ? \"Web app installation guide\" : \"آموزش نصب نسخه وب اپ\"\n        };\n        Object.entries(labels).forEach(([key, value]) => {\n          const el = downloadPopover.querySelector(`[data-download-label=\"${key}\"]`);\n          if (el) el.textContent = value;\n        });\n      }\n\n      function setVersionPopoverLanguage() {\n        const en = state.lang === \"en\";\n        const setText = (selector, value) => {\n          const el = $(selector);\n          if (el) el.textContent = value;\n        };\n        setText(\"#versionPopoverTitle\", en ? \"Ramp Calculation App\" : \"نرم‌افزار محاسبه رمپ\");\n        setText(\"#versionPopoverVersion\", en ? \"Version 160\" : \"نسخه ۱۶۰\");\n        setText(\"#versionChangesLabel\", en ? \"Latest changes\" : \"آخرین تغییرات\");\n        setText(\"#versionChange1\", en ? \"Mirror ramp drawings\" : \"قرینه کردن ترسیم هر رمپ\");\n        setText(\"#versionChange1Desc\", en ? \"Mirror section and plan drawings independently for each ramp tab.\" : \"دکمهٔ آینه‌کردن برای مقطع و پلان افزوده شد و جهت هر تب جداگانه حفظ می‌شود.\");\n        setText(\"#versionChange2\", en ? \"Manual entry & exit slope\" : \"ورود دستی شیب ابتدا و انتها\");\n        setText(\"#versionChange2Desc\", en ? \"For the car ramp, the entry and exit slope can now be set fully manually.\" : \"در رمپ خودرو، شیب ابتدا و انتها به‌صورت کامل دستی تنظیم می‌شود.\");\n        setText(\"#versionChange3\", en ? \"Cleaner technical output\" : \"خروجی فنی بهتر\");\n        setText(\"#versionChange3Desc\", en ? \"Plan, section, and PDF output are prepared with cleaner organization.\" : \"پلان، نما و خروجی PDF با نمایش منظم‌تر آماده می‌شوند.\");\n        setText(\"#versionFollowText\", en ? \"Follow Pixel Studio to receive the latest version and updates for this tool.\" : \"برای دریافت آخرین نسخه و به‌روزرسانی‌های این ابزار، پیج Pixel Studio را دنبال کنید.\");\n        setText(\"#versionAuthors\", en ? \"Created by Ali & Arian\" : \"ساخته شده توسط علی و آرین\");\n      }\n\n      function closeDownloadPopover() {\n        if (!downloadPopover || !downloadButton) return;\n        downloadPopover.classList.remove(\"open\");\n        downloadButton.setAttribute(\"aria-expanded\", \"false\");\n      }\n\n      function closeVersionPopover() {\n        if (!versionPopover || !versionButton) return;\n        versionPopover.classList.remove(\"open\");\n        versionButton.setAttribute(\"aria-expanded\", \"false\");\n      }\n\n      function toggleDownloadPopover(event) {\n        event?.preventDefault();\n        event?.stopPropagation();\n        if (!downloadPopover || !downloadButton) return;\n        setDownloadMenuLanguage();\n        closeVersionPopover();\n        const nextOpen = !downloadPopover.classList.contains(\"open\");\n        downloadPopover.classList.toggle(\"open\", nextOpen);\n        downloadButton.setAttribute(\"aria-expanded\", String(nextOpen));\n      }\n\n      function toggleVersionPopover(event) {\n        event?.preventDefault();\n        event?.stopPropagation();\n        if (!versionPopover || !versionButton) return;\n        setVersionPopoverLanguage();\n        closeDownloadPopover();\n        const nextOpen = !versionPopover.classList.contains(\"open\");\n        versionPopover.classList.toggle(\"open\", nextOpen);\n        versionButton.setAttribute(\"aria-expanded\", String(nextOpen));\n      }\n\n      async function shareAppLink() {\n        const url = location.href;\n        try {\n          if (navigator.share) {\n            await navigator.share({ title: document.title, url });\n          } else {\n            await navigator.clipboard.writeText(url);\n            showToast(state.lang === \"fa\" ? \"لینک کپی شد\" : \"Link copied\");\n          }\n        } catch (error) {\n          if (error?.name === \"AbortError\") return;\n          try {\n            await navigator.clipboard.writeText(url);\n            showToast(state.lang === \"fa\" ? \"لینک کپی شد\" : \"Link copied\");\n          } catch {}\n        }\n      }\n\n      downloadPopover?.addEventListener(\"click\", async event => {\n        const item = event.target.closest(\"[data-download-action]\");\n        if (!item) return;\n        const action = item.dataset.downloadAction;\n        closeDownloadPopover();\n\n        if (action === \"webapp\") { downloadCurrentHTML(); return; }\n        if (action === \"share\") { await shareAppLink(); return; }\n        if (action === \"install\") {\n          showToast(state.lang === \"fa\"\n            ? \"از منوی مرورگر Add to Home Screen / Install App را انتخاب کنید.\"\n            : \"Choose Add to Home Screen / Install App from your browser menu.\");\n          return;\n        }\n        if (action === \"windows\" || action === \"android\") {\n          showToast(state.lang === \"fa\" ? \"لینک این نسخه هنوز متصل نشده است.\" : \"This version is not linked yet.\");\n        }\n      });\n\n      document.addEventListener(\"click\", event => {\n        if (downloadPopover?.classList.contains(\"open\")) {\n          if (!downloadPopover.contains(event.target) && !downloadButton?.contains(event.target)) closeDownloadPopover();\n        }\n        if (versionPopover?.classList.contains(\"open\")) {\n          if (!versionPopover.contains(event.target) && !versionButton?.contains(event.target)) closeVersionPopover();\n        }\n      });" + "\n\n" + eventsMarker);
 
     source = source.replace(
       '      function toggleDownloadPopover(event) {',
@@ -615,7 +768,7 @@ html,body{margin:0;width:100%;height:100%;background:#121629}
       $$('input, select:not(.height-unit-select)').forEach(el => el.addEventListener("change", () => calculateCurrent(true)));`,
       `      const calculationHistory = [];
       let calculationHistoryIndex = -1;
-      const historyFields = ["#carHeight", "#carSlope", "#carTransition", "#carAfterRamp3m", "#disabledHeight", "#disabledSlope", "#disabledRegulations", "#disabledCompanion", "#humanHeight", "#humanSlope"];
+      const historyFields = ["#carHeight", "#carSlope", "#carTransition", "#carAfterRamp3m", "#carSargiriEnabled", "#carSargiriHeight", "#carSargiriMinHeight", "#disabledHeight", "#disabledSlope", "#disabledRegulations", "#disabledCompanion", "#humanHeight", "#humanSlope"];
       const captureCalculationSnapshot = () => ({
         type: state.type,
         heightUnit: state.heightUnit,
@@ -641,6 +794,8 @@ html,body{margin:0;width:100%;height:100%;background:#121629}
         if (typeof syncInlinePercent === "function") {
           syncInlinePercent("#carSlope");
           syncInlinePercent("#carTransition");
+          syncInlinePercent("#disabledSlope");
+          syncInlinePercent("#humanSlope");
         }
         if (snapshot.view) setView(snapshot.view);
         calculateCurrent(true);
@@ -691,6 +846,21 @@ html,body{margin:0;width:100%;height:100%;background:#121629}
         localStorage.setItem("rampHeightUnit", normalized);
         applyHeightUnitAttributes(normalized);
         $$('.input-wrap input[type="number"]').forEach(updateNumberStepperState);`
+    );
+
+    // Keep the newly added sargiri clearance input in the active unit before
+    // the embedded app performs its first calculation (the form default is meters).
+    source = source.replace(
+      `        state.heightUnit = initialUnit;
+        applyHeightUnitAttributes(initialUnit);`,
+      `        state.heightUnit = initialUnit;
+        applyHeightUnitAttributes(initialUnit);
+        const sargiriHeightInput = $("#carSargiriHeight");
+        const sargiriMinimumToggle = $("#carSargiriMinHeight");
+        if (sargiriHeightInput) {
+          sargiriHeightInput.value = initialUnit === "cm" ? "210" : "2.10";
+          if (sargiriMinimumToggle) sargiriHeightInput.disabled = sargiriMinimumToggle.checked;
+        }`
     );
 
     source = source.replace(
@@ -950,6 +1120,71 @@ ${dimensionFunctionAnchor}`
     ].forEach(([from, to]) => {
       source = source.split(from).join(to);
     });
+
+    // Follow the complete ramp profile with the ceiling, including the stop area.
+    source = source.replace(
+      '      function drawSection(r) {',
+      `      function sargiriDrawingLabel(r) {
+        const name = state.lang === "en" ? "Ceiling / headroom" : "سقف / سرگیری";
+        return escapeXML(name);
+      }
+      function sargiriRampPoints(r, geom) {
+        if (state.type !== "car" || !Number.isFinite(r?.sargiriLength) || r.sargiriLength <= 0) return [];
+        return geom.points.map(p => ({ x: p.x, z: p.z }));
+      }
+      function sargiriSectionMarkup(r, geom, toX, toY) {
+        const points = sargiriRampPoints(r, geom);
+        if (points.length < 2) return "";
+        const clearanceM = Number(r?.sargiriHeightM || $("#carSargiriHeight")?.value || 2.10);
+        const path = points.map((p, i) => (i ? "L" : "M") + toX(p.x) + " " + toY(p.z + clearanceM)).join(" ");
+        const end = points[points.length - 1];
+        const station = end.x * .30;
+        const heightAt = x => {
+          for (let i = 1; i < points.length; i++) {
+            if (x <= points[i].x) {
+              const a = points[i - 1], b = points[i];
+              return a.z + (x - a.x) / (b.x - a.x) * (b.z - a.z);
+            }
+          }
+          return end.z;
+        };
+        const floorZ = heightAt(station);
+        const dimX = toX(station), floorY = toY(floorZ), ceilingY = toY(floorZ + clearanceM);
+        const labelY = (floorY + ceilingY) / 2;
+        const labelX = (toX(0) + toX(end.x)) / 2;
+        const roofLabelY = toY(heightAt(end.x / 2) + clearanceM) - 13;
+        return '<g class="sargiri-drawing" data-clearance-m="' + clearanceM + '">' +
+          '<path d="' + path + '" fill="none" stroke="#ffffff" stroke-opacity=".66" stroke-width="3" stroke-linecap="square" stroke-linejoin="round"/>' +
+          dimensionLine(dimX, floorY, dimX, ceilingY, "var(--muted)") +
+          '<text x="' + (dimX - 9) + '" y="' + labelY + '" text-anchor="middle" font-size="10" font-weight="800" transform="rotate(-90 ' + (dimX - 9) + ' ' + labelY + ')">' + escapeXML(formatLength(clearanceM)) + '</text>' +
+          '<text x="' + labelX + '" y="' + roofLabelY + '" text-anchor="middle" font-size="11" font-weight="900" fill="var(--accent)">' + sargiriDrawingLabel(r) + '</text></g>';
+      }
+      function drawSection(r) {`
+    );
+    const sectionScaleAnchor = `        const totalX = Math.max(1, geom.totalX || 1);
+        const overallEndX = state.type === "car" ? Math.max(0, totalX - Number(r.stopLength || 0)) : totalX;
+        const totalZ = Math.max(0.35, geom.totalRise || geom.heightM || 0.35);
+        const scale = Math.min((right - left) / totalX, (bottom - top) / totalZ);
+        const drawW = totalX * scale;`;
+    if (!source.includes(sectionScaleAnchor)) throw new Error("ابعاد ترسیم مقطع رمپ پیدا نشد.");
+    source = source.replace(sectionScaleAnchor, `        const totalX = Math.max(1, geom.totalX || 1);
+        const overallEndX = state.type === "car" ? Math.max(0, totalX - Number(r.stopLength || 0)) : totalX;
+        const takeoffPoints = sargiriRampPoints(r, geom);
+        const takeoffEnd = takeoffPoints[takeoffPoints.length - 1];
+        const drawingExtentX = Math.max(totalX, takeoffEnd?.x || 0);
+        const totalZ = Math.max(0.35, geom.totalRise || geom.heightM || 0.35, (takeoffEnd?.z || 0) + (takeoffEnd ? 2.65 : 0));
+        const scale = Math.min((right - left) / drawingExtentX, (bottom - top) / totalZ);
+        const drawW = drawingExtentX * scale;`);
+    const sectionDrawingAnchor = '          ${segments}\n          ${details}\n\n';
+    if (!source.includes(sectionDrawingAnchor)) {
+      throw new Error("محل نمایش خط سرگیری در ترسیم پیدا نشد.");
+    }
+    source = source.replace(sectionDrawingAnchor,
+      '          ${segments}\n          ${details}\n          ${sargiriSectionMarkup(r, geom, toX, toY)}\n\n');
+    const slopeBadgeTextAnchor = '<text x="711" y="44" text-anchor="middle" font-size="11" font-weight="800">${escapeXML(slopeText)}</text>';
+    if (!source.includes(slopeBadgeTextAnchor)) throw new Error("متن باکس اطلاعات شیب ترسیم پیدا نشد.");
+    source = source.replace(slopeBadgeTextAnchor,
+      '<text x="711" y="39" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="800">${escapeXML(slopeText)}</text>');
 
     // Keep the lower P1–P2 dimension unchanged. Only the upper label on the
     // ramp itself is replaced with the main ramp slope in the plan view.
@@ -2168,6 +2403,10 @@ ${dimensionFunctionAnchor}`
       exportDxfBlock = exportDxfBlock.replace(
         '`ramp-${state.type}-${state.view}-${selectedLengthUnit()}.dxf`',
         '`ramp-${state.type}-${exportDxfView}-${exportDxfUnit}.dxf`'
+      );
+      exportDxfBlock = exportDxfBlock.replace(
+        '        const dxf = `0\nSECTION\n2\nHEADER',
+        "        if (state.type === \"car\" && Number.isFinite(state.result?.sargiriLength) && (exportDxfView === \"section\" || exportDxfView === \"both\")) {\n          const ceilingPoints = sargiriRampPoints(state.result, geom);\n          for (let i = 1; i < ceilingPoints.length; i++) {\n            const start = ceilingPoints[i - 1], end = ceilingPoints[i];\n            line(start.x, start.z + 2.10, end.x, end.z + 2.10, \"SARGIRI\");\n          }\n        }\n        const dxf = `0\nSECTION\n2\nHEADER"
       );
       source = source.slice(0, exportDxfStart) + exportDxfBlock + source.slice(exportDxfEnd);
     }
@@ -3875,7 +4114,8 @@ ${dimensionFunctionAnchor}`
               "#carHeight": "350",
               "#carSlope": "15",
               "#carTransition": "10",
-              "#carAfterRamp3m": true
+              "#carAfterRamp3m": true,
+              "#carSargiriEnabled": false
             },
             disabled: {
               "#disabledHeight": "120",
@@ -3899,6 +4139,7 @@ ${dimensionFunctionAnchor}`
           // Render the selected tab's default geometry immediately. The
           // calculation remains uncommitted until the Calculate button is used.
           calculateCurrent(false);
+          syncInlinePercent(type === "disabled" ? "#disabledSlope" : type === "human" ? "#humanSlope" : "#carSlope");
         },
         view: () => state.view,
         setView: view => setView(view)
@@ -3992,11 +4233,11 @@ ${dimensionFunctionAnchor}`
         if (sharedHistoryRow && sharedCalculateButton && sharedFormCard) {
           sharedFormCard.insertBefore(sharedHistoryRow, sharedCalculateButton);
         }
-        const parkingStopBox = doc.querySelector('.parking-stop-box');
+        const carOptionsRow = doc.querySelector('.car-options-row');
         const syncParkingStopControl = () => {
           const currentType = frame.contentWindow.rampExportAPI?.type?.();
           if (sharedFormCard) sharedFormCard.dataset.rampType = currentType || '';
-          if (parkingStopBox) parkingStopBox.style.display = currentType === 'car' ? '' : 'none';
+          if (carOptionsRow) carOptionsRow.style.display = currentType === 'car' ? 'grid' : 'none';
         };
         syncParkingStopControl();
 
@@ -4237,6 +4478,11 @@ ${dimensionFunctionAnchor}`
             if (!button) return;
             const type = button.dataset.type;
             if (!["car", "disabled", "human"].includes(type)) return;
+            const historyPopover = doc.querySelector("#calculationHistoryPopover");
+            const historyButton = doc.querySelector("#openCalculationHistoryBtn");
+            historyPopover?.classList.remove("open");
+            historyPopover?.setAttribute("aria-hidden", "true");
+            historyButton?.setAttribute("aria-expanded", "false");
             const api = frame.contentWindow.rampExportAPI;
             if (typeof api?.setType !== "function") return;
             event.preventDefault();
@@ -4790,9 +5036,33 @@ ${dimensionFunctionAnchor}`
         if (!doc.querySelector("#downloadPopover")) throw new Error("منوی دانلود ساخته نشد.");
         if (!doc.querySelector('#carTransition') || doc.querySelectorAll('#carTransition option').length !== 2) throw new Error("گزینه‌های شیب ابتدا و انتها ساخته نشد.");
         if (!doc.querySelector("#carAfterRamp3m")) throw new Error("گزینه ۳ متر بعد از رمپ ساخته نشد.");
+        if (!doc.querySelector("#carSargiriEnabled")) throw new Error("گزینه سرگیری رمپ ساخته نشد.");
         if (!doc.documentElement.dataset.historyUiReady) {
           doc.documentElement.dataset.historyUiReady = "true";
-          const historyFields = ["#carHeight", "#carSlope", "#carTransition", "#carAfterRamp3m", "#disabledHeight", "#disabledSlope", "#disabledRegulations", "#disabledCompanion", "#humanHeight", "#humanSlope"];
+          const exclusivePopoverPairs = [
+            ["downloadBtn", "downloadPopover"],
+            ["versionBtn", "versionPopover"],
+            ["openCalculationHistoryBtn", "calculationHistoryPopover"],
+            ["openSargiriSettingsBtn", "sargiriSettingsPopover"]
+          ];
+          const popoverForControl = new Map(exclusivePopoverPairs.map(([buttonId, popoverId]) => [buttonId, popoverId]));
+          doc.addEventListener("click", event => {
+            const trigger = event.target.closest?.("button");
+            const targetPopoverId = popoverForControl.get(trigger?.id);
+            if (!targetPopoverId) return;
+            exclusivePopoverPairs.forEach(([buttonId, popoverId]) => {
+              if (popoverId === targetPopoverId) return;
+              const popover = doc.getElementById(popoverId);
+              const button = doc.getElementById(buttonId);
+              popover?.classList.remove("open");
+              popover?.setAttribute("aria-hidden", "true");
+              button?.setAttribute("aria-expanded", "false");
+              if (popoverId === "sargiriSettingsPopover") {
+                doc.querySelector(".form-card")?.classList.remove("sargiri-popover-open");
+              }
+            });
+          }, true);
+          const historyFields = ["#carHeight", "#carSlope", "#carTransition", "#carAfterRamp3m", "#carSargiriEnabled", "#carSargiriHeight", "#carSargiriMinHeight", "#disabledHeight", "#disabledSlope", "#disabledRegulations", "#disabledCompanion", "#humanHeight", "#humanSlope"];
           const captureHistoryState = type => ({
             type: type || doc.querySelector(".type-tab.active")?.dataset.type || "car",
             view: doc.querySelector(".view-tab.active")?.dataset.view || "section",
@@ -4911,6 +5181,12 @@ ${dimensionFunctionAnchor}`
             historyButton?.setAttribute("aria-expanded", "false");
           };
           const openHistory = () => {
+            const settingsPopover = doc.querySelector("#sargiriSettingsPopover");
+            const settingsButton = doc.querySelector("#openSargiriSettingsBtn");
+            settingsPopover?.classList.remove("open");
+            settingsPopover?.setAttribute("aria-hidden", "true");
+            settingsButton?.setAttribute("aria-expanded", "false");
+            doc.querySelector(".form-card")?.classList.remove("sargiri-popover-open");
             renderHistoryList();
             historyPopover?.classList.add("open");
             historyPopover?.setAttribute("aria-hidden", "false");
@@ -5780,6 +6056,9 @@ ${dimensionFunctionAnchor}`
         }
         html[data-startup-skeleton] [data-startup-mask],
         html[data-startup-skeleton] [data-startup-mask] * { visibility: hidden !important; }
+        /* This floating animated cue lives outside .app-shell. Hide it for the
+           full startup skeleton interval so it cannot move over the loader. */
+        html[data-startup-skeleton] #pageScrollCue { visibility: hidden !important; }
         html[data-startup-skeleton] #calculationInputChangedNote::before {
           visibility: hidden !important;
         }
@@ -5799,7 +6078,7 @@ ${dimensionFunctionAnchor}`
         }
         /* Keep the real input and stopping-space boxes in the layout and paint
            their loading state in place, so they appear without a resize. */
-        html[data-startup-skeleton] .form-card .form-section :is(input[type="number"], select),
+        html[data-startup-skeleton] .form-card .form-section input[type="number"],
         html[data-startup-skeleton] .form-card .parking-stop-box {
           background-color: var(--surface-2) !important;
           background-image: linear-gradient(100deg, transparent 20%,
@@ -5809,8 +6088,15 @@ ${dimensionFunctionAnchor}`
           box-shadow: none !important;
           animation: startupSkeletonShimmer 1s ease-in-out infinite !important;
         }
+        /* Hide select chevrons without changing their reserved dimensions or
+           background sizing; they reappear in the same position at reveal. */
         html[data-startup-skeleton] .form-card .form-section select {
           appearance: none !important;
+          background-color: var(--surface-2) !important;
+          background-image: none !important;
+          background-size: 12px 12px !important;
+          border-color: transparent !important;
+          box-shadow: none !important;
         }
         html[data-startup-skeleton] .form-card .form-section .input-wrap :is(.number-stepper, .unit),
         html[data-startup-skeleton] .form-card .parking-stop-box > * {
@@ -5984,6 +6270,11 @@ ${dimensionFunctionAnchor}`
         doc.documentElement.removeAttribute('data-startup-preparing');
         skeleton = createStartupSkeleton(doc);
         doc.defaultView.performance.mark('ramp-skeleton-visible');
+        // The child document and its parent iframe can be composited on
+        // separate frames. Keep the iframe hidden until the skeleton styles
+        // have reached a painted frame, or real input values can flash first.
+        await nextFrame();
+        await nextFrame();
         frame.setAttribute('data-skeleton-painted', '');
         const skeletonShownAt = performance.now();
         await frame.rampCreditFontReady;
@@ -6004,6 +6295,56 @@ ${dimensionFunctionAnchor}`
         console.warn('Startup loading treatment unavailable', error);
       }
     }, { once: true });
+    // Light modal material: enough white tint to keep dark labels readable
+    // over the backdrop, while retaining the existing liquid-glass layers.
+    source = source.replace('</style>', `
+      html[data-theme="light"] :is(#rulesModal .modal, #exportModal .export-modal) {
+        --muted: #52617a;
+        --line: #d0d9e8;
+        --line-strong: #b7c6dc;
+        color: var(--text);
+        color-scheme: light;
+        border-color: rgba(183,198,220,.85) !important;
+        box-shadow: 0 24px 70px rgba(31,48,78,.18), inset 0 1px 0 rgba(255,255,255,.85) !important;
+      }
+      html[data-theme="light"] :is(#rulesModal, #exportModal) {
+        background: rgba(39,53,77,.22);
+      }
+      html[data-theme="light"] :is(#rulesModal .modal, #exportModal .export-modal) > .glass-overlay {
+        background: rgba(255,255,255,.84) !important;
+      }
+      html[data-theme="light"] :is(#rulesModal .modal, #exportModal .export-modal) > .glass-filter {
+        filter: none !important;
+      }
+      html[data-theme="light"] #rulesModal :is(.modal-head, .rules-card-heading) {
+        background: rgba(241,245,251,.78) !important;
+        color: var(--text);
+      }
+      html[data-theme="light"] #rulesModal :is(.rules-source-card, .source-figure, .source-image-table) {
+        background: rgba(255,255,255,.68) !important;
+        border-color: var(--line) !important;
+      }
+      html[data-theme="light"] #rulesModal :is(.modal-title, .rules-document-content, .source-rule-text) {
+        color: var(--text);
+      }
+      html[data-theme="light"] #exportModal :is(.export-modal-title, .export-setting-label, .export-format-picker-title, .export-format-option-title, .export-format-scroll-cue) {
+        color: var(--text) !important;
+      }
+      html[data-theme="light"] #exportModal :is(.export-select, .export-check-control, .export-choice-control) {
+        background: rgba(255,255,255,.90);
+        color: var(--text);
+        color-scheme: light;
+      }
+      html[data-theme="light"] #exportModal .export-format-menu {
+        background: rgba(255,255,255,.97);
+        box-shadow: 0 14px 38px rgba(31,48,78,.16);
+      }
+      html[data-theme="light"] #exportModal :is(.export-select, .export-format-picker, .export-choice-control):focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+    </style>`);
+
     // Final terminology pass after all dynamic Export UI fragments have been added.
     source = source
       .replaceAll("پلان + نما", "پلان + مقطع طولی")
@@ -6013,15 +6354,58 @@ ${dimensionFunctionAnchor}`
       .replaceAll('"نما"', '"مقطع طولی"')
       .replaceAll("'نما'", "'مقطع طولی'");
     source = source.replaceAll("مقطع طولی", "مقطع");
+    source = source.replaceAll("ترسیم دقیق", "ترسیم");
     source = source.replaceAll("پلان، نما", "پلان، مقطع");
     source = source.replaceAll("نمای شماتیک", "مقطع شماتیک");
     source = source.replace(/(^|[\s>+،"'(])نما(?=$|[\s<"'،).])/g, "$1مقطع");
     // Normalize Arabic kaf characters in the embedded Persian content.
     source = source.replaceAll("ك", "ک");
+    // Mirror the ramp geometry while counter-flipping each label so it remains legible.
+    source = source.replace('      function renderDrawing() {', `      const mirrorByRamp = { car: false, disabled: false, human: false };
+      function mirrorDrawingMarkup(markup) {
+        if (!mirrorByRamp[state.type]) return markup;
+        const container = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        container.innerHTML = markup;
+        container.querySelectorAll("text").forEach(label => {
+          const x = Number(label.getAttribute("x"));
+          if (!Number.isFinite(x)) return;
+          const old = label.getAttribute("transform") || "";
+          const rotated = old.match(/rotate\\(\\s*([-+0-9.]+)[ ,]+([-+0-9.]+)[ ,]+([-+0-9.]+)\\s*\\)/);
+          if (rotated) {
+            const angle = rotated[1], cx = Number(rotated[2]);
+            label.setAttribute("transform", "rotate(" + angle + " " + cx + " " + rotated[3] + ") translate(" + (2 * cx) + " 0) scale(-1 1)");
+          } else {
+            label.setAttribute("transform", "translate(" + (2 * x) + " 0) scale(-1 1) " + old);
+          }
+        });
+        return '<g transform="translate(900 0) scale(-1 1)">' + container.innerHTML + '</g>';
+      }
+      function syncMirrorButton() {
+        const button = document.getElementById("mirrorDrawingBtn");
+        if (!button) return;
+        const tabsBox = document.querySelector(".view-tabs");
+        if (tabsBox) {
+          button.style.width = "40px";
+          button.style.height = tabsBox.offsetHeight + "px";
+        }
+        button.setAttribute("aria-pressed", String(mirrorByRamp[state.type]));
+        button.setAttribute("aria-label", state.lang === "en" ? "Mirror drawing" : "قرینه کردن ترسیم");
+        button.title = state.lang === "en" ? "Mirror drawing" : "قرینه کردن ترسیم";
+      }
+      function renderDrawing() {
+        syncMirrorButton();`);
+    source = source.replace('svg.innerHTML = state.view === "section" ? drawSection(r) : drawPlan(r);', 'svg.innerHTML = mirrorDrawingMarkup(state.view === "section" ? drawSection(r) : drawPlan(r));');
+    source = source.replace('const drawing = view === "section" ? drawSection(r) : drawPlan(r, Number.isFinite(planWidthM) && planWidthM > 0 ? planWidthM : null);', 'const drawing = mirrorDrawingMarkup(view === "section" ? drawSection(r) : drawPlan(r, Number.isFinite(planWidthM) && planWidthM > 0 ? planWidthM : null));');
+    source = source.replace(/(<div class="view-tabs">[\s\S]*?<button class="view-tab" data-view="plan"[^>]*>پلان<\/button>)\s*<\/div>/, '$1</div><button class="mirror-view-btn" id="mirrorDrawingBtn" type="button" aria-label="قرینه کردن ترسیم" aria-pressed="false" title="قرینه کردن ترسیم"><svg viewBox="0 0 64 64" width="22" height="22" fill="none" aria-hidden="true"><path class="mirror-left-shape" transform="translate(1 2.24) scale(.93)" d="M24.25 28.15 6.1 18.55C3.85 17.36 1 18.95 1 21.5v21c0 2.55 2.85 4.14 5.1 2.95l18.15-9.6c2.8-1.48 2.8-6.22 0-7.7Z"/><path class="mirror-right-shape" transform="translate(3.5 2.24) scale(.93)" d="M39.75 28.15 57.9 18.55C60.15 17.36 63 18.95 63 21.5v21c0 2.55-2.85 4.14-5.1 2.95l-18.15-9.6c-2.8-1.48-2.8-6.22 0-7.7Z"/><path d="M32 12v40" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-dasharray="3 2"/></svg></button>');
+    source = source.replace('<div class="view-tabs">', '<div class="drawing-view-actions"><div class="view-tabs">').replace('</div><button class="mirror-view-btn"', '</div><button class="mirror-view-btn"').replace('</svg></button>\n        </div>\n        <div class="drawing-area">', '</svg></button></div>\n        </div>\n        <div class="drawing-area">');
+    source = source.replace('      // Number controls\n', '      document.getElementById("mirrorDrawingBtn")?.addEventListener("click", () => { mirrorByRamp[state.type] = !mirrorByRamp[state.type]; renderDrawing(); });\n\n      // Number controls\n');
+    source = source.replace('</style>', '.drawing-view-actions{display:flex;flex-direction:row-reverse;align-items:center;gap:12px}.mirror-view-btn{display:grid;place-items:center;width:38px;height:38px;box-sizing:border-box;flex:none;padding:0;border:1px solid var(--line);border-radius:11px;background:var(--surface-2);color:var(--muted);cursor:pointer;transition:background .2s,color .2s,border-color .2s}.mirror-view-btn:hover{color:var(--text);border-color:var(--accent)}.mirror-view-btn svg{display:block;pointer-events:none}.mirror-left-shape,.mirror-right-shape{stroke:currentColor;stroke-width:2.4;stroke-linejoin:round;transition:fill .18s ease}.mirror-left-shape{fill:currentColor}.mirror-right-shape{fill:none}.mirror-view-btn[aria-pressed="true"] .mirror-left-shape{fill:none}.mirror-view-btn[aria-pressed="true"] .mirror-right-shape{fill:currentColor}</style>');
+    source = source.replaceAll('>v160<', '>v180<').replaceAll('نسخه ۱۶۰', 'نسخه ۱۸۰').replaceAll('Version 160', 'Version 180');
     // Do not paint fallback-font text while the inner document is preparing.
     // Visibility preserves intrinsic layout and font loading, unlike display.
     source = source.replace('<html ', '<html data-startup-preparing ');
     source = source.replace('</head>', '<style id="startupPreparation">html[data-startup-preparing] body{visibility:hidden!important}</style></head>');
+    source = source.replace(/<\/body>(?=\s*<\/html>\s*$)/, "<script>" + "(function(){\nconst button=document.getElementById('openSargiriSettingsBtn'),panel=document.getElementById('sargiriSettingsPopover'),close=document.getElementById('closeSargiriSettingsBtn'),minimum=document.getElementById('carSargiriMinHeight'),height=document.getElementById('carSargiriHeight'),unitLabel=panel?.querySelector('.sargiri-height-unit'),unitSelects=[...document.querySelectorAll('.height-unit-select')],historyButton=document.getElementById('openCalculationHistoryBtn'),historyPanel=document.getElementById('calculationHistoryPopover'),formCard=button?.closest('.form-card');\nif(!button||!panel||!minimum||!height)return;\nfunction currentUnit(){const select=unitSelects.find(el=>el.closest('.form-section')?.classList.contains('active'))||unitSelects.find(el=>el.offsetParent!==null)||unitSelects[0];return select?.value==='cm'?'cm':'m';}\nlet previousUnit=currentUnit();\nfunction syncUnit(convert){const nextUnit=currentUnit();if(minimum.checked){height.value=nextUnit==='cm'?'210':'2.10';}else if(convert&&nextUnit!==previousUnit){const value=Number(height.value);if(Number.isFinite(value)){const meters=previousUnit==='cm'?value/100:value;height.value=String(Number((nextUnit==='cm'?meters*100:meters).toFixed(nextUnit==='cm'?2:4)));}}if(unitLabel)unitLabel.textContent=nextUnit;height.min=nextUnit==='cm'?'10':'0.1';height.step=nextUnit==='cm'?'1':'0.05';previousUnit=nextUnit;}\nfunction syncMinimum(){height.disabled=minimum.checked;if(minimum.checked)height.value=currentUnit()==='cm'?'210':'2.10';}\nfunction recalculate(){if(typeof window.rampExportAPI?.refresh==='function'){window.rampExportAPI.refresh();return;}const enabled=document.getElementById('carSargiriEnabled');if(enabled)enabled.dispatchEvent(new Event('change',{bubbles:true}));else document.getElementById('carHeight')?.dispatchEvent(new Event('input',{bubbles:true}));}\nfunction closePanel(){panel.classList.remove('open');panel.setAttribute('aria-hidden','true');button.setAttribute('aria-expanded','false');formCard?.classList.remove('sargiri-popover-open');}\nfunction togglePanel(){const open=!panel.classList.contains('open');if(open&&historyPanel){historyPanel.classList.remove('open');historyPanel.setAttribute('aria-hidden','true');historyButton?.setAttribute('aria-expanded','false');}panel.classList.toggle('open',open);panel.setAttribute('aria-hidden',String(!open));button.setAttribute('aria-expanded',String(open));formCard?.classList.toggle('sargiri-popover-open',open);}\nsyncUnit(true);syncMinimum();\nwindow.addEventListener('load',()=>{syncUnit(true);syncMinimum();requestAnimationFrame(()=>requestAnimationFrame(recalculate));},{once:true});\nunitSelects.forEach(select=>select.addEventListener('change',()=>{syncUnit(true);recalculate();}));\nbutton.addEventListener('click',togglePanel);close?.addEventListener('click',closePanel);\nminimum.addEventListener('change',()=>{syncUnit(false);syncMinimum();recalculate();});\nheight.addEventListener('input',recalculate);\ndocument.addEventListener('click',event=>{if(panel.classList.contains('open')&&!panel.contains(event.target)&&!button.contains(event.target))closePanel();});\ndocument.addEventListener('keydown',event=>{if(event.key==='Escape'&&panel.classList.contains('open')){closePanel();button.focus();}});\n})();" + "<\/script></body>");
     frame.srcdoc = source;
   } catch (error) {
     console.error(error);
